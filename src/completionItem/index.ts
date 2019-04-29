@@ -24,8 +24,6 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
       filePath
     );
 
-    console.log('currentNamespace', currentNamespace);
-
     const completionItems: vscode.CompletionItem[] = [];
 
     dvaModels.reduce(
@@ -34,7 +32,7 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
         if (currentValue.namespace === currentNamespace) {
           namespace = '/';
         } else {
-          namespace = `${currentNamespace}/`;
+          namespace = `${currentValue.namespace}/`;
         }
         Object.keys(currentValue.effects).forEach(key => {
           previousValue.push(
@@ -59,6 +57,16 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
     );
 
     return completionItems;
+  }
+
+  resolveCompletionItem(item: vscode.CompletionItem) {
+    if (item.label.startsWith(`'/`)) {
+      return new vscode.CompletionItem(
+        item.label[0] + item.label.slice(2),
+        vscode.CompletionItemKind.Text
+      );
+    }
+    return null;
   }
 }
 
