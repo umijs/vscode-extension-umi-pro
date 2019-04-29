@@ -35,20 +35,26 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
           namespace = `${currentValue.namespace}/`;
         }
         Object.keys(currentValue.effects).forEach(key => {
-          previousValue.push(
-            new vscode.CompletionItem(
-              `'${namespace}${key}'`,
-              vscode.CompletionItemKind.Text
-            )
+          const snippetCompletion = new vscode.CompletionItem(
+            `'${namespace}${key}'`
           );
+          snippetCompletion.documentation = new vscode.MarkdownString(
+            `\`\`\`typescript\n${currentValue.effects[key].code}\`\`\``
+          );
+          if (namespace === '/') {
+            snippetCompletion.insertText =
+              snippetCompletion.label[0] + snippetCompletion.label.slice(2);
+          }
+          previousValue.push(snippetCompletion);
         });
         Object.keys(currentValue.reducers).forEach(key => {
-          previousValue.push(
-            new vscode.CompletionItem(
-              `'${namespace}${key}'`,
-              vscode.CompletionItemKind.Text
-            )
+          const snippetCompletion = new vscode.CompletionItem(
+            `'${namespace}${key}'`
           );
+          snippetCompletion.documentation = new vscode.MarkdownString(
+            `\`\`\`typescript\n${currentValue.reducers[key].code}\`\`\``
+          );
+          previousValue.push(snippetCompletion);
         });
         return previousValue;
       },
@@ -57,16 +63,6 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
     );
 
     return completionItems;
-  }
-
-  resolveCompletionItem(item: vscode.CompletionItem) {
-    if (item.label.startsWith(`'/`)) {
-      return new vscode.CompletionItem(
-        item.label[0] + item.label.slice(2),
-        vscode.CompletionItemKind.Text
-      );
-    }
-    return null;
   }
 }
 
