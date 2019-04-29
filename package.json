@@ -6,6 +6,8 @@
   "engines": {
     "vscode": "^1.33.0"
   },
+  "publisher": "DiamondYuan",
+  "repository": "https://github.com/DiamondYuan/dva-helper",
   "activationEvents": [
     "workspaceContains:package.json"
   ],
@@ -17,6 +19,8 @@
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
     "commit": "git-cz",
+    "package": "vsce package",
+    "publish": "vsce publish",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test-local": " egg-bin test",
