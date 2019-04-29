@@ -6,6 +6,9 @@
   "engines": {
     "vscode": "^1.33.0"
   },
+  "activationEvents": [
+    "workspaceContains:package.json"
+  ],
   "categories": [
     "Other"
   ],
