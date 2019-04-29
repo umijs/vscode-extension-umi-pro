@@ -18,7 +18,8 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test-local": " egg-bin test",
     "cov": " egg-bin cov",
-    "lint": "eslint --ext .js,.ts ."
+    "lint": "eslint --ext .js,.ts .",
+    "test-watch": "yarn test-local --watch --watch-extensions ts"
   },
   "pre-commit": [
     "lint"
@@ -33,6 +34,8 @@
   },
   "devDependencies": {
     "@diamondyuan/eslint-config-typescript": "^6.0.0",
+    "@types/babel-generator": "^6.25.3",
+    "@types/babel-types": "^7.0.7",
     "@types/mocha": "^2.2.42",
     "@types/mz": "^0.0.32",
     "@types/node": "^10.12.21",

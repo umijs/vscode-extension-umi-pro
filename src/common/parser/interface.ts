@@ -1,9 +1,13 @@
 export interface IDvaModel {
   namespace: string;
   effects: {
-    [name: string]: string;
+    [name: string]: {
+      code: string;
+    };
   };
   reducers: {
-    [name: string]: string;
+    [name: string]: {
+      code: string;
+    };
   };
 }
