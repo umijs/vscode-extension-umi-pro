@@ -49,4 +49,10 @@ describe('index.test.ts', () => {
     const userModel = await new DvaModelParser().parseFile(userModelPath);
     assert.deepEqual(userModel, expectResult);
   });
+
+  it('empty', async () => {
+    const emptyModelPath = path.resolve(__dirname, './fixture/model/empty.js');
+    const emptyModel = await new DvaModelParser().parseFile(emptyModelPath);
+    assert.deepEqual(emptyModel, []);
+  });
 });

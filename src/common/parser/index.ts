@@ -44,7 +44,8 @@ export class DvaModelParser implements IDvaModelParser {
     return this.parse(code);
   }
   private parseObjectExpression(ast: ObjectExpression): IDvaModel | null {
-    const result: Partial<IDvaModel> = {
+    const result: IDvaModel = {
+      namespace: '',
       effects: {},
       reducers: {},
     };
@@ -64,7 +65,6 @@ export class DvaModelParser implements IDvaModelParser {
           if (!isObjectMethod(valueProperty)) {
             return;
           }
-          // console.log(valueProperty);
           const methodName = valueProperty.key.name;
           const { code } = generate(valueProperty);
           const { loc } = valueProperty;
@@ -78,6 +78,12 @@ export class DvaModelParser implements IDvaModelParser {
     if (!result.namespace) {
       return null;
     }
-    return result as IDvaModel;
+    if (
+      Object.keys(result.effects).length === 0 &&
+      Object.keys(result.reducers).length === 0
+    ) {
+      return null;
+    }
+    return result;
   }
 }
