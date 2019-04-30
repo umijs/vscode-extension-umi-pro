@@ -27,7 +27,7 @@
     "test-local": " egg-bin test",
     "cov": "egg-bin cov",
     "lint": "eslint --ext .js,.ts .",
-    "ci": "npn run lint && npm run cov",
+    "ci": "npm run lint && npm run cov",
     "test-watch": "yarn test-local --watch --watch-extensions ts"
   },
   "pre-commit": [

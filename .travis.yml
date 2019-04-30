@@ -6,7 +6,6 @@ install:
   - npm install
 script:
   - npm run ci
-  - npm run
 after_success:
   - npm i codecov && codecov
 deploy:
