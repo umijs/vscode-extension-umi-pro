@@ -2,7 +2,17 @@ import * as vscode from 'vscode';
 import ModelInfoCache from '../common/cache';
 
 class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
-  async provideCompletionItems(document: vscode.TextDocument) {
+  async provideCompletionItems(
+    document: vscode.TextDocument,
+    position: vscode.Position
+  ) {
+    const lineText = document.getText(
+      new vscode.Range(position.with(position.line, 0), position)
+    );
+    //todo 更智能的判断
+    if (!lineText.includes('type')) {
+      return [];
+    }
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders) {
       return [];
@@ -12,7 +22,7 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
       filePath.startsWith(o.uri.fsPath)
     );
     if (!workspace) {
-      return;
+      return [];
     }
     const projectPath = workspace.uri.fsPath;
     let dvaModels = ModelInfoCache.getAllModules(projectPath);
