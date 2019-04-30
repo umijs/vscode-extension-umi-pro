@@ -13,6 +13,7 @@ deploy:
   script: bash release.sh
   on:
     repo: DiamondYuan/dva-helper
+    skip_cleanup: true
     tags: true
 env:
   global:
