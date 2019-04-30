@@ -12,9 +12,8 @@ after_success:
 deploy:
   provider: script
   script: npm run travis-publish
+  skip_cleanup: true
   on:
-    repo: DiamondYuan/dva-helper
-    skip_cleanup: true
     tags: true
 env:
   global:
