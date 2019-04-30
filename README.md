@@ -7,6 +7,10 @@
       <img src="https://img.shields.io/codecov/c/github/DiamondYuan/dva-helper/master.svg?style=flat-square" alt="Codecov">
     </a>
     <img src="https://img.shields.io/github/license/Diamondyuan/dva-helper.svg">
+    <a href="https://marketplace.visualstudio.com/items?itemName=DiamondYuan.dva-helper">
+      <img src="https://img.shields.io/visual-studio-marketplace/v/DiamondYuan.dva-helper.svg">
+    </a>
+
 </p>
 
 为 dva 提供 Model 中 reducers 与 effects 中函数的代码提示。
