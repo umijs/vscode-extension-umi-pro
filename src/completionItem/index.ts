@@ -64,6 +64,10 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
           snippetCompletion.documentation = new vscode.MarkdownString(
             `\`\`\`typescript\n${currentValue.reducers[key].code}\`\`\``
           );
+          if (namespace === '/') {
+            snippetCompletion.insertText =
+              snippetCompletion.label[0] + snippetCompletion.label.slice(2);
+          }
           previousValue.push(snippetCompletion);
         });
         return previousValue;
