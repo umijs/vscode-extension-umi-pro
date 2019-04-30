@@ -11,7 +11,7 @@ after_success:
   - npm i codecov && codecov
 deploy:
   provider: script
-  script: bash release.sh
+  script: npm run travis-publish
   on:
     repo: DiamondYuan/dva-helper
     skip_cleanup: true
