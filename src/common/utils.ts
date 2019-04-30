@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import * as fs from 'mz/fs';
 import globby from 'globby';
 import { QuoteType } from './config';
@@ -30,4 +30,9 @@ export function quoteString(input: string, type: QuoteType) {
   quoteMap.set(QuoteType.backtick, '`');
   const quote = quoteMap.get(type);
   return `${quote}${input}${quote}`;
+}
+
+export function getAbsPath(input: string) {
+  const rootPath = resolve(__dirname, '../../');
+  return input.replace(join(rootPath, 'out'), join(rootPath, 'src'));
 }

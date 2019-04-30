@@ -1,6 +1,7 @@
 import assert = require('assert');
-import * as path from 'path';
-import { DvaModelParser } from '../src/common/parser';
+import { join } from 'path';
+import { DvaModelParser } from '../common/parser';
+import { getAbsPath } from '../common/utils';
 
 describe('index.test.ts', () => {
   it('test ', async () => {
@@ -45,13 +46,13 @@ describe('index.test.ts', () => {
         namespace: 'user',
       },
     ];
-    const userModelPath = path.resolve(__dirname, './fixture/model/user.js');
+    const userModelPath = getAbsPath(join(__dirname, './fixtures/user.js'));
     const userModel = await new DvaModelParser().parseFile(userModelPath);
     assert.deepEqual(userModel, expectResult);
   });
 
   it('empty', async () => {
-    const emptyModelPath = path.resolve(__dirname, './fixture/model/empty.js');
+    const emptyModelPath = getAbsPath(join(__dirname, './fixtures/empty.js'));
     const emptyModel = await new DvaModelParser().parseFile(emptyModelPath);
     assert.deepEqual(emptyModel, []);
   });
