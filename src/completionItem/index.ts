@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import ModelInfoCache from '../common/cache';
+import { getConfig } from '../common/config';
+import { quoteString } from '../common/utils';
 
 class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
   async provideCompletionItems(
@@ -36,6 +38,8 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
 
     const completionItems: vscode.CompletionItem[] = [];
 
+    const userConfig = getConfig();
+
     dvaModels.reduce(
       (previousValue, currentValue) => {
         let namespace;
@@ -46,7 +50,7 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
         }
         Object.keys(currentValue.effects).forEach(key => {
           const snippetCompletion = new vscode.CompletionItem(
-            `'${namespace}${key}'`
+            quoteString(`${namespace}${key}`, userConfig.quotes)
           );
           snippetCompletion.documentation = new vscode.MarkdownString(
             `\`\`\`typescript\n${currentValue.effects[key].code}\`\`\``
@@ -59,7 +63,7 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
         });
         Object.keys(currentValue.reducers).forEach(key => {
           const snippetCompletion = new vscode.CompletionItem(
-            `'${namespace}${key}'`
+            quoteString(`${namespace}${key}`, userConfig.quotes)
           );
           snippetCompletion.documentation = new vscode.MarkdownString(
             `\`\`\`typescript\n${currentValue.reducers[key].code}\`\`\``

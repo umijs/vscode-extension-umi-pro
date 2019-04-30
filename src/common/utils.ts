@@ -1,6 +1,7 @@
 import { join } from 'path';
 import * as fs from 'mz/fs';
 import globby from 'globby';
+import { QuoteType } from './config';
 
 const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
 
@@ -20,4 +21,13 @@ export async function getModels(cwd: string): Promise<string[]> {
     )
   );
   return modules.map(p => join(cwd, p));
+}
+
+export function quoteString(input: string, type: QuoteType) {
+  const quoteMap = new Map<QuoteType, string>();
+  quoteMap.set(QuoteType.single, "'");
+  quoteMap.set(QuoteType.double, `"`);
+  quoteMap.set(QuoteType.backtick, '`');
+  const quote = quoteMap.get(type);
+  return `${quote}${input}${quote}`;
 }

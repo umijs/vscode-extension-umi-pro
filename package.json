@@ -41,6 +41,22 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
+  "configuration": {
+    "type": "object",
+    "title": "dva-helper configuration",
+    "properties": {
+      "dva_helper.quotes": {
+        "type": "string",
+        "default": "single",
+        "description": "type of quotes",
+        "enum": [
+          "double",
+          "single",
+          "backtick"
+        ]
+      }
+    }
+  },
   "devDependencies": {
     "@diamondyuan/eslint-config-typescript": "^6.0.0",
     "@types/babel-generator": "^6.25.3",
