@@ -2,7 +2,7 @@
   "name": "dva-helper",
   "displayName": "dva-helper",
   "description": "dva helper make you write code happy",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "license": "MIT",
   "engines": {
     "vscode": "^1.33.0"
