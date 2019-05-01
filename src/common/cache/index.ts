@@ -2,6 +2,7 @@ import { IDvaModel } from './../parser/interface';
 import * as path from 'path';
 import * as fs from 'mz/fs';
 import { DvaModelParser } from '../parser';
+import logger from '../logger';
 
 interface Cache {
   [projectPath: string]: {
@@ -42,9 +43,13 @@ class ModelInfoCache implements IModelInfoCache {
       files.map(
         file =>
           new Promise(async r => {
-            const modulesPath = path.resolve(modulesRoot, file);
-            const modules = await new DvaModelParser().parseFile(modulesPath);
-            project[modulesPath] = modules;
+            try {
+              const modulesPath = path.resolve(modulesRoot, file);
+              const modules = await new DvaModelParser().parseFile(modulesPath);
+              project[modulesPath] = modules;
+            } catch (error) {
+              logger.info(error.message);
+            }
             r();
           })
       )

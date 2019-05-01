@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import ModelInfoCache from '../common/cache';
 import { getConfig } from '../common/config';
 import { quoteString } from '../common/utils';
+import logger from '../common/logger';
 
 class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
   async provideCompletionItems(
@@ -11,6 +12,7 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
     const lineText = document.getText(
       new vscode.Range(position.with(position.line, 0), position)
     );
+    logger.info(`current line ${lineText}`);
     //todo 更智能的判断
     if (!lineText.includes('type')) {
       return [];
@@ -37,9 +39,7 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
     );
 
     const completionItems: vscode.CompletionItem[] = [];
-
     const userConfig = getConfig();
-
     dvaModels.reduce(
       (previousValue, currentValue) => {
         let namespace;
