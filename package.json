@@ -38,19 +38,21 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
-  "configuration": {
-    "type": "object",
-    "title": "dva-helper configuration",
-    "properties": {
-      "dva_helper.quotes": {
-        "type": "string",
-        "default": "single",
-        "description": "type of quotes",
-        "enum": [
-          "double",
-          "single",
-          "backtick"
-        ]
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "dva-helper configuration",
+      "properties": {
+        "dva_helper.quotes": {
+          "type": "string",
+          "default": "single",
+          "description": "type of quotes",
+          "enum": [
+            "double",
+            "single",
+            "backtick"
+          ]
+        }
       }
     }
   },

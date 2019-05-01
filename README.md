@@ -14,3 +14,9 @@
 </p>
 
 为 dva 提供 Model 中 reducers 与 effects 中函数的代码提示。
+
+可配置项
+
+| 配置项              | 可选值                        |
+| ------------------- | ----------------------------- |
+| `dva_helper.quotes` | `single`,`double` ,`backtick` |
