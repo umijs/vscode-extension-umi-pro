@@ -1,84 +1,96 @@
 import { IDvaModel } from './../parser/interface';
-import * as path from 'path';
+import { join } from 'path';
 import * as fs from 'mz/fs';
 import { DvaModelParser } from '../parser';
 import logger from '../logger';
+import { getModels } from '../utils';
 
 interface Cache {
-  [projectPath: string]: {
+  /**
+   * 所有文件的编译缓存 IDvaModel
+   */
+  center: {
     [filePath: string]: IDvaModel[];
+  };
+  projects: {
+    /**
+     * key 为项目根路径
+     */
+    [projectPath: string]: {
+      globalModels: string[];
+    };
   };
 }
 
 interface IModelInfoCache {
   reloadFile(path: string): void;
+
+  getModules(projectPath: string): Promise<IDvaModel[]>;
+
+  getCurrentNameSpace(filePath: string): string | null;
 }
 
 class ModelInfoCache implements IModelInfoCache {
   private cache: Cache;
+  private parser: DvaModelParser;
 
   constructor() {
-    this.cache = {};
+    this.cache = {
+      center: {},
+      projects: {},
+    };
+    this.parser = new DvaModelParser();
   }
   async reloadFile(filePath: string) {
-    const projects = Object.keys(this.cache);
-    const projectKey = projects.find(projectPath =>
-      filePath.startsWith(projectPath)
-    );
-    if (projectKey) {
-      const project = this.cache[projectKey];
-      project[filePath] = [];
-      const modules = await new DvaModelParser().parseFile(filePath);
-      project[filePath] = modules;
-    }
+    this.cache.center[filePath] = [];
+    await this.loadFile(filePath);
   }
 
-  async loadProject(projectPath): Promise<IDvaModel[]> {
-    const modulesRoot = path.resolve(projectPath, 'src', 'models');
-    const files = fs.readdirSync(modulesRoot);
-    const project: {
-      [filePath: string]: IDvaModel[];
-    } = {};
-    await Promise.all(
-      files.map(
-        file =>
-          new Promise(async r => {
-            try {
-              const modulesPath = path.resolve(modulesRoot, file);
-              const modules = await new DvaModelParser().parseFile(modulesPath);
-              project[modulesPath] = modules;
-            } catch (error) {
-              logger.info(error.message);
-            }
-            r();
-          })
-      )
-    );
-    this.cache[projectPath] = project;
-    return this.getAllModules(projectPath)!;
-  }
-
-  getAllModules(projectPath: string) {
-    const project = this.cache[projectPath];
+  getModules = async (projectPath: string): Promise<IDvaModel[]> => {
+    const project = this.cache.projects[projectPath];
     if (!project) {
-      return null;
+      logger.info(`load project ${projectPath}`);
+      const globalModels = await getModels(join(projectPath, 'src'));
+      await Promise.all(globalModels.map(file => this.loadFile(file)));
+      this.cache.projects[projectPath] = {
+        globalModels,
+      };
+      return this.filesToModels(globalModels);
     }
-    return Object.values(project).reduce((previousValue, currentValue) => {
-      return previousValue.concat(currentValue);
-    }, []);
-  }
+    return this.filesToModels(project.globalModels);
+  };
 
-  getCurrentNameSpace(projectPath: string, filePath: string): string | null {
-    const project = this.cache[projectPath];
-    if (!project) {
-      return null;
-    }
-    const dvaModels = project[filePath];
+  getCurrentNameSpace(filePath: string): string | null {
+    const dvaModels = this.cache.center[filePath];
     if (!dvaModels || dvaModels.length !== 1) {
       return null;
     }
     return dvaModels[0].namespace;
   }
+
+  private filesToModels(files: string[]) {
+    return files.reduce(
+      (previousValue, filePath) => {
+        const models = this.cache.center[filePath];
+        if (Array.isArray(models)) {
+          return previousValue.concat(this.cache.center[filePath]);
+        }
+        return previousValue;
+      },
+      [] as IDvaModel[]
+    );
+  }
+
+  private async loadFile(filePath) {
+    if (await fs.exists(filePath)) {
+      try {
+        this.cache.center[filePath] = await this.parser.parseFile(filePath);
+      } catch (error) {
+        logger.info(`解析文件失败 ${filePath}`);
+        logger.info(error.message);
+      }
+    }
+  }
 }
 
-export default new ModelInfoCache();
+export default new ModelInfoCache() as IModelInfoCache;

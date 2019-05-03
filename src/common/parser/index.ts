@@ -22,7 +22,17 @@ export class DvaModelParser implements IDvaModelParser {
   public async parse(code: string): Promise<IDvaModel[]> {
     const ast = babelParser.parse(code, {
       sourceType: 'module',
-      plugins: ['typescript', 'classProperties'],
+      plugins: [
+        'typescript',
+        'classProperties',
+        'jsx',
+        [
+          'decorators',
+          {
+            decoratorsBeforeExport: true,
+          },
+        ],
+      ],
     });
     let modelObjects: ObjectExpression[] = [];
     for (const node of ast.program.body) {

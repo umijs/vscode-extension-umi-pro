@@ -29,15 +29,8 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
       return [];
     }
     const projectPath = workspace.uri.fsPath;
-    let dvaModels = ModelInfoCache.getAllModules(projectPath);
-    if (!dvaModels) {
-      dvaModels = await ModelInfoCache.loadProject(projectPath);
-    }
-    const currentNamespace = ModelInfoCache.getCurrentNameSpace(
-      projectPath,
-      filePath
-    );
-
+    let dvaModels = await ModelInfoCache.getModules(projectPath);
+    const currentNamespace = ModelInfoCache.getCurrentNameSpace(filePath);
     const completionItems: vscode.CompletionItem[] = [];
     const userConfig = getConfig();
     dvaModels.reduce(
