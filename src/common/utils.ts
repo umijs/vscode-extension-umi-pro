@@ -1,4 +1,4 @@
-import { join, resolve } from 'path';
+import { join, resolve, dirname } from 'path';
 import * as fs from 'mz/fs';
 import globby from 'globby';
 import { QuoteType } from './config';
@@ -21,6 +21,22 @@ export async function getModels(cwd: string): Promise<string[]> {
     )
   );
   return modules.map(p => join(cwd, p));
+}
+
+/**
+ * 参考了 umi 的源码
+ * @see https://github.com/umijs/umi/blob/master/packages/umi-plugin-dva/src/index.js
+ * @param filePath 文件路径
+ * @param projectPath 项目路径
+ */
+export async function getPageModels(filePath, projectPath): Promise<string[]> {
+  let models: string[] = [];
+  let cwd = dirname(filePath);
+  while (cwd !== projectPath && cwd !== join(projectPath, 'src')) {
+    models = models.concat(await getModels(cwd));
+    cwd = dirname(cwd);
+  }
+  return models;
 }
 
 export function quoteString(input: string, type: QuoteType) {

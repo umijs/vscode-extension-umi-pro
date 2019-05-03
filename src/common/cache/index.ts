@@ -3,7 +3,7 @@ import { join } from 'path';
 import * as fs from 'mz/fs';
 import { DvaModelParser } from '../parser';
 import logger from '../logger';
-import { getModels } from '../utils';
+import { getModels, getPageModels } from '../utils';
 
 interface Cache {
   /**
@@ -25,7 +25,7 @@ interface Cache {
 interface IModelInfoCache {
   reloadFile(path: string): void;
 
-  getModules(projectPath: string): Promise<IDvaModel[]>;
+  getModules(filePath: string, projectPath: string): Promise<IDvaModel[]>;
 
   getCurrentNameSpace(filePath: string): string | null;
 }
@@ -44,20 +44,33 @@ class ModelInfoCache implements IModelInfoCache {
   async reloadFile(filePath: string) {
     this.cache.center[filePath] = [];
     await this.loadFile(filePath);
+    const projects = Object.keys(this.cache.projects);
+    projects.forEach(key => {
+      if (filePath.startsWith[key]) {
+        const models = this.cache.projects[key];
+        if (models.globalModels.every(path => path !== filePath)) {
+          models.globalModels.push(filePath);
+        }
+      }
+    });
   }
 
-  getModules = async (projectPath: string): Promise<IDvaModel[]> => {
-    const project = this.cache.projects[projectPath];
+  getModules = async (filePath: string, projectPath: string) => {
+    let project = this.cache.projects[projectPath];
     if (!project) {
       logger.info(`load project ${projectPath}`);
-      const globalModels = await getModels(join(projectPath, 'src'));
-      await Promise.all(globalModels.map(file => this.loadFile(file)));
-      this.cache.projects[projectPath] = {
-        globalModels,
+      project = {
+        globalModels: await getModels(join(projectPath, 'src')),
       };
-      return this.filesToModels(globalModels);
+      this.cache.projects[projectPath] = project;
     }
-    return this.filesToModels(project.globalModels);
+    try {
+      const pageModels = await getPageModels(filePath, projectPath);
+      return this.filesToModels(project.globalModels.concat(pageModels));
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
   };
 
   getCurrentNameSpace(filePath: string): string | null {
@@ -68,12 +81,13 @@ class ModelInfoCache implements IModelInfoCache {
     return dvaModels[0].namespace;
   }
 
-  private filesToModels(files: string[]) {
+  private async filesToModels(files: string[]) {
+    await Promise.all(files.map(file => this.loadFile(file)));
     return files.reduce(
       (previousValue, filePath) => {
         const models = this.cache.center[filePath];
         if (Array.isArray(models)) {
-          return previousValue.concat(this.cache.center[filePath]);
+          return previousValue.concat(models);
         }
         return previousValue;
       },
