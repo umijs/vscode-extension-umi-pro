@@ -1,10 +1,17 @@
 import * as vscode from 'vscode';
-import ModelInfoCache from '../common/cache';
+import { IModelInfoCache } from '../common/cache';
 import { getConfig } from '../common/config';
 import { quoteString } from '../common/utils';
 import logger from '../common/logger';
 
-class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
+export default class DvaCompletionItemProvider
+  implements vscode.CompletionItemProvider {
+  private cache: IModelInfoCache;
+
+  constructor(cache: IModelInfoCache) {
+    this.cache = cache;
+  }
+
   async provideCompletionItems(
     document: vscode.TextDocument,
     position: vscode.Position
@@ -29,8 +36,8 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
       return [];
     }
     const projectPath = workspace.uri.fsPath;
-    let dvaModels = await ModelInfoCache.getModules(filePath, projectPath);
-    const currentNamespace = ModelInfoCache.getCurrentNameSpace(filePath);
+    let dvaModels = await this.cache.getModules(filePath, projectPath);
+    const currentNamespace = this.cache.getCurrentNameSpace(filePath);
     const completionItems: vscode.CompletionItem[] = [];
     const userConfig = getConfig();
     dvaModels.reduce(
@@ -76,5 +83,3 @@ class DvaCompletionItemProvider implements vscode.CompletionItemProvider {
     return completionItems;
   }
 }
-
-export default DvaCompletionItemProvider;

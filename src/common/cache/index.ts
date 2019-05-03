@@ -22,7 +22,7 @@ interface Cache {
   };
 }
 
-interface IModelInfoCache {
+export interface IModelInfoCache {
   reloadFile(path: string): void;
 
   getModules(filePath: string, projectPath: string): Promise<IDvaModel[]>;
