@@ -11,7 +11,7 @@ describe('test getPageModels', () => {
     return paths.map(path => join(projectPath, 'src', 'pages', path));
   }
 
-  it('page a models should right', async () => {
+  it('page a models should correct', async () => {
     const page = join(pagesPath, 'a', 'page.js');
     const models = await getPageModels(page, projectPath);
     assert.deepEqual(
@@ -24,32 +24,18 @@ describe('test getPageModels', () => {
     );
   });
 
-  it('page c models should right', async () => {
-    const page = join(pagesPath, 'a', 'c', 'page.js');
+  it('page c models should correct', async () => {
+    const page = join(pagesPath, 'c', 'page.js');
     const models = await getPageModels(page, projectPath);
-    assert.deepEqual(
-      models.sort(),
-      getAbsModelsPaths([
-        'a/models/a.js',
-        'a/models/b.js',
-        'a/models/ss/s.js',
-        'a/c/model.js',
-      ]).sort()
-    );
+    assert.deepEqual(models.sort(), getAbsModelsPaths(['c/model.js']).sort());
   });
 
-  it('page d models should right', async () => {
-    const page = join(pagesPath, 'a', 'c', 'd', 'page.js');
+  it('page d models should correct', async () => {
+    const page = join(pagesPath, 'c', 'd', 'page.js');
     const models = await getPageModels(page, projectPath);
     assert.deepEqual(
       models.sort(),
-      getAbsModelsPaths([
-        'a/models/a.js',
-        'a/models/b.js',
-        'a/models/ss/s.js',
-        'a/c/model.js',
-        'a/c/d/models/d.js',
-      ]).sort()
+      getAbsModelsPaths(['c/model.js', 'c/d/models/d.js']).sort()
     );
   });
 });
