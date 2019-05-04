@@ -13,7 +13,11 @@
 
 </p>
 
-为 dva 提供 Model 中 reducers 与 effects 中函数的代码提示。
+## 功能
+
+- action type 自动补全
+- 悬浮显示 action 源码
+- 点击跳转到 action 源码所在位置
 
 ## 可配置项
 
