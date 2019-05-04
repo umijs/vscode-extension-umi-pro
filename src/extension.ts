@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import DvaCompletionItemProvider from './completionItem';
 import DvaHoverProvider from './HoverProvider';
+import DvaDefinitionProvider from './DefinitionProvider';
 import ModelInfoCache from './common/cache';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -29,6 +30,13 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.languages.registerHoverProvider(
       ['javascript', 'typescript'],
       new DvaHoverProvider(ModelInfoCache)
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.languages.registerDefinitionProvider(
+      ['javascript', 'typescript'],
+      new DvaDefinitionProvider(ModelInfoCache)
     )
   );
 }

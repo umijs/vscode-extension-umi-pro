@@ -1,4 +1,4 @@
-import { IDvaModel } from './../parser/interface';
+import { IDvaModel, IDvaModelWithFilePath } from './../parser/interface';
 import { join } from 'path';
 import * as fs from 'mz/fs';
 import { DvaModelParser } from '../parser';
@@ -25,7 +25,10 @@ interface Cache {
 export interface IModelInfoCache {
   reloadFile(path: string): void;
 
-  getModules(filePath: string, projectPath: string): Promise<IDvaModel[]>;
+  getModules(
+    filePath: string,
+    projectPath: string
+  ): Promise<IDvaModelWithFilePath[]>;
 
   getCurrentNameSpace(filePath: string): string | null;
 }
@@ -87,11 +90,18 @@ class ModelInfoCache implements IModelInfoCache {
       (previousValue, filePath) => {
         const models = this.cache.center[filePath];
         if (Array.isArray(models)) {
-          return previousValue.concat(models);
+          return previousValue.concat(
+            models.map(({ namespace, effects, reducers }) => ({
+              filePath,
+              namespace,
+              effects,
+              reducers,
+            }))
+          );
         }
         return previousValue;
       },
-      [] as IDvaModel[]
+      [] as IDvaModelWithFilePath[]
     );
   }
 
