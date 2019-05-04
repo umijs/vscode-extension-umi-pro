@@ -8,6 +8,12 @@ export enum QuoteType {
   backtick = 'backtick',
 }
 
+export const QuoteCharMap = {
+  [QuoteType.single]: "'",
+  [QuoteType.double]: '"',
+  [QuoteType.backtick]: '`',
+};
+
 export interface IDvaHelperConfig {
   quotes: QuoteType;
 }
