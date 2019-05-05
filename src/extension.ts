@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import DvaCompletionItemProvider from './completionItem';
-import DvaHoverProvider from './HoverProvider';
-import DvaDefinitionProvider from './DefinitionProvider';
+import DvaCompletionItemProvider from './language/completionItem';
+import DvaHoverProvider from './language/hoverProvider';
+import DvaDefinitionProvider from './language/definitionProvider';
 import ModelInfoCache from './common/cache';
 
 export function activate(context: vscode.ExtensionContext) {
