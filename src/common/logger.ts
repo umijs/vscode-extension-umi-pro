@@ -4,10 +4,10 @@ interface ILogger {
   info(message: string);
 }
 
-class Logger implements ILogger {
+export class Logger implements ILogger {
   private channel: OutputChannel;
-  constructor() {
-    this.channel = window.createOutputChannel('dva_helper');
+  constructor(channel: OutputChannel) {
+    this.channel = channel;
   }
 
   public info(message) {
@@ -16,4 +16,4 @@ class Logger implements ILogger {
   }
 }
 
-export default new Logger() as ILogger;
+export default new Logger(window.createOutputChannel('dva_helper')) as ILogger;
