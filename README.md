@@ -13,6 +13,12 @@
 
 </p>
 
+## 安装
+
+直接在 vs-code 商店搜索 `dva-helper`
+
+![](https://user-images.githubusercontent.com/9692408/57274505-18040000-70ce-11e9-92ac-1b2b49a2cb8a.png)
+
 ## 功能
 
 - action type 自动补全
