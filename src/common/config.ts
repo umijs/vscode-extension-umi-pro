@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-const CONFIG_NAMESPACE = 'dva_helper';
+const CONFIG_NAMESPACE = 'umi_pro';
 
 export enum QuoteType {
   double = 'double',

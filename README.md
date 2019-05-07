@@ -1,21 +1,21 @@
-<h1 align="center">dva-helper</h1>
+<h1 align="center">Umi Pro</h1>
 <p align="center">
-    <a href="https://travis-ci.org/DiamondYuan/dva-helper">
-      <img src="https://img.shields.io/travis/DiamondYuan/dva-helper/master.svg?style=flat-square" alt="Build Status">
+    <a href="https://travis-ci.org/DiamondYuan/umi-pro">
+      <img src="https://img.shields.io/travis/DiamondYuan/umi-pro/master.svg?style=flat-square" alt="Build Status">
     </a>
-    <a href="https://codecov.io/gh/DiamondYuan/dva-helper">
-      <img src="https://img.shields.io/codecov/c/github/DiamondYuan/dva-helper/master.svg?style=flat-square" alt="Codecov">
+    <a href="https://codecov.io/gh/DiamondYuan/umi-pro">
+      <img src="https://img.shields.io/codecov/c/github/DiamondYuan/umi-pro/master.svg?style=flat-square" alt="Codecov">
     </a>
-    <img src="https://img.shields.io/github/license/Diamondyuan/dva-helper.svg">
-    <a href="https://marketplace.visualstudio.com/items?itemName=DiamondYuan.dva-helper">
-      <img src="https://img.shields.io/visual-studio-marketplace/v/DiamondYuan.dva-helper.svg">
+    <img src="https://img.shields.io/github/license/Diamondyuan/umi-pro.svg">
+    <a href="https://marketplace.visualstudio.com/items?itemName=DiamondYuan.umi-pro">
+      <img src="https://img.shields.io/visual-studio-marketplace/v/DiamondYuan.umi-pro.svg">
     </a>
 
 </p>
 
 ## 安装
 
-直接在 vs-code 商店搜索 `dva-helper`
+直接在 vs-code 商店搜索 `umi-pro`
 
 ![](https://user-images.githubusercontent.com/9692408/57274505-18040000-70ce-11e9-92ac-1b2b49a2cb8a.png)
 
@@ -27,9 +27,9 @@
 
 ## 可配置项
 
-| 配置项              | 可选值                        |
-| ------------------- | ----------------------------- |
-| `dva_helper.quotes` | `single`,`double` ,`backtick` |
+| 配置项           | 可选值                        |
+| ---------------- | ----------------------------- |
+| `umi_pro.quotes` | `single`,`double` ,`backtick` |
 
 ## model 注册
 
