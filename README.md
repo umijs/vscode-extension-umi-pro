@@ -17,7 +17,7 @@
 
 直接在 vs-code 商店搜索 `umi-pro`
 
-![](https://user-images.githubusercontent.com/9692408/57274505-18040000-70ce-11e9-92ac-1b2b49a2cb8a.png)
+![](https://user-images.githubusercontent.com/9692408/57303307-a351b580-710f-11e9-8789-e5091b3bacb8.png)
 
 ## 功能
 
