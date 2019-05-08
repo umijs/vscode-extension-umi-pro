@@ -1,13 +1,13 @@
 <h1 align="center">Umi Pro</h1>
 <p align="center">
-    <a href="https://travis-ci.org/DiamondYuan/umi-pro" target="_blank">
-      <img src="https://img.shields.io/travis/DiamondYuan/umi-pro/master.svg?style=flat-square" alt="Build Status">
+    <a href="https://travis-ci.org/umijs/vscode-extension-umi-pro" target="_blank">
+      <img src="https://img.shields.io/travis/umijs/vscode-extension-umi-pro/master.svg?style=flat-square" alt="Build Status">
     </a>
-    <a href="https://codecov.io/gh/DiamondYuan/umi-pro" target="_blank">
-      <img src="https://img.shields.io/codecov/c/github/DiamondYuan/umi-pro/master.svg?style=flat-square" alt="Codecov">
+    <a href="https://codecov.io/gh/umijs/vscode-extension-umi-pro" target="_blank">
+      <img src="https://img.shields.io/codecov/c/github/umijs/vscode-extension-umi-pro/master.svg?style=flat-square" alt="Codecov">
     </a>
-    <a href="https://github.com/DiamondYuan/umi-pro/blob/master/LICENSE">
-     <img src="https://img.shields.io/github/license/Diamondyuan/umi-pro.svg">
+    <a href="https://github.com/umijs/vscode-extension-umi-pro/blob/master/LICENSE">
+     <img src="https://img.shields.io/github/license/umijs/vscode-extension-umi-pro.svg">
     </a>
     <a href="https://marketplace.visualstudio.com/items?itemName=DiamondYuan.umi-pro" target="_blank">
       <img src="https://img.shields.io/visual-studio-marketplace/v/DiamondYuan.umi-pro.svg">
