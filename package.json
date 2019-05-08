@@ -8,7 +8,7 @@
     "vscode": "^1.33.0"
   },
   "publisher": "DiamondYuan",
-  "repository": "https://github.com/DiamondYuan/umi-pro",
+  "repository": "https://github.com/umijs/vscode-extension-umi-pro",
   "activationEvents": [
     "workspaceContains:package.json"
   ],

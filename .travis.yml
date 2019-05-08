@@ -1,23 +1,20 @@
 sudo: false
 language: node_js
 node_js:
-- '10'
+  - '10'
 before_install:
-- if [ $TRAVIS_OS_NAME == "linux" ]; then export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
-  sh -e /etc/init.d/xvfb start; sleep 3; fi
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
+    sh -e /etc/init.d/xvfb start; sleep 3; fi
 install:
-- npm install
+  - npm install
 script:
-- npm run test
-- npm run package
+  - npm run test
+  - npm run package
 after_success:
-- npm i codecov && codecov
+  - npm i codecov && codecov
 deploy:
   provider: script
   script: npm run travis-publish
   skip_cleanup: true
   on:
     tags: true
-env:
-  global:
-    secure: rOULgZH9jcb2L5i6HYT53VmNdGpdjsraLZcp4gLQwVXctxC1Cpgfaxqz9Lt6Big/OXcgDVUXS03c4veBNkcwkJhyGlccefeVCvA3cUTzs4/ezr8PTmUb3bCkk5YWqsPpSopRJSkJS3rlaT7SNHzUQqLlbh5ULn5U7nAGR17L6A3QCu555VAdzng0LojjgOCYzaT74ZBQlCaV/QokX9aHh37+twCqDz0uYrfSY4FAuydQkJ6Bjwk6YQYRwhBF3XFxTY2PkGs2T4ZYTCPan9658FG3hW4tYrPp/Gok6NMh6ET4KiKDkrT2O5bZZ98Anz93u3nMUb1bUFDE0mJt8klF1tBN1/+Q4jhAMAfwcxCLeDuDD/qWXA6XMcqaYIhMcI9lXkTlBFk3+kMMJYM8uj5fStwn3fovLffuuiTraQ6CS29qcVxg52I738o5xH3NUkNldZMBjB4aAP2OR/AI/UNiHeGv+1PP9zm5xj+2DRWlN4qN93xXbjMKyjildfccCCxZWqhKgJPZIqYyiAooqTVHF9fpuZLt4ZF/wAY+y0Y9csZIQhI6LNpC9RI5x97Qzs4wGDPmY6IAOHLOSA5tNB7pfxIVn7xn7ley8/PHew2ftlZfZYXGtumINqpzzYTcpqfmWqHixw2dj89XLhRsVBIB6ehw7LY9uJ1at8M+s+1B75U=
