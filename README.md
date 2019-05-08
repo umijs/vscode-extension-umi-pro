@@ -1,21 +1,22 @@
 <h1 align="center">Umi Pro</h1>
 <p align="center">
-    <a href="https://travis-ci.org/DiamondYuan/umi-pro">
+    <a href="https://travis-ci.org/DiamondYuan/umi-pro" target="_blank">
       <img src="https://img.shields.io/travis/DiamondYuan/umi-pro/master.svg?style=flat-square" alt="Build Status">
     </a>
-    <a href="https://codecov.io/gh/DiamondYuan/umi-pro">
+    <a href="https://codecov.io/gh/DiamondYuan/umi-pro" target="_blank">
       <img src="https://img.shields.io/codecov/c/github/DiamondYuan/umi-pro/master.svg?style=flat-square" alt="Codecov">
     </a>
-    <img src="https://img.shields.io/github/license/Diamondyuan/umi-pro.svg">
-    <a href="https://marketplace.visualstudio.com/items?itemName=DiamondYuan.umi-pro">
+    <a href="https://github.com/DiamondYuan/umi-pro/blob/master/LICENSE">
+     <img src="https://img.shields.io/github/license/Diamondyuan/umi-pro.svg">
+    </a>
+    <a href="https://marketplace.visualstudio.com/items?itemName=DiamondYuan.umi-pro" target="_blank">
       <img src="https://img.shields.io/visual-studio-marketplace/v/DiamondYuan.umi-pro.svg">
     </a>
-
 </p>
 
 ## 安装
 
-直接在 vs-code 商店搜索 `umi`
+直接在 vs-code 商店搜索 `umi` 或者直接访问 [网页版商店](https://marketplace.visualstudio.com/items?itemName=DiamondYuan.umi-pro)
 
 ![](https://user-images.githubusercontent.com/9692408/57303307-a351b580-710f-11e9-8789-e5091b3bacb8.png)
 
