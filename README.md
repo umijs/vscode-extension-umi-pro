@@ -15,7 +15,7 @@
 
 ## 安装
 
-直接在 vs-code 商店搜索 `umi-pro`
+直接在 vs-code 商店搜索 `umi`
 
 ![](https://user-images.githubusercontent.com/9692408/57303307-a351b580-710f-11e9-8789-e5091b3bacb8.png)
 
