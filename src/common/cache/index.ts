@@ -33,7 +33,7 @@ export interface IModelInfoCache {
   getCurrentNameSpace(filePath: string): string | null;
 }
 
-class ModelInfoCache implements IModelInfoCache {
+export class ModelInfoCache implements IModelInfoCache {
   private cache: Cache;
   private parser: DvaModelParser;
 
@@ -116,5 +116,3 @@ class ModelInfoCache implements IModelInfoCache {
     }
   }
 }
-
-export default new ModelInfoCache() as IModelInfoCache;

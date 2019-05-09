@@ -1,27 +1,29 @@
 import * as vscode from 'vscode';
 import DvaCompletionItemProvider from './language/completionItem';
-import DvaHoverProvider from './language/hoverProvider';
 import DvaDefinitionProvider from './language/definitionProvider';
-import ModelInfoCache from './common/cache';
+import DvaHoverProvider from './language/hoverProvider';
+import { ModelInfoCache } from './common/cache';
+import logger from './common/logger';
+import { getUmiFileWatcher } from './common/fileWatcher';
 
-export function activate(context: vscode.ExtensionContext) {
-  console.log('extension "dva-helper" is now active!');
-
-  const watcher = vscode.workspace.createFileSystemWatcher(
-    '**/*',
-    false,
-    false,
-    false
+export async function activate(context: vscode.ExtensionContext) {
+  logger.info('extension "umi-pro" is now active!');
+  const umiFileWatcher = await getUmiFileWatcher(
+    vscode.workspace.workspaceFolders
   );
-
-  watcher.onDidChange(e => ModelInfoCache.reloadFile(e.fsPath));
-  watcher.onDidCreate(e => ModelInfoCache.reloadFile(e.fsPath));
-  watcher.onDidDelete(e => ModelInfoCache.reloadFile(e.fsPath));
+  if (!umiFileWatcher) {
+    logger.info('no project use umi');
+    return;
+  }
+  const modelInfoCache = new ModelInfoCache();
+  umiFileWatcher.onDidChange(e => modelInfoCache.reloadFile(e.fsPath));
+  umiFileWatcher.onDidCreate(e => modelInfoCache.reloadFile(e.fsPath));
+  umiFileWatcher.onDidDelete(e => modelInfoCache.reloadFile(e.fsPath));
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
       ['javascript', 'typescript'],
-      new DvaCompletionItemProvider(ModelInfoCache),
+      new DvaCompletionItemProvider(modelInfoCache),
       ':'
     )
   );
@@ -29,14 +31,14 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerHoverProvider(
       ['javascript', 'typescript'],
-      new DvaHoverProvider(ModelInfoCache)
+      new DvaHoverProvider(modelInfoCache)
     )
   );
 
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
       ['javascript', 'typescript'],
-      new DvaDefinitionProvider(ModelInfoCache)
+      new DvaDefinitionProvider(modelInfoCache)
     )
   );
 }

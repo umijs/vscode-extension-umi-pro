@@ -16,4 +16,4 @@ export class Logger implements ILogger {
   }
 }
 
-export default new Logger(window.createOutputChannel('dva_helper')) as ILogger;
+export default new Logger(window.createOutputChannel('Umi Pro')) as ILogger;
