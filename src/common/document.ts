@@ -41,7 +41,7 @@ export class TextDocumentUtils {
     );
     const charArray: string[] = [];
     const quoteChar = QuoteCharMap[quoteType];
-    for (let i = offset; i > -startOfLint; i--) {
+    for (let i = offset; i >= startOfLint; i--) {
       const char = this.CharAt(i);
       if (char === quoteChar || char === null) {
         break;
