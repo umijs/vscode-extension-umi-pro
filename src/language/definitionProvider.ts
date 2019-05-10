@@ -22,10 +22,11 @@ export default class DvaDefinitionProvider
     if (!projectPath) {
       return;
     }
-    let actionType = textDocumentUtils.getWordInQuote(position, config.quotes);
-    if (!actionType) {
+    let range = textDocumentUtils.getQuoteRange(position, config.quotes);
+    if (!range) {
       return;
     }
+    let actionType = document.getText(range).slice(1, -1);
     const filePath = document.uri.fsPath;
     if (!actionType.includes('/')) {
       const namespace = this.cache.getCurrentNameSpace(filePath);
@@ -36,21 +37,29 @@ export default class DvaDefinitionProvider
     }
     const models = await this.cache.getModules(filePath, projectPath);
     const [actionNameSpace, actionFunctionName] = actionType.split('/');
-
     for (let model of models) {
       if (model.namespace === actionNameSpace) {
-        let actionFunction = model.effects[actionFunctionName];
-        if (!actionFunction) {
-          actionFunction = model.reducers[actionFunctionName];
-        }
+        let actionFunction =
+          model.effects[actionFunctionName] ||
+          model.reducers[actionFunctionName];
         if (actionFunction) {
-          return new vscode.Location(
-            vscode.Uri.file(model.filePath),
+          const targetRange = new vscode.Range(
             new vscode.Position(
               actionFunction.loc.start.line - 1,
               actionFunction.loc.start.column
+            ),
+            new vscode.Position(
+              actionFunction.loc.end.line - 1,
+              actionFunction.loc.end.column
             )
           );
+          return [
+            {
+              originSelectionRange: range,
+              targetUri: vscode.Uri.file(model.filePath),
+              targetRange,
+            },
+          ];
         }
       }
     }

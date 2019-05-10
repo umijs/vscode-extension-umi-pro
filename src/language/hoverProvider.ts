@@ -1,5 +1,5 @@
 import { IModelInfoCache } from './../common/cache';
-import { getProjectPath } from './../common/utils';
+import { getProjectPath } from '../common/utils';
 import { TextDocumentUtils } from './../common/document';
 import { getConfig } from './../common/config';
 import logger from '../common/logger';
@@ -21,10 +21,11 @@ export default class DvaHoverProvider implements vscode.HoverProvider {
     const config = getConfig();
     const filePath = document.uri.fsPath;
     const textDocumentUtils = new TextDocumentUtils(document);
-    let actionType = textDocumentUtils.getWordInQuote(position, config.quotes);
-    if (!actionType) {
+    let range = textDocumentUtils.getQuoteRange(position, config.quotes);
+    if (!range) {
       return;
     }
+    let actionType = document.getText(range).slice(1, -1);
     if (!actionType.includes('/')) {
       const namespace = this.cache.getCurrentNameSpace(filePath);
       if (!namespace) {
@@ -39,19 +40,17 @@ export default class DvaHoverProvider implements vscode.HoverProvider {
 
     for (let model of models) {
       if (model.namespace === actionNameSpace) {
-        let actionFunction = model.effects[actionFunctionName];
+        let actionFunction =
+          model.effects[actionFunctionName] ||
+          model.reducers[actionFunctionName];
         if (actionFunction) {
-          return new vscode.Hover({
-            language: 'typescript',
-            value: actionFunction.code,
-          });
-        }
-        actionFunction = model.reducers[actionFunctionName];
-        if (actionFunction) {
-          return new vscode.Hover({
-            language: 'typescript',
-            value: actionFunction.code,
-          });
+          return new vscode.Hover(
+            {
+              language: 'typescript',
+              value: actionFunction.code,
+            },
+            range
+          );
         }
       }
     }

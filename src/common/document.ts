@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { QuoteType, QuoteCharMap } from './config';
+import { isUndefined } from './utils';
 
 export class TextDocumentUtils {
   private document: vscode.TextDocument;
@@ -28,7 +29,7 @@ export class TextDocumentUtils {
     return this.document.positionAt(offset).isEqual(this.illegal);
   };
 
-  public getWordInQuote = (position: vscode.Position, quoteType: QuoteType) => {
+  public getQuoteRange = (position: vscode.Position, quoteType: QuoteType) => {
     const offset = this.document.offsetAt(position);
     if (this.outOfRange(offset)) {
       return null;
@@ -39,22 +40,30 @@ export class TextDocumentUtils {
     const endOfLint = this.document.offsetAt(
       new vscode.Position(position.line, Infinity)
     );
-    const charArray: string[] = [];
     const quoteChar = QuoteCharMap[quoteType];
+    let frontQuoteOffset;
     for (let i = offset; i >= startOfLint; i--) {
-      const char = this.CharAt(i);
-      if (char === quoteChar || char === null) {
+      if (this.CharAt(i) === quoteChar) {
+        frontQuoteOffset = i;
         break;
       }
-      charArray.unshift(char);
     }
+    if (isUndefined(frontQuoteOffset)) {
+      return null;
+    }
+    let endQuoteOffset;
     for (let i = offset + 1; i <= endOfLint; i++) {
-      const char = this.CharAt(i);
-      if (char === quoteChar || char === null) {
+      if (this.CharAt(i) === quoteChar) {
+        endQuoteOffset = i;
         break;
       }
-      charArray.push(char);
     }
-    return charArray.join('');
+    if (isUndefined(endQuoteOffset)) {
+      return null;
+    }
+    return new vscode.Range(
+      this.document.positionAt(frontQuoteOffset),
+      this.document.positionAt(endQuoteOffset + 1)
+    );
   };
 }

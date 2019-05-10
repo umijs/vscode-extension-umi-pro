@@ -73,3 +73,8 @@ export function getProjectPath(
   }
   return workspace.uri.fsPath;
 }
+
+export function isUndefined<T>(data: T | undefined): data is T {
+  // eslint-disable-next-line no-undefined
+  return data === undefined;
+}
