@@ -2,6 +2,12 @@ import * as vscode from 'vscode';
 import { QuoteType, QuoteCharMap } from './config';
 import { isUndefined } from './utils';
 
+export enum Brackets {
+  ROUND = '()',
+  BOX = '[]',
+  CURLY = '{}',
+}
+
 export class TextDocumentUtils {
   private document: vscode.TextDocument;
   private readonly illegal: vscode.Position;
@@ -13,9 +19,9 @@ export class TextDocumentUtils {
     );
   }
 
-  public CharAt = (offset: number): string | null => {
+  public CharAt = (offset: number): string => {
     if (this.outOfRange(offset)) {
-      return null;
+      throw new Error('illegal offset');
     }
     return this.document.getText(
       new vscode.Range(
@@ -28,6 +34,66 @@ export class TextDocumentUtils {
   public outOfRange = (offset: number) => {
     return this.document.positionAt(offset).isEqual(this.illegal);
   };
+
+  public growBracketsRange(
+    positionOrRange: vscode.Position | vscode.Range,
+    brackets: Brackets
+  ): vscode.Range | null {
+    let start: number;
+    let end: number;
+    if (positionOrRange instanceof vscode.Position) {
+      start = this.document.offsetAt(positionOrRange);
+      end = this.document.offsetAt(positionOrRange);
+    } else {
+      start = this.document.offsetAt(positionOrRange.start);
+      end = this.document.offsetAt(positionOrRange.end);
+    }
+    let growStart;
+    let growEnd;
+    const startOfDocument = this.document.offsetAt(new vscode.Position(0, 0));
+    const endOfDocument = this.document.offsetAt(
+      new vscode.Position(Infinity, Infinity)
+    );
+
+    let bracketsStack: string[] = [];
+    const leftBrackets = brackets[0];
+    const rightBrackets = brackets[1];
+    for (let i = start; i >= startOfDocument; i--) {
+      if (this.CharAt(i) === rightBrackets) {
+        bracketsStack.push(brackets);
+      } else if (this.CharAt(i) === leftBrackets) {
+        if (bracketsStack.length === 0) {
+          growStart = i;
+          break;
+        } else {
+          bracketsStack.pop();
+        }
+      }
+    }
+    if (!growStart) {
+      return null;
+    }
+    bracketsStack = [];
+    for (let i = end; i <= endOfDocument; i++) {
+      if (this.CharAt(i) === leftBrackets) {
+        bracketsStack.push(brackets);
+      } else if (this.CharAt(i) === rightBrackets) {
+        if (bracketsStack.length === 0) {
+          growEnd = i;
+          break;
+        } else {
+          bracketsStack.pop();
+        }
+      }
+    }
+    if (!growEnd) {
+      return null;
+    }
+    return new vscode.Range(
+      this.document.positionAt(growStart),
+      this.document.positionAt(growEnd + 1)
+    );
+  }
 
   public getQuoteRange = (position: vscode.Position, quoteType: QuoteType) => {
     const offset = this.document.offsetAt(position);

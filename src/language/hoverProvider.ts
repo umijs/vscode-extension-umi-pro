@@ -18,6 +18,7 @@ export default class DvaHoverProvider implements vscode.HoverProvider {
     if (!projectPath) {
       return;
     }
+
     const config = getConfig();
     const filePath = document.uri.fsPath;
     const textDocumentUtils = new TextDocumentUtils(document);
