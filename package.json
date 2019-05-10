@@ -2,7 +2,7 @@
   "name": "umi-pro",
   "displayName": "Umi Pro",
   "description": "Write Umi like a Pro! ",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "engines": {
     "vscode": "^1.33.0"
