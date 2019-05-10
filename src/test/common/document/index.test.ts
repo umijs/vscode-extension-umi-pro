@@ -18,7 +18,11 @@ describe('test TextDocumentUtils', () => {
     assert.equal(textDocumentUtils.CharAt(6), '六');
     assert.equal(textDocumentUtils.CharAt(10), '十');
     assert.equal(textDocumentUtils.CharAt(11), '\n');
-    assert.equal(textDocumentUtils.CharAt(12), null);
+    try {
+      assert.equal(textDocumentUtils.CharAt(12), null);
+    } catch (error) {
+      assert.equal(error.message, 'illegal offset');
+    }
   });
 
   it('test outOfRange', async () => {
