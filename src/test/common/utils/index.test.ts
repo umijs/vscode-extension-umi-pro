@@ -1,4 +1,4 @@
-import { quoteString } from '../../../common/utils';
+import { quoteString, isUndefined } from '../../../common/utils';
 import { QuoteType } from '../../../common/config';
 
 import assert = require('assert');
@@ -17,5 +17,13 @@ describe('test utils', () => {
       quoteString('DiamondYuanLoveOPLinJie', QuoteType.backtick),
       '`DiamondYuanLoveOPLinJie`'
     );
+  });
+
+  it('test isUndefined', () => {
+    let undefinedVal;
+    assert.equal(isUndefined(undefinedVal), true);
+    // eslint-disable-next-line no-undefined
+    assert.equal(isUndefined(undefined), true);
+    assert.equal(isUndefined(null), false);
   });
 });
