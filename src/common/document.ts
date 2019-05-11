@@ -51,14 +51,19 @@ export class TextDocumentUtils {
     let growStart;
     let growEnd;
     const startOfDocument = this.document.offsetAt(new vscode.Position(0, 0));
+    if (startOfDocument === start) {
+      return null;
+    }
     const endOfDocument = this.document.offsetAt(
       new vscode.Position(Infinity, Infinity)
     );
-
+    if (endOfDocument === end) {
+      return null;
+    }
     let bracketsStack: string[] = [];
     const leftBrackets = brackets[0];
     const rightBrackets = brackets[1];
-    for (let i = start; i >= startOfDocument; i--) {
+    for (let i = start - 1; i >= startOfDocument; i--) {
       if (this.CharAt(i) === rightBrackets) {
         bracketsStack.push(brackets);
       } else if (this.CharAt(i) === leftBrackets) {
@@ -74,7 +79,7 @@ export class TextDocumentUtils {
       return null;
     }
     bracketsStack = [];
-    for (let i = end; i <= endOfDocument; i++) {
+    for (let i = end + 1; i <= endOfDocument; i++) {
       if (this.CharAt(i) === leftBrackets) {
         bracketsStack.push(brackets);
       } else if (this.CharAt(i) === rightBrackets) {

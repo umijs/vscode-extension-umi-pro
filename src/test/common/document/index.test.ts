@@ -1,4 +1,4 @@
-import { TextDocumentUtils } from '../../../common/document';
+import { TextDocumentUtils, Brackets } from '../../../common/document';
 import { getAbsPath } from '../../../common/utils';
 import { join } from 'path';
 import * as vscode from 'vscode';
@@ -32,5 +32,23 @@ describe('test TextDocumentUtils', () => {
     const textDocumentUtils = new TextDocumentUtils(text);
     assert.equal(textDocumentUtils.outOfRange(11), false);
     assert.equal(textDocumentUtils.outOfRange(12), true);
+  });
+
+  it('test growBracketsRange', async () => {
+    const text = await vscode.workspace.openTextDocument(
+      join(fixtures, 'growBracketsRange.js')
+    );
+    const textDocumentUtils = new TextDocumentUtils(text);
+    const range = textDocumentUtils.growBracketsRange(
+      new vscode.Position(20, 17),
+      Brackets.CURLY
+    );
+    assert.notEqual(range, null);
+    assert.equal(range!.isEqual(new vscode.Range(17, 6, 21, 7)), true);
+    const expendRange = textDocumentUtils.growBracketsRange(
+      new vscode.Range(17, 6, 21, 7),
+      Brackets.CURLY
+    );
+    assert.equal(new vscode.Range(6, 2, 26, 3).isEqual(expendRange!), true);
   });
 });
