@@ -6,6 +6,13 @@ import {
   isIdentifier,
 } from '@babel/types';
 
+/**
+ *
+ * 判断是否是路由配置里面的 component 路径
+ *
+ * @param code 路由配置的代码
+ * @param path 在引号里的字符串
+ */
 export function isPathInRouter(code: string, path: string) {
   const ast = babelParser.parseExpression(code, {
     sourceType: 'module',
@@ -29,10 +36,10 @@ export function isPathInRouter(code: string, path: string) {
       return false;
     }
     const { key, value } = property;
-    if (!isIdentifier(key) || key.name === 'component') {
+    if (!isIdentifier(key) || key.name !== 'component') {
       return false;
     }
-    if (!isStringLiteral(value) || value.value === path) {
+    if (!isStringLiteral(value) || value.value !== path) {
       return false;
     }
     return true;
