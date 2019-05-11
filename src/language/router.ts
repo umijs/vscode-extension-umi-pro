@@ -18,6 +18,12 @@ export default class UmiRouterDefinitionProvider
     if (!projectPath) {
       return;
     }
+    const routerPath = config.routerConfigPath
+      ? [config.routerConfigPath]
+      : ['.umirc.js', 'config/config.js', 'config/config.js'];
+    if (routerPath.every(o => join(projectPath, o) !== document.uri.fsPath)) {
+      return;
+    }
     let range = textDocumentUtils.getQuoteRange(position, config.quotes);
     if (!range) {
       return;
@@ -33,7 +39,6 @@ export default class UmiRouterDefinitionProvider
     if (!isPathInRouter(document.getText(codeRange), routePath)) {
       return;
     }
-
     const possiblePagePath = [
       '.js',
       '.jsx',

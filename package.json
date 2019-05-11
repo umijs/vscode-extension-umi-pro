@@ -52,6 +52,10 @@
             "single",
             "backtick"
           ]
+        },
+        "umi_pro.router_config_path": {
+          "type": "string",
+          "description": "path of router config"
         }
       }
     }
