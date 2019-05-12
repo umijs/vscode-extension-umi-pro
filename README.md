@@ -16,9 +16,9 @@
 
 ## 安装
 
-直接在 vs-code 商店搜索 `umi` 或者直接访问 [网页版商店](https://marketplace.visualstudio.com/items?itemName=DiamondYuan.umi-pro)
+直接在 vs-code 商店搜索 `umi pro` 或者直接访问 [网页版商店](https://marketplace.visualstudio.com/items?itemName=DiamondYuan.umi-pro)
 
-![](https://user-images.githubusercontent.com/9692408/57303307-a351b580-710f-11e9-8789-e5091b3bacb8.png)
+![](https://user-images.githubusercontent.com/9692408/57577593-072c0380-74ad-11e9-9151-44b5c4eb7550.png)
 
 ## 功能
 
