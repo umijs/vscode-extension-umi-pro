@@ -16,11 +16,15 @@ export const QuoteCharMap = {
 
 export interface IDvaHelperConfig {
   quotes: QuoteType;
+  routerConfigPath?: string;
 }
 
 export function getConfig(): IDvaHelperConfig {
-  const config = { quotes: QuoteType.single };
   const userConfig = vscode.workspace.getConfiguration(CONFIG_NAMESPACE);
+  const config: IDvaHelperConfig = {
+    quotes: QuoteType.single,
+    routerConfigPath: userConfig.get<string>('router_config_path'),
+  };
   const userQuotesConfig = userConfig.get<QuoteType>('quotes');
   if (userQuotesConfig && Object.values(QuoteType).includes(userQuotesConfig)) {
     config.quotes = userQuotesConfig;
