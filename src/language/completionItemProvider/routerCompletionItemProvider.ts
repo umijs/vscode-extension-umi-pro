@@ -32,12 +32,10 @@ export class UmiRouterCompletionItemProvider
     }
     const pages = await getAllPages(join(projectPath, 'src/pages'));
 
-    console.log(pages);
     const result = pages
       .filter(o => o.startsWith(routePath.slice(2)))
       .map(o => new vscode.CompletionItem(o.slice(routePath.slice(2).length)));
 
-    console.log(pages);
     return result;
   }
 }
