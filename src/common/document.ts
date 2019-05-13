@@ -113,7 +113,7 @@ export class TextDocumentUtils {
     );
     const quoteChar = QuoteCharMap[quoteType];
     let frontQuoteOffset;
-    for (let i = offset; i >= startOfLint; i--) {
+    for (let i = offset - 1; i >= startOfLint; i--) {
       if (this.CharAt(i) === quoteChar) {
         frontQuoteOffset = i;
         break;
@@ -123,7 +123,7 @@ export class TextDocumentUtils {
       return null;
     }
     let endQuoteOffset;
-    for (let i = offset + 1; i <= endOfLint; i++) {
+    for (let i = offset; i <= endOfLint; i++) {
       if (this.CharAt(i) === quoteChar) {
         endQuoteOffset = i;
         break;

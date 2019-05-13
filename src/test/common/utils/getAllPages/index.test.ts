@@ -8,6 +8,6 @@ describe('test getAllPages', () => {
 
   it('should get getAllPages correct', async () => {
     const result = await getAllPages(fixtures);
-    assert.deepEqual(result.sort(), ['index', 'a', 'a/b'].sort());
+    assert.deepEqual(result.sort(), ['index', 'a', 'a/b', 'b/a'].sort());
   });
 });

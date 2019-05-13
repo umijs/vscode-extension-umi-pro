@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import DvaCompletionItemProvider from './language/completionItem';
 import DvaDefinitionProvider from './language/definitionProvider';
 import DvaHoverProvider from './language/hoverProvider';
+import { UmiRouterCompletionItemProvider } from './language/completionItemProvider/routerCompletionItemProvider';
 import UmiRouterDefinitionProvider from './language/router';
 import { ModelInfoCache } from './common/cache';
 import logger from './common/logger';
@@ -42,10 +43,19 @@ export async function activate(context: vscode.ExtensionContext) {
       new DvaDefinitionProvider(modelInfoCache)
     )
   );
+
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
       ['javascript', 'typescript'],
       new UmiRouterDefinitionProvider()
+    )
+  );
+
+  context.subscriptions.push(
+    vscode.languages.registerCompletionItemProvider(
+      ['javascript', 'typescript'],
+      new UmiRouterCompletionItemProvider(),
+      ...['/']
     )
   );
 }
