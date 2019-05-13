@@ -18,7 +18,7 @@ export class UmiRouterCompletionItemProvider
     }
     const routerPath = config.routerConfigPath
       ? [config.routerConfigPath]
-      : ['.umirc.js', 'config/config.js', 'config/config.js'];
+      : ['.umirc.js', 'config/config.js', 'config/router.config.js'];
     if (routerPath.every(o => join(projectPath, o) !== document.uri.fsPath)) {
       return;
     }
@@ -27,24 +27,7 @@ export class UmiRouterCompletionItemProvider
       return;
     }
     let routePath = document.getText(range).slice(1, -1);
-    if (!routePath.startsWith('./')) {
-      return;
-    }
-    routePath = routePath.slice(2);
-    const pages = await getAllPages(join(projectPath, 'src/pages'));
-    return pages.reduce(
-      (previousValue, value) => {
-        if (value.startsWith(routePath)) {
-          previousValue.push(
-            new vscode.CompletionItem(
-              value.slice(routePath.length),
-              vscode.CompletionItemKind.File
-            )
-          );
-        }
-        return previousValue;
-      },
-      [] as vscode.CompletionItem[]
-    );
+    const pages = await getAllPages(join(projectPath, 'src/pages', routePath));
+    return pages.map(o => new vscode.CompletionItem(o));
   }
 }
