@@ -25,6 +25,9 @@
 ### 自动补全
 
 - 路由组件编写自动补全
+
+![](https://raw.githubusercontent.com/umijs/vscode-extension-umi-pro/master/images/router_auto_complete.gif)
+
 - action type 自动补全
 
 ### 悬浮提示
