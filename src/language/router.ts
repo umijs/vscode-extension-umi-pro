@@ -20,7 +20,7 @@ export default class UmiRouterDefinitionProvider
     }
     const routerPath = config.routerConfigPath
       ? [config.routerConfigPath]
-      : ['.umirc.js', 'config/config.js', 'config/config.js'];
+      : ['.umirc.js', 'config/config.js', 'config/router.config.js'];
     if (routerPath.every(o => join(projectPath, o) !== document.uri.fsPath)) {
       return;
     }
