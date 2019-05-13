@@ -30,12 +30,21 @@ export class UmiRouterCompletionItemProvider
     if (!routePath.startsWith('./')) {
       return;
     }
+    routePath = routePath.slice(2);
     const pages = await getAllPages(join(projectPath, 'src/pages'));
-
-    const result = pages
-      .filter(o => o.startsWith(routePath.slice(2)))
-      .map(o => new vscode.CompletionItem(o.slice(routePath.slice(2).length)));
-
-    return result;
+    return pages.reduce(
+      (previousValue, value) => {
+        if (value.startsWith(routePath)) {
+          previousValue.push(
+            new vscode.CompletionItem(
+              value.slice(routePath.length),
+              vscode.CompletionItemKind.File
+            )
+          );
+        }
+        return previousValue;
+      },
+      [] as vscode.CompletionItem[]
+    );
   }
 }

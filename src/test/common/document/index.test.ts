@@ -3,6 +3,7 @@ import { getAbsPath } from '../../../common/utils';
 import { join } from 'path';
 import * as vscode from 'vscode';
 import assert = require('assert');
+import { QuoteType } from '../../../common/config';
 
 describe('test TextDocumentUtils', () => {
   const fixtures = getAbsPath(join(__dirname, './fixtures'));
@@ -50,5 +51,22 @@ describe('test TextDocumentUtils', () => {
       Brackets.CURLY
     );
     assert.equal(new vscode.Range(6, 2, 26, 3).isEqual(expendRange!), true);
+  });
+
+  it('test growBracketsRange', async () => {
+    const text = await vscode.workspace.openTextDocument(
+      join(fixtures, 'getQuoteRange.js')
+    );
+    const textDocumentUtils = new TextDocumentUtils(text);
+    let range = textDocumentUtils.getQuoteRange(
+      new vscode.Position(3, 18),
+      QuoteType.single
+    );
+    assert.equal(new vscode.Range(3, 15, 3, 19).isEqual(range!), true);
+    range = textDocumentUtils.getQuoteRange(
+      new vscode.Position(4, 70),
+      QuoteType.single
+    );
+    assert.equal(new vscode.Range(4, 62, 4, 71).isEqual(range!), true);
   });
 });
