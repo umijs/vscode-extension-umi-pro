@@ -2,7 +2,7 @@ import { TextDocumentUtils } from './../../common/document';
 import { join } from 'path';
 import * as vscode from 'vscode';
 import { getProjectPath, getAllPages } from '../../common/utils';
-import { getConfig } from '../../common/config';
+import { getConfig, DEFAULT_ROUTER_CONFIG_PATH } from '../../common/config';
 
 export class UmiRouterCompletionItemProvider
   implements vscode.CompletionItemProvider {
@@ -18,7 +18,7 @@ export class UmiRouterCompletionItemProvider
     }
     const routerPath = config.routerConfigPath
       ? [config.routerConfigPath]
-      : ['.umirc.js', 'config/config.js', 'config/router.config.js'];
+      : DEFAULT_ROUTER_CONFIG_PATH;
     if (routerPath.every(o => join(projectPath, o) !== document.uri.fsPath)) {
       return;
     }

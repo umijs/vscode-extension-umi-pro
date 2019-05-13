@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { TextDocumentUtils, Brackets } from '../common/document';
-import { getConfig } from './../common/config';
+import { getConfig, DEFAULT_ROUTER_CONFIG_PATH } from './../common/config';
 import { getProjectPath } from './../common/utils';
 import { join } from 'path';
 import { isPathInRouter } from '../common/ast';
@@ -20,7 +20,7 @@ export default class UmiRouterDefinitionProvider
     }
     const routerPath = config.routerConfigPath
       ? [config.routerConfigPath]
-      : ['.umirc.js', 'config/config.js', 'config/router.config.js'];
+      : DEFAULT_ROUTER_CONFIG_PATH;
     if (routerPath.every(o => join(projectPath, o) !== document.uri.fsPath)) {
       return;
     }
