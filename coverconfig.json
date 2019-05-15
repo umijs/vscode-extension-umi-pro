@@ -2,7 +2,7 @@
   "enabled": true,
   "relativeSourcePath": "..",
   "relativeCoverageDir": "../../coverage",
-  "ignorePatterns": ["test/**"],
+  "ignorePatterns": ["test/**", "extension.js"],
   "includePid": false,
   "reports": ["json", "html", "lcov"],
   "verbose": false
