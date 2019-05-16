@@ -28,7 +28,7 @@ export default class DvaHoverProvider implements vscode.HoverProvider {
     }
     let actionType = document.getText(range).slice(1, -1);
     if (!actionType.includes('/')) {
-      const namespace = this.cache.getCurrentNameSpace(filePath);
+      const namespace = await this.cache.getCurrentNameSpace(filePath);
       if (!namespace) {
         return;
       }

@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { IModelInfoCache } from '../common/cache';
-import { getConfig } from '../common/config';
-import { quoteString } from '../common/utils';
-import logger from '../common/logger';
+import { IModelInfoCache } from '../../common/cache';
+import { getConfig } from '../../common/config';
+import { quoteString, getProjectPath } from '../../common/utils';
+import logger from '../../common/logger';
 
 export default class DvaCompletionItemProvider
   implements vscode.CompletionItemProvider {
@@ -16,6 +16,11 @@ export default class DvaCompletionItemProvider
     document: vscode.TextDocument,
     position: vscode.Position
   ) {
+    const projectPath = getProjectPath(document);
+    if (!projectPath) {
+      return;
+    }
+    const filePath = document.uri.fsPath;
     const lineText = document.getText(
       new vscode.Range(position.with(position.line, 0), position)
     );
@@ -24,20 +29,8 @@ export default class DvaCompletionItemProvider
     if (!lineText.includes('type')) {
       return [];
     }
-    const workspaceFolders = vscode.workspace.workspaceFolders;
-    if (!workspaceFolders) {
-      return [];
-    }
-    const filePath = document.uri.fsPath;
-    const workspace = workspaceFolders.find(o =>
-      filePath.startsWith(o.uri.fsPath)
-    );
-    if (!workspace) {
-      return [];
-    }
-    const projectPath = workspace.uri.fsPath;
     let dvaModels = await this.cache.getModules(filePath, projectPath);
-    const currentNamespace = this.cache.getCurrentNameSpace(filePath);
+    const currentNamespace = await this.cache.getCurrentNameSpace(filePath);
     const completionItems: vscode.CompletionItem[] = [];
     const userConfig = getConfig();
     dvaModels.reduce(

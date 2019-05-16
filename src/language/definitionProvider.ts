@@ -29,7 +29,7 @@ export default class DvaDefinitionProvider
     let actionType = document.getText(range).slice(1, -1);
     const filePath = document.uri.fsPath;
     if (!actionType.includes('/')) {
-      const namespace = this.cache.getCurrentNameSpace(filePath);
+      const namespace = await this.cache.getCurrentNameSpace(filePath);
       if (!namespace) {
         return;
       }

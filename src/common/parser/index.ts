@@ -12,7 +12,7 @@ import {
 } from '@babel/types';
 import generate from '@babel/generator';
 
-interface IDvaModelParser {
+export interface IDvaModelParser {
   parse(code: string): Promise<IDvaModel[]>;
 
   parseFile(path: string): Promise<IDvaModel[]>;

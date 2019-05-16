@@ -1,10 +1,15 @@
 import * as vscode from 'vscode';
-import DvaCompletionItemProvider from './language/completionItem';
+import DvaCompletionItemProvider from './language/completionItemProvider/completionItem';
 import DvaDefinitionProvider from './language/definitionProvider';
 import DvaHoverProvider from './language/hoverProvider';
 import { UmiRouterCompletionItemProvider } from './language/completionItemProvider/routerCompletionItemProvider';
 import UmiRouterDefinitionProvider from './language/router';
-import { ModelInfoCache } from './common/cache';
+import {
+  ModelInfoCache,
+  ModelCacheKeyParser,
+  ModelCache,
+} from './common/cache';
+import { DvaModelParser } from './common/parser';
 import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
 
@@ -17,10 +22,14 @@ export async function activate(context: vscode.ExtensionContext) {
     logger.info('no project use umi');
     return;
   }
-  const modelInfoCache = new ModelInfoCache();
-  umiFileWatcher.onDidChange(e => modelInfoCache.reloadFile(e.fsPath));
-  umiFileWatcher.onDidCreate(e => modelInfoCache.reloadFile(e.fsPath));
-  umiFileWatcher.onDidDelete(e => modelInfoCache.reloadFile(e.fsPath));
+  const modelCache = new ModelCache(
+    new ModelCacheKeyParser(new DvaModelParser())
+  );
+  umiFileWatcher.onDidChange(e => modelCache.update(e.fsPath));
+  umiFileWatcher.onDidCreate(e => modelCache.update(e.fsPath));
+  umiFileWatcher.onDidDelete(e => modelCache.update(e.fsPath));
+
+  const modelInfoCache = new ModelInfoCache(modelCache);
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(

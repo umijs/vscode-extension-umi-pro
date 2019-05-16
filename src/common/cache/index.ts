@@ -1,118 +1,60 @@
-import { IDvaModel, IDvaModelWithFilePath } from './../parser/interface';
+import { IDvaModelWithFilePath } from './../parser/interface';
 import { join } from 'path';
-import * as fs from 'mz/fs';
-import { DvaModelParser } from '../parser';
-import logger from '../logger';
-import { getModels, getPageModels } from '../utils';
 
-interface Cache {
-  /**
-   * 所有文件的编译缓存 IDvaModel
-   */
-  center: {
-    [filePath: string]: IDvaModel[];
-  };
-  projects: {
-    /**
-     * key 为项目根路径
-     */
-    [projectPath: string]: {
-      globalModels: string[];
-    };
-  };
-}
+import { getModels, getPageModels } from '../utils';
+import { ModelCache } from './modelCache';
+export * from './modelCache';
 
 export interface IModelInfoCache {
-  reloadFile(path: string): void;
-
   getModules(
     filePath: string,
     projectPath: string
   ): Promise<IDvaModelWithFilePath[]>;
 
-  getCurrentNameSpace(filePath: string): string | null;
+  getCurrentNameSpace(filePath: string): Promise<string | null>;
 }
 
 export class ModelInfoCache implements IModelInfoCache {
-  private cache: Cache;
-  private parser: DvaModelParser;
+  private cache: ModelCache;
 
-  constructor() {
-    this.cache = {
-      center: {},
-      projects: {},
-    };
-    this.parser = new DvaModelParser();
-  }
-  async reloadFile(filePath: string) {
-    this.cache.center[filePath] = [];
-    await this.loadFile(filePath);
-    const projects = Object.keys(this.cache.projects);
-    projects.forEach(key => {
-      if (filePath.startsWith[key]) {
-        const models = this.cache.projects[key];
-        if (models.globalModels.every(path => path !== filePath)) {
-          models.globalModels.push(filePath);
-        }
-      }
-    });
+  constructor(cache: ModelCache) {
+    this.cache = cache;
   }
 
   getModules = async (filePath: string, projectPath: string) => {
-    let project = this.cache.projects[projectPath];
-    if (!project) {
-      logger.info(`load project ${projectPath}`);
-      project = {
-        globalModels: await getModels(join(projectPath, 'src')),
-      };
-      this.cache.projects[projectPath] = project;
-    }
     try {
+      const globalModels = await getModels(join(projectPath, 'src'));
       const pageModels = await getPageModels(filePath, projectPath);
-      return this.filesToModels(project.globalModels.concat(pageModels));
+
+      const models = await Promise.all(
+        globalModels.concat(pageModels).map(file => this.fileToModels(file))
+      );
+      const result: IDvaModelWithFilePath[] = [];
+      models.forEach(o => {
+        if (o) {
+          result.push(...o);
+        }
+      });
+      return result;
     } catch (error) {
       console.log(error);
       return [];
     }
   };
 
-  getCurrentNameSpace(filePath: string): string | null {
-    const dvaModels = this.cache.center[filePath];
+  getCurrentNameSpace = async (filePath: string): Promise<string | null> => {
+    const dvaModels = await this.cache.get(filePath);
     if (!dvaModels || dvaModels.length !== 1) {
       return null;
     }
     return dvaModels[0].namespace;
-  }
+  };
 
-  private async filesToModels(files: string[]) {
-    await Promise.all(files.map(file => this.loadFile(file)));
-    return files.reduce(
-      (previousValue, filePath) => {
-        const models = this.cache.center[filePath];
-        if (Array.isArray(models)) {
-          return previousValue.concat(
-            models.map(({ namespace, effects, reducers }) => ({
-              filePath,
-              namespace,
-              effects,
-              reducers,
-            }))
-          );
-        }
-        return previousValue;
-      },
-      [] as IDvaModelWithFilePath[]
-    );
-  }
-
-  private async loadFile(filePath) {
-    if (await fs.exists(filePath)) {
-      try {
-        this.cache.center[filePath] = await this.parser.parseFile(filePath);
-      } catch (error) {
-        logger.info(`解析文件失败 ${filePath}`);
-        logger.info(error.message);
-      }
+  private async fileToModels(file): Promise<IDvaModelWithFilePath[] | null> {
+    const models = await this.cache.get(file);
+    if (!models) {
+      return null;
     }
+    return models.map(model => ({ ...model, filePath: file }));
   }
 }
