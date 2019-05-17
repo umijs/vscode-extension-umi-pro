@@ -61,6 +61,7 @@
   "devDependencies": {
     "@diamondyuan/eslint-config-typescript": "^6.0.0",
     "@types/babel-generator": "^6.25.3",
+    "@types/babel-traverse": "^6.25.5",
     "@types/babel-types": "^7.0.7",
     "@types/lodash": "^4.14.129",
     "@types/mocha": "^2.2.42",
@@ -91,6 +92,7 @@
   "dependencies": {
     "@babel/generator": "^7.4.4",
     "@babel/parser": "^7.4.4",
+    "@babel/traverse": "^7.4.4",
     "@babel/types": "^7.4.4",
     "globby": "^9.2.0",
     "lodash": "^4.17.11",
