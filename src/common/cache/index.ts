@@ -1,9 +1,10 @@
 import { IDvaModelWithFilePath } from './../parser/interface';
 import { join } from 'path';
-
 import { getModels, getPageModels } from '../utils';
 import { ModelCache } from './modelCache';
 export * from './modelCache';
+import * as lodash from 'lodash';
+import logger from '../logger';
 
 export interface IModelInfoCache {
   getModules(
@@ -25,19 +26,14 @@ export class ModelInfoCache implements IModelInfoCache {
     try {
       const globalModels = await getModels(join(projectPath, 'src'));
       const pageModels = await getPageModels(filePath, projectPath);
-
-      const models = await Promise.all(
-        globalModels.concat(pageModels).map(file => this.fileToModels(file))
+      const modelFiles = globalModels.concat(pageModels);
+      return lodash.flatten(
+        (await Promise.all(
+          modelFiles.map(file => this.fileToModels(file))
+        )).filter((o): o is IDvaModelWithFilePath[] => !!o)
       );
-      const result: IDvaModelWithFilePath[] = [];
-      models.forEach(o => {
-        if (o) {
-          result.push(...o);
-        }
-      });
-      return result;
     } catch (error) {
-      console.log(error);
+      logger.info(error.message);
       return [];
     }
   };
@@ -50,11 +46,8 @@ export class ModelInfoCache implements IModelInfoCache {
     return dvaModels[0].namespace;
   };
 
-  private async fileToModels(file): Promise<IDvaModelWithFilePath[] | null> {
-    const models = await this.cache.get(file);
-    if (!models) {
-      return null;
-    }
-    return models.map(model => ({ ...model, filePath: file }));
+  private async fileToModels(filePath) {
+    const models = await this.cache.get(filePath);
+    return models ? models.map(model => ({ ...model, filePath })) : null;
   }
 }
