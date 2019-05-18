@@ -6,6 +6,8 @@ import {
   isIdentifier,
 } from '@babel/types';
 
+export { IModelReferenceParser, ModelReferenceParser } from './modelReference';
+
 /**
  *
  * 判断是否是路由配置里面的 component 路径

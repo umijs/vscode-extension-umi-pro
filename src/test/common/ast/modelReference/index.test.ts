@@ -1,4 +1,4 @@
-import { ModelReferenceParser } from '../../../../common/ast/modelReference';
+import { ModelReferenceParser } from '../../../../common/ast';
 import { getAbsPath } from '../../../../common/utils';
 import { join } from 'path';
 import { Uri, Range } from 'vscode';
