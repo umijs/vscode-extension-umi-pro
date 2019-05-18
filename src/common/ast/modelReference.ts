@@ -9,11 +9,9 @@ import {
   isObjectProperty,
   isStringLiteral,
 } from '@babel/types';
-import { IModelInfoCache } from '../cache';
 
 interface ModelReference {
-  namespace: string;
-  actionType: string;
+  type: string;
   uri: Uri;
   range: Range;
 }
@@ -23,15 +21,8 @@ export interface IModelReferenceParser {
 }
 
 export class ModelReferenceParser implements IModelReferenceParser {
-  private cache: IModelInfoCache;
-
-  constructor(cache: IModelInfoCache) {
-    this.cache = cache;
-  }
-
   public async parseFile(filePath: string) {
     const code = await fs.readFile(filePath, 'utf-8');
-    const fileNamespace = this.cache.getCurrentNameSpace(filePath);
     const ast = babelParser.parse(code, {
       sourceType: 'module',
       plugins: [
@@ -78,17 +69,8 @@ export class ModelReferenceParser implements IModelReferenceParser {
             ) {
               return;
             }
-            let namespace;
-            let actionType;
-            if (value.value.includes('/')) {
-              [namespace, actionType] = value.value.split('/');
-            } else {
-              namespace = fileNamespace;
-              actionType = value.value;
-            }
             result.push({
-              namespace,
-              actionType,
+              type: value.value,
               uri: Uri.file(filePath),
               range: new Range(
                 new Position(value.loc.start.line - 1, value.loc.start.column),
