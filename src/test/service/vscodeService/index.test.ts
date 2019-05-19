@@ -1,27 +1,24 @@
+import { QuoteType } from './../../../services/vscodeService';
 import { VscodeService } from '../../../services/vscodeService';
 import { join } from 'path';
 import { getAbsPath } from '../../../common/utils';
-import { Uri, WorkspaceFolder, workspace } from 'vscode';
+import { workspace } from 'vscode';
 import assert = require('assert');
 
 describe('test VscodeService', () => {
-  const fixtures = getAbsPath(join(__dirname, './fixtures'));
+  const workspaceFolders = workspace.workspaceFolders;
+  const workspaceFixtures = getAbsPath(join(__dirname, '../../fixtures'));
 
-  const workspaceOnePath = join(fixtures, './workspace_1');
-  const workspaceTwoPath = join(fixtures, './workspace_2');
+  const jsProject = join(workspaceFixtures, 'jsProject');
+  const tsProject = join(workspaceFixtures, 'tsProject');
 
-  const workspaceFolders: WorkspaceFolder[] = [
-    {
-      uri: Uri.file(workspaceOnePath),
-      name: 'workspaceOne',
-      index: 0,
-    },
-    {
-      uri: Uri.file(workspaceTwoPath),
-      name: 'workspaceTwo',
-      index: 1,
-    },
-  ];
+  it('should have 2 workspace', () => {
+    assert.equal(workspaceFolders!.length, 2);
+  });
+
+  if (!workspaceFolders) {
+    return;
+  }
 
   const configs = workspaceFolders.map(({ uri }) => {
     return workspace.getConfiguration('umi_pro', uri);
@@ -32,11 +29,9 @@ describe('test VscodeService', () => {
 
   describe('test vscodeService.getWorkspace', () => {
     it('should get correct workspace', () => {
-      const result = vscodeService.getWorkspace(
-        join(workspaceOnePath, './1.js')
-      );
+      const result = vscodeService.getWorkspace(join(jsProject, './1.js'));
       assert.notEqual(result, null);
-      assert.equal(result!.uri.fsPath, workspaceOnePath);
+      assert.equal(result!.uri.fsPath, jsProject);
     });
     it('should get null when no workspace match', () => {
       const result = vscodeService.getWorkspace(join('./1.js'));
@@ -46,15 +41,25 @@ describe('test VscodeService', () => {
 
   describe('test vscodeService.getProjectPath', () => {
     it('should get correct getProjectPath', () => {
-      const result = vscodeService.getProjectPath(
-        join(workspaceOnePath, './1.js')
-      );
+      const result = vscodeService.getProjectPath(join(jsProject, './1.js'));
       assert.notEqual(result, null);
-      assert.equal(result, workspaceOnePath);
+      assert.equal(result, jsProject);
     });
     it('should get null when no workspace match', () => {
       const result = vscodeService.getProjectPath(join('./1.js'));
       assert.equal(result, null);
+    });
+  });
+
+  describe('test vscodeService.getConfig', () => {
+    it('should get correct config', () => {
+      let result = vscodeService.getConfig(join(tsProject, './1.ts'));
+      assert.notEqual(result, null);
+      assert.equal(result!.quotes, QuoteType.double);
+
+      result = vscodeService.getConfig(join(jsProject, './1.js'));
+      assert.notEqual(result, null);
+      assert.equal(result!.quotes, QuoteType.single);
     });
   });
 });

@@ -26,7 +26,7 @@
     "postinstall": "node ./node_modules/vscode/bin/install",
     "lint": "eslint --ext .js,.ts .",
     "travis-publish": "vsce publish -p $VS_TOKEN",
-    "test": "yarn run compile && node ./node_modules/vscode/bin/test"
+    "test": "yarn run compile && CODE_TESTS_WORKSPACE=src/test/fixtures/testWorkspace.code-workspace node ./node_modules/vscode/bin/test"
   },
   "pre-commit": [
     "lint"

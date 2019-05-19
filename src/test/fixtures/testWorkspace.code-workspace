@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "path": "jsProject",
+      "name": "Js Project"
+    },
+    {
+      "path": "tsProject",
+      "name": "Ts Project"
+    }
+  ]
+}
