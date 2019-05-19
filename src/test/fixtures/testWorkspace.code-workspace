@@ -1,6 +1,10 @@
 {
   "folders": [
     {
+      "path": "ant-design-pro-master",
+      "name": "Ant Design Pro"
+    },
+    {
       "path": "jsProject",
       "name": "Js Project"
     },

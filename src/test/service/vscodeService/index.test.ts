@@ -12,8 +12,8 @@ describe('test VscodeService', () => {
   const jsProject = join(workspaceFixtures, 'jsProject');
   const tsProject = join(workspaceFixtures, 'tsProject');
 
-  it('should have 2 workspace', () => {
-    assert.equal(workspaceFolders!.length, 2);
+  it('should have 3 workspace', () => {
+    assert.equal(workspaceFolders!.length, 3);
   });
 
   if (!workspaceFolders) {
