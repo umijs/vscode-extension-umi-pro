@@ -66,7 +66,7 @@
     "@types/babel-traverse": "^6.25.5",
     "@types/babel-types": "^7.0.7",
     "@types/lodash": "^4.14.129",
-    "@types/mocha": "^2.2.42",
+    "@types/mocha": "^5.2.6",
     "@types/mz": "^0.0.32",
     "@types/node": "^10.12.21",
     "@types/power-assert": "^1.5.0",
