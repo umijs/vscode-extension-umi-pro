@@ -42,6 +42,7 @@
       "title": "Umi Pro configuration",
       "properties": {
         "umi_pro.quotes": {
+          "scope": "resource",
           "type": "string",
           "default": "single",
           "description": "type of quotes",
@@ -52,6 +53,7 @@
           ]
         },
         "umi_pro.router_config_path": {
+          "scope": "resource",
           "type": "string",
           "description": "path of router config"
         }

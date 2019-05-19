@@ -95,13 +95,12 @@ export class VscodeService implements IVscodeService {
 
   getConfig(filePath: string) {
     const index = this.workspaceFolders.findIndex(o =>
-      o.uri.fsPath.startsWith(filePath)
+      filePath.startsWith(o.uri.fsPath)
     );
     if (index === -1) {
       return null;
     }
     const userConfig = this.workspaceConfigurations[index];
-
     const config: IUmiProConfig = {
       quotes: QuoteType.single,
       routerConfigPath: userConfig.get<string>('router_config_path'),
