@@ -38,51 +38,47 @@ export class ModelReferenceParser implements IModelReferenceParser {
       ],
     });
     const result: ModelReference[] = [];
-    try {
-      traverse(ast, {
-        enter(path) {
-          const { node } = path;
-          if (!isCallExpression(node)) {
+    traverse(ast, {
+      enter(path) {
+        const { node } = path;
+        if (!isCallExpression(node)) {
+          return;
+        }
+        const { callee } = node;
+        if (!isIdentifier(callee) || node.arguments.length !== 1) {
+          return;
+        }
+        if (callee.name !== 'dispatch' && callee.name !== 'put') {
+          return;
+        }
+        const [firstArgument] = node.arguments;
+        if (!isObjectExpression(firstArgument)) {
+          return;
+        }
+        firstArgument.properties.forEach(property => {
+          if (!isObjectProperty(property)) {
             return;
           }
-          const { callee } = node;
-          if (!isIdentifier(callee) || node.arguments.length !== 1) {
+          const { value, key } = property;
+          if (
+            !isIdentifier(key) ||
+            key.name !== 'type' ||
+            !isStringLiteral(value) ||
+            !value.loc
+          ) {
             return;
           }
-          if (callee.name !== 'dispatch' && callee.name !== 'put') {
-            return;
-          }
-          const [firstArgument] = node.arguments;
-          if (!isObjectExpression(firstArgument)) {
-            return;
-          }
-          firstArgument.properties.forEach(property => {
-            if (!isObjectProperty(property)) {
-              return;
-            }
-            const { value, key } = property;
-            if (
-              !isIdentifier(key) ||
-              key.name !== 'type' ||
-              !isStringLiteral(value) ||
-              !value.loc
-            ) {
-              return;
-            }
-            result.push({
-              type: value.value,
-              uri: Uri.file(filePath),
-              range: new Range(
-                new Position(value.loc.start.line - 1, value.loc.start.column),
-                new Position(value.loc.end.line - 1, value.loc.end.column)
-              ),
-            });
+          result.push({
+            type: value.value,
+            uri: Uri.file(filePath),
+            range: new Range(
+              new Position(value.loc.start.line - 1, value.loc.start.column),
+              new Position(value.loc.end.line - 1, value.loc.end.column)
+            ),
           });
-        },
-      });
-    } catch (error) {
-      console.log('error', error);
-    }
+        });
+      },
+    });
     return result;
   }
 }

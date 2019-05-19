@@ -1,7 +1,10 @@
+// import { ModelReferenceParser } from './common/ast/modelReference';
 import * as vscode from 'vscode';
+import 'reflect-metadata';
 import DvaCompletionItemProvider from './language/completionItemProvider/completionItem';
 import DvaDefinitionProvider from './language/definitionProvider';
 import DvaHoverProvider from './language/hoverProvider';
+import ModelReference from './language/modelReference';
 import { UmiRouterCompletionItemProvider } from './language/completionItemProvider/routerCompletionItemProvider';
 import UmiRouterDefinitionProvider from './language/router';
 import {
@@ -12,6 +15,8 @@ import {
 import { DvaModelParser } from './common/parser';
 import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
+import { Container } from 'typedi';
+import { VscodeService, loadVscodeService } from './services/vscodeService';
 
 export async function activate(context: vscode.ExtensionContext) {
   logger.info('extension "umi-pro" is now active!');
@@ -28,8 +33,16 @@ export async function activate(context: vscode.ExtensionContext) {
   umiFileWatcher.onDidChange(e => modelCache.update(e.fsPath));
   umiFileWatcher.onDidCreate(e => modelCache.update(e.fsPath));
   umiFileWatcher.onDidDelete(e => modelCache.update(e.fsPath));
-
   const modelInfoCache = new ModelInfoCache(modelCache);
+  Container.set('modelInfoCache', modelInfoCache);
+  let vscodeService = Container.get(VscodeService);
+  await loadVscodeService(vscodeService);
+  vscode.workspace.onDidChangeWorkspaceFolders(() =>
+    loadVscodeService(vscodeService)
+  );
+  vscode.workspace.onDidChangeConfiguration(() =>
+    loadVscodeService(vscodeService)
+  );
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
@@ -65,6 +78,14 @@ export async function activate(context: vscode.ExtensionContext) {
       ['javascript', 'typescript'],
       new UmiRouterCompletionItemProvider(),
       ...['/']
+    )
+  );
+
+  const modelReference = Container.get(ModelReference);
+  context.subscriptions.push(
+    vscode.languages.registerReferenceProvider(
+      ['javascript', 'typescript'],
+      modelReference
     )
   );
 }
