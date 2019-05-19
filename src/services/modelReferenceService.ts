@@ -1,3 +1,4 @@
+import { LoggerService, ILogger } from './../common/logger';
 import {
   ModelReferenceParser,
   IModelReferenceParser,
@@ -43,11 +44,16 @@ export default class ModelReferenceService implements IModelReferenceService {
   private modelReferenceMap: Map<string, ReferenceCache>;
   private projectFileModelsMap: Map<string, FileInfoCache>;
   private modelInfoCache: ModelInfoCache;
+  private logger: ILogger;
 
   @Inject(_type => VscodeService)
   private vscodeService!: VscodeService;
 
-  constructor() {
+  constructor(
+    @Inject(LoggerService)
+    logger: ILogger
+  ) {
+    this.logger = logger;
     this.modelReferenceMap = new Map<string, ReferenceCache>();
     this.projectFileModelsMap = new Map<string, FileInfoCache>();
     this.modelInfoCache = Container.get('modelInfoCache');
@@ -80,9 +86,9 @@ export default class ModelReferenceService implements IModelReferenceService {
         ext => !p.endsWith(ext)
       )
     );
-    console.log(`load project ${cwd} find ${files.length} files`);
+    this.logger.info(`load project ${cwd} find ${files.length} files`);
     await Promise.all(files.map(file => this.reloadFile(join(cwd, file))));
-    console.log(`load project ${cwd} success`);
+    this.logger.info(`load project ${cwd} success`);
   }
 
   async reloadFile(filePath: string) {

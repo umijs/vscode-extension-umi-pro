@@ -1,10 +1,18 @@
 import { window, OutputChannel } from 'vscode';
+import { Token, Service } from 'typedi';
 
-interface ILogger {
+export interface ILogger {
   info(message: string);
 }
 
-export class Logger implements ILogger {
+export const LoggerService = new Token<ILogger>();
+
+function createLogger() {
+  return new Logger(window.createOutputChannel('Umi Pro'));
+}
+
+@Service({ id: LoggerService, factory: createLogger })
+class Logger implements ILogger {
   private channel: OutputChannel;
   constructor(channel: OutputChannel) {
     this.channel = channel;
@@ -16,4 +24,5 @@ export class Logger implements ILogger {
   }
 }
 
+export { Logger };
 export default new Logger(window.createOutputChannel('Umi Pro')) as ILogger;
