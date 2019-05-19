@@ -69,15 +69,20 @@ export default class ModelReferenceService implements IModelReferenceService {
 
   async loadProject(cwd: string) {
     const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
-    const files = (await globby([`./**/*{${JS_EXT_NAMES.join(',')}}`], {
-      cwd,
-      deep: true,
-    })).filter(p =>
+    const files = (await globby(
+      [`./src/**/*{${JS_EXT_NAMES.join(',')}}`, '!./node_modules/**'],
+      {
+        cwd,
+        deep: true,
+      }
+    )).filter(p =>
       ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(
         ext => !p.endsWith(ext)
       )
     );
+    console.log(`load project ${cwd} find ${files.length} files`);
     await Promise.all(files.map(file => this.reloadFile(join(cwd, file))));
+    console.log(`load project ${cwd} success`);
   }
 
   async reloadFile(filePath: string) {
