@@ -1,4 +1,4 @@
-import { Service } from 'typedi';
+import { Service, Token } from 'typedi';
 import * as vscode from 'vscode';
 
 export enum QuoteType {
@@ -69,6 +69,8 @@ export async function loadVscodeService(service: VscodeService) {
   } = await getVscodeServiceArgs();
   service.load(workspaceFolders, workspaceConfigurations);
 }
+
+export const VscodeServiceToken = new Token<IVscodeService>();
 
 @Service()
 export class VscodeService implements IVscodeService {
