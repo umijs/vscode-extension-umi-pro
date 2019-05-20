@@ -2,8 +2,8 @@ import { Inject, Service } from 'typedi';
 import {
   IVscodeService,
   VscodeServiceToken,
-} from './../../services/vscodeService';
-import { TextDocumentUtils } from './../../common/document';
+} from '../../services/vscodeService';
+import { TextDocumentUtils } from '../../common/document';
 import { join } from 'path';
 import * as vscode from 'vscode';
 import { getAllPages } from '../../common/utils';

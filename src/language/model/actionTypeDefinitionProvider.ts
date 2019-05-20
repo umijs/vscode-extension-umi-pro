@@ -2,17 +2,16 @@ import { Inject, Service } from 'typedi';
 import {
   IModelInfoService,
   ModelInfoServiceToken,
-} from './../services/modelInfoService';
+} from '../../services/modelInfoService';
 import {
   IVscodeService,
   VscodeServiceToken,
-} from './../services/vscodeService';
+} from '../../services/vscodeService';
 import * as vscode from 'vscode';
-import { TextDocumentUtils } from '../common/document';
+import { TextDocumentUtils } from '../../common/document';
 
 @Service()
-export default class DvaDefinitionProvider
-  implements vscode.DefinitionProvider {
+export class ActionTypeDefinitionProvider implements vscode.DefinitionProvider {
   private vscodeService: IVscodeService;
 
   private modelInfoService: IModelInfoService;

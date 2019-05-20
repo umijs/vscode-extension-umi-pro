@@ -1,19 +1,19 @@
 import {
   IVscodeService,
   VscodeServiceToken,
-} from './../services/vscodeService';
+} from '../../services/vscodeService';
 import {
   ModelInfoServiceToken,
   IModelInfoService,
-} from './../services/modelInfoService';
-import { TextDocumentUtils } from './../common/document';
-import logger from '../common/logger';
+} from '../../services/modelInfoService';
+import { TextDocumentUtils } from '../../common/document';
+import logger from '../../common/logger';
 import { Service, Inject } from 'typedi';
 
 import * as vscode from 'vscode';
 
 @Service()
-export default class DvaHoverProvider implements vscode.HoverProvider {
+export class ActionTypeHoverProvider implements vscode.HoverProvider {
   private vscodeService: IVscodeService;
 
   private modelInfoService: IModelInfoService;

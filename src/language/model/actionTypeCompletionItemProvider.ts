@@ -12,7 +12,7 @@ import { quoteString } from '../../common/utils';
 import logger from '../../common/logger';
 
 @Service()
-export default class DvaCompletionItemProvider
+export class ActionTypeCompletionItemProvider
   implements vscode.CompletionItemProvider {
   private vscodeService: IVscodeService;
 

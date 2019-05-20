@@ -1,20 +1,20 @@
 import {
   IModelReferenceService,
   ModelReferenceServiceToken,
-} from './../services/modelReferenceService';
+} from '../../services/modelReferenceService';
 import {
   VscodeServiceToken,
   IVscodeService,
-} from './../services/vscodeService';
+} from '../../services/vscodeService';
 import { Service, Inject } from 'typedi';
 import { ReferenceProvider, TextDocument, Position } from 'vscode';
 import {
   ModelInfoServiceToken,
   IModelInfoService,
-} from '../services/modelInfoService';
+} from '../../services/modelInfoService';
 
 @Service()
-export default class UmiModelReferenceProvider implements ReferenceProvider {
+export class ModelActionReference implements ReferenceProvider {
   private modelReferenceService: IModelReferenceService;
 
   private vscodeService: IVscodeService;

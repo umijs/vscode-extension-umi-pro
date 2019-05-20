@@ -1,21 +1,24 @@
 // import { ModelReferenceParser } from './common/ast/modelReference';
 import * as vscode from 'vscode';
 import 'reflect-metadata';
-import DvaCompletionItemProvider from './language/completionItemProvider/completionItem';
-import DvaDefinitionProvider from './language/definitionProvider';
-import DvaHoverProvider from './language/hoverProvider';
-import ModelReference from './language/modelReference';
-import { UmiRouterCompletionItemProvider } from './language/completionItemProvider/routerCompletionItemProvider';
-import UmiRouterDefinitionProvider from './language/router';
+import { Container } from 'typedi';
+import {
+  ActionTypeDefinitionProvider,
+  ActionTypeHoverProvider,
+  ModelActionReference,
+  ActionTypeCompletionItemProvider,
+} from './language/model';
+import {
+  UmiRouterCompletionItemProvider,
+  UmiRouterDefinitionProvider,
+} from './language/router';
 import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
-import { Container } from 'typedi';
 import {
   loadVscodeService,
   VscodeServiceToken,
 } from './services/vscodeService';
 import { ModelInfoServiceToken } from './services/modelInfoService';
-
 export async function activate(context: vscode.ExtensionContext) {
   logger.info('extension "umi-pro" is now active!');
   const umiFileWatcher = await getUmiFileWatcher(
@@ -40,22 +43,21 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
       ['javascript', 'typescript'],
-      Container.get(DvaCompletionItemProvider),
+      Container.get(ActionTypeCompletionItemProvider),
       ':'
     )
   );
-
   context.subscriptions.push(
     vscode.languages.registerHoverProvider(
       ['javascript', 'typescript'],
-      Container.get(DvaHoverProvider)
+      Container.get(ActionTypeHoverProvider)
     )
   );
 
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
       ['javascript', 'typescript'],
-      Container.get(DvaDefinitionProvider)
+      Container.get(ActionTypeDefinitionProvider)
     )
   );
 
@@ -77,7 +79,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerReferenceProvider(
       ['javascript', 'typescript'],
-      Container.get(ModelReference)
+      Container.get(ModelActionReference)
     )
   );
 }
