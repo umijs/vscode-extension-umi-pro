@@ -1,20 +1,38 @@
+import {
+  IVscodeService,
+  VscodeServiceToken,
+} from './../services/vscodeService';
+import { Service, Inject } from 'typedi';
 import * as vscode from 'vscode';
 import { TextDocumentUtils, Brackets } from '../common/document';
-import { getConfig, DEFAULT_ROUTER_CONFIG_PATH } from './../common/config';
-import { getProjectPath } from './../common/utils';
+import { DEFAULT_ROUTER_CONFIG_PATH } from './../common/config';
 import { join } from 'path';
 import { isPathInRouter } from '../common/ast';
 import * as fs from 'mz/fs';
 
+@Service()
 export default class UmiRouterDefinitionProvider
   implements vscode.DefinitionProvider {
+  private vscodeService: IVscodeService;
+
+  constructor(
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService
+  ) {
+    this.vscodeService = vscodeService;
+  }
+
   async provideDefinition(
     document: vscode.TextDocument,
     position: vscode.Position
   ) {
+    const filePath = document.uri.fsPath;
     const textDocumentUtils = new TextDocumentUtils(document);
-    const config = getConfig();
-    const projectPath = getProjectPath(document);
+    const config = this.vscodeService.getConfig(filePath);
+    if (!config) {
+      return;
+    }
+    const projectPath = this.vscodeService.getProjectPath(filePath);
     if (!projectPath) {
       return;
     }

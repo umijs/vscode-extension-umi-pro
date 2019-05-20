@@ -7,16 +7,11 @@ import DvaHoverProvider from './language/hoverProvider';
 import ModelReference from './language/modelReference';
 import { UmiRouterCompletionItemProvider } from './language/completionItemProvider/routerCompletionItemProvider';
 import UmiRouterDefinitionProvider from './language/router';
-import {
-  ModelInfoCache,
-  ModelCacheKeyParser,
-  ModelCache,
-} from './common/cache';
-import { DvaModelParser } from './common/parser';
 import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
 import { Container } from 'typedi';
 import { VscodeService, loadVscodeService } from './services/vscodeService';
+import { ModelInfoServiceToken } from './services/modelInfoService';
 
 export async function activate(context: vscode.ExtensionContext) {
   logger.info('extension "umi-pro" is now active!');
@@ -27,14 +22,10 @@ export async function activate(context: vscode.ExtensionContext) {
     logger.info('no project use umi');
     return;
   }
-  const modelCache = new ModelCache(
-    new ModelCacheKeyParser(new DvaModelParser())
-  );
-  umiFileWatcher.onDidChange(e => modelCache.update(e.fsPath));
-  umiFileWatcher.onDidCreate(e => modelCache.update(e.fsPath));
-  umiFileWatcher.onDidDelete(e => modelCache.update(e.fsPath));
-  const modelInfoCache = new ModelInfoCache(modelCache);
-  Container.set('modelInfoCache', modelInfoCache);
+  const modelInfoService = Container.get(ModelInfoServiceToken);
+  umiFileWatcher.onDidChange(e => modelInfoService.updateFile(e.fsPath));
+  umiFileWatcher.onDidCreate(e => modelInfoService.updateFile(e.fsPath));
+  umiFileWatcher.onDidDelete(e => modelInfoService.updateFile(e.fsPath));
   let vscodeService = Container.get(VscodeService);
   await loadVscodeService(vscodeService);
   vscode.workspace.onDidChangeWorkspaceFolders(() =>
@@ -43,11 +34,10 @@ export async function activate(context: vscode.ExtensionContext) {
   vscode.workspace.onDidChangeConfiguration(() =>
     loadVscodeService(vscodeService)
   );
-
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
       ['javascript', 'typescript'],
-      new DvaCompletionItemProvider(modelInfoCache),
+      Container.get(DvaCompletionItemProvider),
       ':'
     )
   );
@@ -55,37 +45,36 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.languages.registerHoverProvider(
       ['javascript', 'typescript'],
-      new DvaHoverProvider(modelInfoCache)
+      Container.get(DvaHoverProvider)
     )
   );
 
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
       ['javascript', 'typescript'],
-      new DvaDefinitionProvider(modelInfoCache)
+      Container.get(DvaDefinitionProvider)
     )
   );
 
   context.subscriptions.push(
     vscode.languages.registerDefinitionProvider(
       ['javascript', 'typescript'],
-      new UmiRouterDefinitionProvider()
+      Container.get(UmiRouterDefinitionProvider)
     )
   );
 
   context.subscriptions.push(
     vscode.languages.registerCompletionItemProvider(
       ['javascript', 'typescript'],
-      new UmiRouterCompletionItemProvider(),
+      Container.get(UmiRouterCompletionItemProvider),
       ...['/']
     )
   );
 
-  const modelReference = Container.get(ModelReference);
   context.subscriptions.push(
     vscode.languages.registerReferenceProvider(
       ['javascript', 'typescript'],
-      modelReference
+      Container.get(ModelReference)
     )
   );
 }

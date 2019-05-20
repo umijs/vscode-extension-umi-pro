@@ -2,7 +2,6 @@ import { join, resolve, dirname, extname, basename } from 'path';
 import * as fs from 'mz/fs';
 import globby from 'globby';
 import { QuoteType, QuoteCharMap } from './config';
-import * as vscode from 'vscode';
 
 const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
 
@@ -48,30 +47,6 @@ export function quoteString(input: string, type: QuoteType) {
 export function getAbsPath(input: string) {
   const rootPath = resolve(__dirname, '../../');
   return input.replace(join(rootPath, 'out'), join(rootPath, 'src'));
-}
-
-export function getProjectPath(
-  document: vscode.TextDocument
-): string | undefined {
-  if (!document || !document.uri) {
-    return;
-  }
-  const filePath = document.uri.fsPath;
-  const workspaceFolders = vscode.workspace.workspaceFolders;
-  if (!workspaceFolders) {
-    return;
-  }
-  const workspace = workspaceFolders.find(workspaceFolder => {
-    const { uri } = workspaceFolder;
-    if (!uri || !uri.fsPath) {
-      return false;
-    }
-    return filePath.startsWith(uri.fsPath);
-  });
-  if (!workspace) {
-    return;
-  }
-  return workspace.uri.fsPath;
 }
 
 export function isUndefined<T>(data: T | undefined): data is T {

@@ -1,26 +1,41 @@
+import { Inject, Service } from 'typedi';
+import {
+  IModelInfoService,
+  ModelInfoServiceToken,
+} from './../../services/modelInfoService';
+import {
+  IVscodeService,
+  VscodeServiceToken,
+} from './../../services/vscodeService';
 import * as vscode from 'vscode';
-import { IModelInfoCache } from '../../common/cache';
-import { getConfig } from '../../common/config';
-import { quoteString, getProjectPath } from '../../common/utils';
+import { quoteString } from '../../common/utils';
 import logger from '../../common/logger';
 
+@Service()
 export default class DvaCompletionItemProvider
   implements vscode.CompletionItemProvider {
-  private cache: IModelInfoCache;
+  private vscodeService: IVscodeService;
 
-  constructor(cache: IModelInfoCache) {
-    this.cache = cache;
+  private modelInfoService: IModelInfoService;
+
+  constructor(
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService,
+    @Inject(ModelInfoServiceToken)
+    modelInfoService: IModelInfoService
+  ) {
+    this.vscodeService = vscodeService;
+    this.modelInfoService = modelInfoService;
   }
-
   async provideCompletionItems(
     document: vscode.TextDocument,
     position: vscode.Position
   ) {
-    const projectPath = getProjectPath(document);
-    if (!projectPath) {
+    const filePath = document.uri.fsPath;
+    const userConfig = this.vscodeService.getConfig(filePath);
+    if (!userConfig) {
       return;
     }
-    const filePath = document.uri.fsPath;
     const lineText = document.getText(
       new vscode.Range(position.with(position.line, 0), position)
     );
@@ -29,10 +44,10 @@ export default class DvaCompletionItemProvider
     if (!lineText.includes('type')) {
       return [];
     }
-    let dvaModels = await this.cache.getModules(filePath, projectPath);
-    const currentNamespace = await this.cache.getCurrentNameSpace(filePath);
+    let dvaModels = await this.modelInfoService.getModules(filePath);
+    const currentNamespace = await this.modelInfoService.getNameSpace(filePath);
     const completionItems: vscode.CompletionItem[] = [];
-    const userConfig = getConfig();
+
     dvaModels.reduce(
       (previousValue, currentValue) => {
         let namespace;

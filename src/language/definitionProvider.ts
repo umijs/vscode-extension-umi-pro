@@ -1,25 +1,41 @@
+import { Inject, Service } from 'typedi';
+import {
+  IModelInfoService,
+  ModelInfoServiceToken,
+} from './../services/modelInfoService';
+import {
+  IVscodeService,
+  VscodeServiceToken,
+} from './../services/vscodeService';
 import * as vscode from 'vscode';
 import { TextDocumentUtils } from '../common/document';
-import { getConfig } from './../common/config';
-import { IModelInfoCache } from '../common/cache';
-import { getProjectPath } from '../common/utils';
 
+@Service()
 export default class DvaDefinitionProvider
   implements vscode.DefinitionProvider {
-  private cache: IModelInfoCache;
+  private vscodeService: IVscodeService;
 
-  constructor(cache: IModelInfoCache) {
-    this.cache = cache;
+  private modelInfoService: IModelInfoService;
+
+  constructor(
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService,
+    @Inject(ModelInfoServiceToken)
+    modelInfoService: IModelInfoService
+  ) {
+    this.vscodeService = vscodeService;
+    this.modelInfoService = modelInfoService;
   }
 
   async provideDefinition(
     document: vscode.TextDocument,
     position: vscode.Position
   ) {
+    const filePath = document.uri.fsPath;
+
     const textDocumentUtils = new TextDocumentUtils(document);
-    const config = getConfig();
-    const projectPath = getProjectPath(document);
-    if (!projectPath) {
+    const config = this.vscodeService.getConfig(filePath);
+    if (!config) {
       return;
     }
     let range = textDocumentUtils.getQuoteRange(position, config.quotes);
@@ -27,15 +43,14 @@ export default class DvaDefinitionProvider
       return;
     }
     let actionType = document.getText(range).slice(1, -1);
-    const filePath = document.uri.fsPath;
     if (!actionType.includes('/')) {
-      const namespace = await this.cache.getCurrentNameSpace(filePath);
+      const namespace = await this.modelInfoService.getNameSpace(filePath);
       if (!namespace) {
         return;
       }
       actionType = `${namespace}/${actionType}`;
     }
-    const models = await this.cache.getModules(filePath, projectPath);
+    const models = await this.modelInfoService.getModules(filePath);
     const [actionNameSpace, actionFunctionName] = actionType.split('/');
     for (let model of models) {
       if (model.namespace === actionNameSpace) {

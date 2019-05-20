@@ -1,19 +1,35 @@
+import { Inject, Service } from 'typedi';
+import {
+  IVscodeService,
+  VscodeServiceToken,
+} from './../../services/vscodeService';
 import { TextDocumentUtils } from './../../common/document';
 import { join } from 'path';
 import * as vscode from 'vscode';
-import { getProjectPath, getAllPages } from '../../common/utils';
-import { getConfig, DEFAULT_ROUTER_CONFIG_PATH } from '../../common/config';
+import { getAllPages } from '../../common/utils';
+import { DEFAULT_ROUTER_CONFIG_PATH } from '../../common/config';
 
+@Service()
 export class UmiRouterCompletionItemProvider
   implements vscode.CompletionItemProvider {
+  private vscodeService: IVscodeService;
+
+  constructor(
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService
+  ) {
+    this.vscodeService = vscodeService;
+  }
+
   async provideCompletionItems(
     document: vscode.TextDocument,
     position: vscode.Position
   ) {
+    const filePath = document.uri.fsPath;
     const textDocumentUtils = new TextDocumentUtils(document);
-    const config = getConfig();
-    const projectPath = getProjectPath(document);
-    if (!projectPath) {
+    const config = this.vscodeService.getConfig(filePath);
+    const projectPath = this.vscodeService.getProjectPath(filePath);
+    if (!projectPath || !config) {
       return;
     }
     const routerPath = config.routerConfigPath

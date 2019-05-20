@@ -1,27 +1,37 @@
 import {
+  IModelReferenceService,
+  ModelReferenceServiceToken,
+} from './../services/modelReferenceService';
+import {
   VscodeServiceToken,
   IVscodeService,
 } from './../services/vscodeService';
-import { ModelInfoCache } from './../common/cache/index';
-import { Service, Inject, Container } from 'typedi';
+import { Service, Inject } from 'typedi';
 import { ReferenceProvider, TextDocument, Position } from 'vscode';
-import ModelReferenceService from '../services/modelReferenceService';
+import {
+  ModelInfoServiceToken,
+  IModelInfoService,
+} from '../services/modelInfoService';
 
 @Service()
 export default class UmiModelReferenceProvider implements ReferenceProvider {
-  private modelReferenceService!: ModelReferenceService;
+  private modelReferenceService: IModelReferenceService;
 
   private vscodeService: IVscodeService;
 
-  private modelInfoCache: ModelInfoCache;
+  private modelInfoService: IModelInfoService;
 
   constructor(
     @Inject(VscodeServiceToken)
-    vscodeService: IVscodeService
+    vscodeService: IVscodeService,
+    @Inject(ModelInfoServiceToken)
+    modelInfoService: IModelInfoService,
+    @Inject(ModelReferenceServiceToken)
+    modelReferenceService: IModelReferenceService
   ) {
     this.vscodeService = vscodeService;
-    console.log('init UmiModelReferenceProvider');
-    this.modelInfoCache = Container.get('modelInfoCache');
+    this.modelInfoService = modelInfoService;
+    this.modelReferenceService = modelReferenceService;
   }
 
   async provideReferences(document: TextDocument, position: Position) {
@@ -29,7 +39,7 @@ export default class UmiModelReferenceProvider implements ReferenceProvider {
     if (!projectPath) {
       return;
     }
-    const currentNamespace = await this.modelInfoCache.getCurrentNameSpace(
+    const currentNamespace = await this.modelInfoService.getNameSpace(
       document.uri.fsPath
     );
     if (!currentNamespace) {

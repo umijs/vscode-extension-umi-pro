@@ -15,6 +15,8 @@ export interface IModelInfoService {
   getModules(filePath: string): Promise<IDvaModelWithFilePath[]>;
 
   getNameSpace(filePath: string): Promise<string | null>;
+
+  updateFile(filePath: string): void;
 }
 
 export const ModelInfoServiceToken = new Token<IModelInfoService>();
