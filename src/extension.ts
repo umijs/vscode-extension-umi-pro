@@ -10,7 +10,10 @@ import UmiRouterDefinitionProvider from './language/router';
 import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
 import { Container } from 'typedi';
-import { VscodeService, loadVscodeService } from './services/vscodeService';
+import {
+  loadVscodeService,
+  VscodeServiceToken,
+} from './services/vscodeService';
 import { ModelInfoServiceToken } from './services/modelInfoService';
 
 export async function activate(context: vscode.ExtensionContext) {
@@ -26,7 +29,7 @@ export async function activate(context: vscode.ExtensionContext) {
   umiFileWatcher.onDidChange(e => modelInfoService.updateFile(e.fsPath));
   umiFileWatcher.onDidCreate(e => modelInfoService.updateFile(e.fsPath));
   umiFileWatcher.onDidDelete(e => modelInfoService.updateFile(e.fsPath));
-  let vscodeService = Container.get(VscodeService);
+  let vscodeService = Container.get(VscodeServiceToken);
   await loadVscodeService(vscodeService);
   vscode.workspace.onDidChangeWorkspaceFolders(() =>
     loadVscodeService(vscodeService)
