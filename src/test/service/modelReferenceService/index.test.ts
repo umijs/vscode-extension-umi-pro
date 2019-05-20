@@ -17,7 +17,8 @@ describe('test modelReferenceService', async () => {
   const workspaceFixtures = getAbsPath(join(__dirname, '../../fixtures'));
   const antdPro = join(workspaceFixtures, 'ant-design-pro-master');
 
-  it('test getReference', async () => {
+  it('test getReference', async function() {
+    this.timeout(5000);
     const LoginModel = join(antdPro, 'src/models/login.js');
     const reference = await modelReferenceService.getReference(
       LoginModel,
