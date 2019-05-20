@@ -1,20 +1,26 @@
+import {
+  VscodeServiceToken,
+  IVscodeService,
+} from './../services/vscodeService';
 import { ModelInfoCache } from './../common/cache/index';
 import { Service, Inject, Container } from 'typedi';
 import { ReferenceProvider, TextDocument, Position } from 'vscode';
 import ModelReferenceService from '../services/modelReferenceService';
-import { VscodeService } from '../services/vscodeService';
 
 @Service()
 export default class UmiModelReferenceProvider implements ReferenceProvider {
-  @Inject(_type => ModelReferenceService)
   private modelReferenceService!: ModelReferenceService;
 
-  @Inject(_type => VscodeService)
-  private vscodeService!: VscodeService;
+  private vscodeService: IVscodeService;
 
   private modelInfoCache: ModelInfoCache;
 
-  constructor() {
+  constructor(
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService
+  ) {
+    this.vscodeService = vscodeService;
+    console.log('init UmiModelReferenceProvider');
     this.modelInfoCache = Container.get('modelInfoCache');
   }
 

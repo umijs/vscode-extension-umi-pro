@@ -28,6 +28,7 @@ export class ModelReferenceParser implements IModelReferenceParser {
       plugins: [
         'typescript',
         'classProperties',
+        'dynamicImport',
         'jsx',
         [
           'decorators',

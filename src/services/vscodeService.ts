@@ -62,7 +62,7 @@ export async function getVscodeServiceArgs() {
   return { workspaceFolders, workspaceConfigurations };
 }
 
-export async function loadVscodeService(service: VscodeService) {
+export async function loadVscodeService(service: IVscodeService) {
   const {
     workspaceFolders,
     workspaceConfigurations,
@@ -72,7 +72,7 @@ export async function loadVscodeService(service: VscodeService) {
 
 export const VscodeServiceToken = new Token<IVscodeService>();
 
-@Service()
+@Service(VscodeServiceToken)
 export class VscodeService implements IVscodeService {
   private workspaceFolders: vscode.WorkspaceFolder[];
   private workspaceConfigurations: vscode.WorkspaceConfiguration[];

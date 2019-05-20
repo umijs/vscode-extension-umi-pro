@@ -7,10 +7,10 @@ import { Location } from 'vscode';
 import globby from 'globby';
 import { flatten } from 'lodash';
 
-import { Service, Inject, Container } from 'typedi';
-import { VscodeService } from './vscodeService';
-import { ModelInfoCache } from '../common/cache';
+import { Service, Inject, Token } from 'typedi';
+import { IVscodeService, VscodeServiceToken } from './vscodeService';
 import { join } from 'path';
+import { IModelInfoService, ModelInfoServiceToken } from './modelInfoService';
 
 export interface IModelReferenceService {
   getReference(
@@ -38,25 +38,30 @@ interface ReferenceCache {
   };
 }
 
-@Service()
+export const ModelReferenceServiceToken = new Token<IModelReferenceService>();
+
+@Service(ModelReferenceServiceToken)
 export default class ModelReferenceService implements IModelReferenceService {
   private modelReferenceParser: IModelReferenceParser;
   private modelReferenceMap: Map<string, ReferenceCache>;
   private projectFileModelsMap: Map<string, FileInfoCache>;
-  private modelInfoCache: ModelInfoCache;
+  private modelInfoService: IModelInfoService;
   private logger: ILogger;
-
-  @Inject(_type => VscodeService)
-  private vscodeService!: VscodeService;
+  private vscodeService: IVscodeService;
 
   constructor(
     @Inject(LoggerService)
-    logger: ILogger
+    logger: ILogger,
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService,
+    @Inject(ModelInfoServiceToken)
+    modelInfoService: IModelInfoService
   ) {
+    this.vscodeService = vscodeService;
     this.logger = logger;
     this.modelReferenceMap = new Map<string, ReferenceCache>();
     this.projectFileModelsMap = new Map<string, FileInfoCache>();
-    this.modelInfoCache = Container.get('modelInfoCache');
+    this.modelInfoService = modelInfoService;
     this.modelReferenceParser = new ModelReferenceParser();
   }
 
@@ -71,24 +76,6 @@ export default class ModelReferenceService implements IModelReferenceService {
     return flatten<Location>(
       Object.values(this.getActionReference(projectPath, model, action))
     );
-  }
-
-  async loadProject(cwd: string) {
-    const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
-    const files = (await globby(
-      [`./src/**/*{${JS_EXT_NAMES.join(',')}}`, '!./node_modules/**'],
-      {
-        cwd,
-        deep: true,
-      }
-    )).filter(p =>
-      ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(
-        ext => !p.endsWith(ext)
-      )
-    );
-    this.logger.info(`load project ${cwd} find ${files.length} files`);
-    await Promise.all(files.map(file => this.reloadFile(join(cwd, file))));
-    this.logger.info(`load project ${cwd} success`);
   }
 
   async reloadFile(filePath: string) {
@@ -108,9 +95,7 @@ export default class ModelReferenceService implements IModelReferenceService {
       });
     }
     const modelReferences = await this.modelReferenceParser.parseFile(filePath);
-    const currentNameSpace = await this.modelInfoCache.getCurrentNameSpace(
-      filePath
-    );
+    const currentNameSpace = await this.modelInfoService.getNameSpace(filePath);
     let actions: Action[] = [];
     modelReferences.forEach(({ uri, range, type }) => {
       let namespace;
@@ -132,6 +117,23 @@ export default class ModelReferenceService implements IModelReferenceService {
       ] = reference;
     });
     fileModels[filePath] = actions;
+  }
+  private async loadProject(cwd: string) {
+    const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
+    const files = (await globby(
+      [`./src/**/*{${JS_EXT_NAMES.join(',')}}`, '!./node_modules/**'],
+      {
+        cwd,
+        deep: true,
+      }
+    )).filter(p =>
+      ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(
+        ext => !p.endsWith(ext)
+      )
+    );
+    this.logger.info(`load project ${cwd} find ${files.length} files`);
+    await Promise.all(files.map(file => this.reloadFile(join(cwd, file))));
+    this.logger.info(`load project ${cwd} success`);
   }
 
   private getActionReference(

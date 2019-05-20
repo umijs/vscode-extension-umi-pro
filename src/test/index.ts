@@ -2,7 +2,6 @@
 import * as fs from 'fs';
 import * as glob from 'glob';
 import * as paths from 'path';
-
 const istanbul = require('istanbul');
 const Mocha = require('mocha');
 const remapIstanbul = require('remap-istanbul');
@@ -17,12 +16,8 @@ if (!tty.getWindowSize) {
 let mocha = new Mocha({
   ui: 'bdd',
   color: true,
+  require: ['reflect-metadata'],
 });
-
-function configure(mochaOpts) {
-  mocha = new Mocha(mochaOpts);
-}
-exports.configure = configure;
 
 function _mkDirIfExists(dir: string): void {
   if (!fs.existsSync(dir)) {
@@ -48,6 +43,7 @@ function run(testsRoot, clb) {
     if (error) {
       return clb(error);
     }
+    console.log('testsRoot', testsRoot);
     try {
       files.forEach(f => mocha.addFile(paths.join(testsRoot, f)));
       let failureCount = 0;

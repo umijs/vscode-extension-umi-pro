@@ -1,10 +1,14 @@
+import { DvaModelParser } from './../common/parser/index';
 import { VscodeServiceToken, IVscodeService } from './vscodeService';
 import { LoggerService, ILogger } from './../common/logger';
-import { IDvaModelWithFilePath } from './../common/parser/interface';
+import {
+  IDvaModelWithFilePath,
+  IDvaModel,
+  IDvaModelParser,
+} from './../common/parser';
 import { join } from 'path';
 import * as lodash from 'lodash';
-import { Service, Container, Inject } from 'typedi';
-import { ModelCache } from '../common/cache';
+import { Service, Inject, Token } from 'typedi';
 import { getModels, getPageModels } from '../common/utils';
 
 export interface IModelInfoService {
@@ -13,11 +17,16 @@ export interface IModelInfoService {
   getNameSpace(filePath: string): Promise<string | null>;
 }
 
-@Service()
+export const ModelInfoServiceToken = new Token<IModelInfoService>();
+
+@Service(ModelInfoServiceToken)
 export class ModelInfoService implements IModelInfoService {
-  private cache: ModelCache;
+  public readonly vscodeService: IVscodeService;
   private logger: ILogger;
-  private vscodeService: IVscodeService;
+  private data: {
+    [filename: string]: IDvaModel[] | null;
+  };
+  private parser: IDvaModelParser;
 
   constructor(
     @Inject(LoggerService)
@@ -25,12 +34,14 @@ export class ModelInfoService implements IModelInfoService {
     @Inject(VscodeServiceToken)
     vscodeService: IVscodeService
   ) {
-    this.cache = Container.get<ModelCache>('ModelCache');
     this.logger = logger;
+    this.logger.info('create ModelInfoService');
     this.vscodeService = vscodeService;
+    this.data = {};
+    this.parser = new DvaModelParser();
   }
 
-  getModules = async (filePath: string) => {
+  public getModules = async (filePath: string) => {
     try {
       const projectPath = this.vscodeService.getProjectPath(filePath);
       if (!projectPath) {
@@ -50,16 +61,33 @@ export class ModelInfoService implements IModelInfoService {
     }
   };
 
-  getNameSpace = async (filePath: string): Promise<string | null> => {
-    const dvaModels = await this.cache.get(filePath);
+  public getNameSpace = async (filePath: string): Promise<string | null> => {
+    const dvaModels = await this.parserFile(filePath);
     if (!dvaModels || dvaModels.length !== 1) {
       return null;
     }
     return dvaModels[0].namespace;
   };
 
-  private async fileToModels(filePath) {
-    const models = await this.cache.get(filePath);
+  public updateFile = async (filePath: string) => {
+    this.data[filePath] = [];
+  };
+
+  private fileToModels = async filePath => {
+    const models = await this.parserFile(filePath);
     return models ? models.map(model => ({ ...model, filePath })) : null;
-  }
+  };
+
+  private parserFile = async (filePath: string) => {
+    const value = this.data[filePath];
+    if (!value) {
+      try {
+        this.data[filePath] = await this.parser.parseFile(filePath);
+      } catch (error) {
+        this.logger.info(`解析文件失败 ${filePath}`);
+        this.logger.info(error.message);
+      }
+    }
+    return this.data[filePath];
+  };
 }

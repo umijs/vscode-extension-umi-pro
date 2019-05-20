@@ -11,6 +11,7 @@ import {
   isObjectMethod,
 } from '@babel/types';
 import generate from '@babel/generator';
+export * from './interface';
 
 export interface IDvaModelParser {
   parse(code: string): Promise<IDvaModel[]>;
@@ -25,6 +26,7 @@ export class DvaModelParser implements IDvaModelParser {
       plugins: [
         'typescript',
         'classProperties',
+        'dynamicImport',
         'jsx',
         [
           'decorators',

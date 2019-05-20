@@ -1,11 +1,16 @@
+import 'reflect-metadata';
 import { QuoteType } from './../../../services/vscodeService';
-import { VscodeService } from '../../../services/vscodeService';
+import {
+  VscodeServiceToken,
+  loadVscodeService,
+} from '../../../services/vscodeService';
 import { join } from 'path';
 import { getAbsPath } from '../../../common/utils';
 import { workspace } from 'vscode';
+import { Container } from 'typedi';
 import assert = require('assert');
 
-describe('test VscodeService', () => {
+describe('test VscodeService', async () => {
   const workspaceFolders = workspace.workspaceFolders;
   const workspaceFixtures = getAbsPath(join(__dirname, '../../fixtures'));
 
@@ -16,16 +21,8 @@ describe('test VscodeService', () => {
     assert.equal(workspaceFolders!.length, 3);
   });
 
-  if (!workspaceFolders) {
-    return;
-  }
-
-  const configs = workspaceFolders.map(({ uri }) => {
-    return workspace.getConfiguration('umi_pro', uri);
-  });
-
-  const vscodeService = new VscodeService();
-  vscodeService.load(workspaceFolders, configs);
+  const vscodeService = Container.get(VscodeServiceToken);
+  await loadVscodeService(vscodeService);
 
   describe('test vscodeService.getWorkspace', () => {
     it('should get correct workspace', () => {
