@@ -60,13 +60,16 @@ describe('test UmiRouterCompletionItemProvider', async () => {
       text,
       new Position(300, 31)
     );
-    deepEqual(completionItems!.map(({ label }) => label), [
-      'BasicLayout',
-      'BlankLayout',
-      'Footer',
-      'Header',
-      'MenuContext',
-      'UserLayout',
-    ]);
+    deepEqual(
+      completionItems!.map(({ label }) => label).sort(),
+      [
+        'BasicLayout',
+        'BlankLayout',
+        'Footer',
+        'Header',
+        'MenuContext',
+        'UserLayout',
+      ].sort()
+    );
   });
 });
