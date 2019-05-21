@@ -1,5 +1,5 @@
 import { quoteString, isUndefined } from '../../../common/utils';
-import { QuoteType } from '../../../common/config';
+import { QuoteType } from '../../../common/types';
 
 import assert = require('assert');
 

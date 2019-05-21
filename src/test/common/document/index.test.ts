@@ -3,7 +3,7 @@ import { getAbsPath } from '../../../common/utils';
 import { join } from 'path';
 import * as vscode from 'vscode';
 import assert = require('assert');
-import { QuoteType } from '../../../common/config';
+import { QuoteType } from '../../../common/types';
 
 describe('test TextDocumentUtils', () => {
   const fixtures = getAbsPath(join(__dirname, './fixtures'));

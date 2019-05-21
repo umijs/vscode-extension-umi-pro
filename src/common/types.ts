@@ -10,7 +10,7 @@ export const QuoteCharMap = {
   [QuoteType.backtick]: '`',
 };
 
-export interface IDvaHelperConfig {
+export interface IUmiProConfig {
   quotes: QuoteType;
   routerConfigPath?: string;
 }

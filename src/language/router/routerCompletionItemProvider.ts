@@ -7,7 +7,7 @@ import { TextDocumentUtils } from '../../common/document';
 import { join } from 'path';
 import * as vscode from 'vscode';
 import { getAllPages } from '../../common/utils';
-import { DEFAULT_ROUTER_CONFIG_PATH } from '../../common/config';
+import { DEFAULT_ROUTER_CONFIG_PATH } from '../../common/types';
 
 @Service()
 export class UmiRouterCompletionItemProvider

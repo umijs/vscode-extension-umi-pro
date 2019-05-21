@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { QuoteType, QuoteCharMap } from './config';
+import { QuoteType, QuoteCharMap } from './types';
 import { isUndefined } from './utils';
 
 export enum Brackets {

@@ -1,5 +1,5 @@
+import { QuoteType } from './../../../common/types';
 import 'reflect-metadata';
-import { QuoteType } from './../../../services/vscodeService';
 import {
   VscodeServiceToken,
   loadVscodeService,

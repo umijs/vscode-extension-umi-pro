@@ -1,22 +1,6 @@
+import { IUmiProConfig, QuoteType } from './../common/types';
 import { Service, Token } from 'typedi';
 import * as vscode from 'vscode';
-
-export enum QuoteType {
-  double = 'double',
-  single = 'single',
-  backtick = 'backtick',
-}
-
-export interface IUmiProConfig {
-  quotes: QuoteType;
-  routerConfigPath?: string;
-}
-
-export const DEFAULT_ROUTER_CONFIG_PATH = [
-  '.umirc.js',
-  'config/config.js',
-  'config/router.config.js',
-];
 
 export interface IVscodeService {
   getConfig(filePath: string): IUmiProConfig | null;
