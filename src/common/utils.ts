@@ -1,9 +1,7 @@
 import { join, resolve, dirname, extname, basename } from 'path';
 import * as fs from 'mz/fs';
 import globby from 'globby';
-import { QuoteType, QuoteCharMap } from './types';
-
-const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
+import { QuoteType, QuoteCharMap, JS_EXT_NAMES } from './types';
 
 export async function getModels(cwd: string): Promise<string[]> {
   for (const extName of JS_EXT_NAMES) {

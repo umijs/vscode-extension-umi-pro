@@ -1,12 +1,6 @@
 import * as vscode from 'vscode';
-import { QuoteType, QuoteCharMap } from './types';
+import { QuoteType, QuoteCharMap, Brackets } from './types';
 import { isUndefined } from './utils';
-
-export enum Brackets {
-  ROUND = '()',
-  BOX = '[]',
-  CURLY = '{}',
-}
 
 export class TextDocumentUtils {
   private document: vscode.TextDocument;

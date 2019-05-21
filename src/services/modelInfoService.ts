@@ -1,11 +1,8 @@
+import { IDvaModelWithFilePath, IDvaModel } from './../common/types';
 import { DvaModelParser } from './../common/parser/index';
 import { VscodeServiceToken, IVscodeService } from './vscodeService';
 import { LoggerService, ILogger } from './../common/logger';
-import {
-  IDvaModelWithFilePath,
-  IDvaModel,
-  IDvaModelParser,
-} from './../common/parser';
+import { IDvaModelParser } from './../common/parser';
 import { join } from 'path';
 import * as lodash from 'lodash';
 import { Service, Inject, Token } from 'typedi';

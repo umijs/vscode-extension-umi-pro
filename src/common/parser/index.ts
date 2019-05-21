@@ -1,4 +1,4 @@
-import { IDvaModel } from './interface';
+import { IDvaModel } from './../types';
 import * as fs from 'mz/fs';
 import * as babelParser from '@babel/parser';
 import {
@@ -11,7 +11,6 @@ import {
   isObjectMethod,
 } from '@babel/types';
 import generate from '@babel/generator';
-export * from './interface';
 
 export interface IDvaModelParser {
   parse(code: string): Promise<IDvaModel[]>;

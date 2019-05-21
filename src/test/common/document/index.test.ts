@@ -1,9 +1,9 @@
-import { TextDocumentUtils, Brackets } from '../../../common/document';
+import { TextDocumentUtils } from '../../../common/document';
 import { getAbsPath } from '../../../common/utils';
 import { join } from 'path';
 import * as vscode from 'vscode';
 import assert = require('assert');
-import { QuoteType } from '../../../common/types';
+import { QuoteType, Brackets } from '../../../common/types';
 
 describe('test TextDocumentUtils', () => {
   const fixtures = getAbsPath(join(__dirname, './fixtures'));

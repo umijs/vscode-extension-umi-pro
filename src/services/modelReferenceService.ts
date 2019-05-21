@@ -1,3 +1,4 @@
+import { JS_EXT_NAMES } from './../common/types';
 import { LoggerService, ILogger } from './../common/logger';
 import {
   ModelReferenceParser,
@@ -119,7 +120,6 @@ export default class ModelReferenceService implements IModelReferenceService {
     fileModels[filePath] = actions;
   }
   private async loadProject(cwd: string) {
-    const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
     const files = (await globby(
       [`./src/**/*{${JS_EXT_NAMES.join(',')}}`, '!./node_modules/**'],
       {

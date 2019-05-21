@@ -1,10 +1,11 @@
+import { Brackets } from './../../common/types';
 import {
   IVscodeService,
   VscodeServiceToken,
 } from '../../services/vscodeService';
 import { Service, Inject } from 'typedi';
 import * as vscode from 'vscode';
-import { TextDocumentUtils, Brackets } from '../../common/document';
+import { TextDocumentUtils } from '../../common/document';
 import { DEFAULT_ROUTER_CONFIG_PATH } from '../../common/types';
 import { join } from 'path';
 import { isPathInRouter } from '../../common/ast';
