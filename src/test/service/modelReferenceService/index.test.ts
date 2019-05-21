@@ -18,7 +18,7 @@ describe('test modelReferenceService', async () => {
   const antdPro = join(workspaceFixtures, 'ant-design-pro-master');
 
   it('test getReference', async function() {
-    this.timeout(5000);
+    this.timeout(10000);
     const LoginModel = join(antdPro, 'src/models/login.js');
     const reference = await modelReferenceService.getReference(
       LoginModel,
