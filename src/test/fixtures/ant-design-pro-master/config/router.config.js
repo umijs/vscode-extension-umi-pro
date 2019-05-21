@@ -292,6 +292,14 @@ export default [
       {
         component: '404',
       },
+      {
+        path: '/test-router-completionItemProvider-pages',
+        component: './Editor/',
+      },
+      {
+        path: '/test-router-completionItemProvider-layout',
+        component: '../layouts/',
+      },
     ],
   },
 ];
