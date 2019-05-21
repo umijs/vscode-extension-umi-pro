@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import { ModelInfoService } from '../../../services/modelInfoService';
 import {
   VscodeServiceToken,

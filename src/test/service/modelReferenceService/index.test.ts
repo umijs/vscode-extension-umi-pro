@@ -1,5 +1,4 @@
 import { Range } from 'vscode';
-import 'reflect-metadata';
 import {
   VscodeServiceToken,
   loadVscodeService,
