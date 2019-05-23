@@ -7,16 +7,10 @@ import {
   ModelActionReference,
   ActionTypeCompletionItemProvider,
 } from './language/model';
-import {
-  UmiRouterCompletionItemProvider,
-  UmiRouterDefinitionProvider,
-} from './language/router';
+import { UmiRouterCompletionItemProvider, UmiRouterDefinitionProvider } from './language/router';
 import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
-import {
-  loadVscodeService,
-  VscodeServiceToken,
-} from './services/vscodeService';
+import { loadVscodeService, VscodeServiceToken } from './services/vscodeService';
 import { ModelInfoServiceToken } from './services/modelInfoService';
 
 export async function activate(context) {

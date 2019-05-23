@@ -1,8 +1,5 @@
 import { QuoteType } from './../../../common/types';
-import {
-  VscodeServiceToken,
-  loadVscodeService,
-} from '../../../services/vscodeService';
+import { VscodeServiceToken, loadVscodeService } from '../../../services/vscodeService';
 import { join } from 'path';
 import { getAbsPath } from '../../../common/utils';
 import { workspace } from 'vscode';

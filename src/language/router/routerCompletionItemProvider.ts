@@ -1,8 +1,5 @@
 import { Inject, Service } from 'typedi';
-import {
-  IVscodeService,
-  VscodeServiceToken,
-} from '../../services/vscodeService';
+import { IVscodeService, VscodeServiceToken } from '../../services/vscodeService';
 import { TextDocumentUtils } from '../../common/document';
 import { join } from 'path';
 import * as vscode from 'vscode';
@@ -10,8 +7,7 @@ import { getAllPages } from '../../common/utils';
 import { DEFAULT_ROUTER_CONFIG_PATH } from '../../common/types';
 
 @Service()
-export class UmiRouterCompletionItemProvider
-  implements vscode.CompletionItemProvider {
+export class UmiRouterCompletionItemProvider implements vscode.CompletionItemProvider {
   private vscodeService: IVscodeService;
 
   constructor(
@@ -21,10 +17,7 @@ export class UmiRouterCompletionItemProvider
     this.vscodeService = vscodeService;
   }
 
-  async provideCompletionItems(
-    document: vscode.TextDocument,
-    position: vscode.Position
-  ) {
+  async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
     const filePath = document.uri.fsPath;
     const textDocumentUtils = new TextDocumentUtils(document);
     const config = this.vscodeService.getConfig(filePath);

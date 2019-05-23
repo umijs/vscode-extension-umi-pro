@@ -1,11 +1,5 @@
-import {
-  IVscodeService,
-  VscodeServiceToken,
-} from '../../services/vscodeService';
-import {
-  ModelInfoServiceToken,
-  IModelInfoService,
-} from '../../services/modelInfoService';
+import { IVscodeService, VscodeServiceToken } from '../../services/vscodeService';
+import { ModelInfoServiceToken, IModelInfoService } from '../../services/modelInfoService';
 import { TextDocumentUtils } from '../../common/document';
 import logger from '../../common/logger';
 import { Service, Inject } from 'typedi';
@@ -55,8 +49,7 @@ export class ActionTypeHoverProvider implements vscode.HoverProvider {
     for (let model of models) {
       if (model.namespace === actionNameSpace) {
         let actionFunction =
-          model.effects[actionFunctionName] ||
-          model.reducers[actionFunctionName];
+          model.effects[actionFunctionName] || model.reducers[actionFunctionName];
         if (actionFunction) {
           return new vscode.Hover(
             {

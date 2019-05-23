@@ -3,10 +3,7 @@ import { workspace, Position, Location } from 'vscode';
 import { deepEqual } from 'assert';
 import { ModelActionReference } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import {
-  VscodeServiceToken,
-  loadVscodeService,
-} from '../../services/vscodeService';
+import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
 
 describe('test ModelActionReference', async () => {
   const provider = Container.get(ModelActionReference);
@@ -34,10 +31,7 @@ describe('test ModelActionReference', async () => {
     const text = await workspace.openTextDocument(
       getAntdProFilePath('src/pages/Profile/models/profile.js')
     );
-    const references = await provider.provideReferences(
-      text,
-      new Position(20, 12)
-    );
+    const references = await provider.provideReferences(text, new Position(20, 12));
     deepEqual(references!.length, 1);
     deepEqual(references!.map(flattenLocation), [
       {

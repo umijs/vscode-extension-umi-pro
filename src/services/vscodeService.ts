@@ -31,9 +31,7 @@ export function eliminateSubWorkspaceFolder(
 }
 
 export async function getVscodeServiceArgs() {
-  const workspaceFolders = eliminateSubWorkspaceFolder(
-    vscode.workspace.workspaceFolders
-  );
+  const workspaceFolders = eliminateSubWorkspaceFolder(vscode.workspace.workspaceFolders);
   if (!workspaceFolders || workspaceFolders.length === 0) {
     return {
       workspaceFolders: null,
@@ -47,10 +45,7 @@ export async function getVscodeServiceArgs() {
 }
 
 export async function loadVscodeService(service: IVscodeService) {
-  const {
-    workspaceFolders,
-    workspaceConfigurations,
-  } = await getVscodeServiceArgs();
+  const { workspaceFolders, workspaceConfigurations } = await getVscodeServiceArgs();
   service.load(workspaceFolders, workspaceConfigurations);
 }
 
@@ -80,9 +75,7 @@ export class VscodeService implements IVscodeService {
   }
 
   getConfig(filePath: string) {
-    const index = this.workspaceFolders.findIndex(o =>
-      filePath.startsWith(o.uri.fsPath)
-    );
+    const index = this.workspaceFolders.findIndex(o => filePath.startsWith(o.uri.fsPath));
     if (index === -1) {
       return null;
     }
@@ -92,19 +85,14 @@ export class VscodeService implements IVscodeService {
       routerConfigPath: userConfig.get<string>('router_config_path'),
     };
     const userQuotesConfig = userConfig.get<QuoteType>('quotes');
-    if (
-      userQuotesConfig &&
-      Object.values(QuoteType).includes(userQuotesConfig)
-    ) {
+    if (userQuotesConfig && Object.values(QuoteType).includes(userQuotesConfig)) {
       config.quotes = userQuotesConfig;
     }
     return config;
   }
 
   getWorkspace(filePath: string) {
-    const workspaceFolder = this.workspaceFolders.find(o =>
-      filePath.startsWith(o.uri.fsPath)
-    );
+    const workspaceFolder = this.workspaceFolders.find(o => filePath.startsWith(o.uri.fsPath));
     if (!workspaceFolder) {
       return null;
     }

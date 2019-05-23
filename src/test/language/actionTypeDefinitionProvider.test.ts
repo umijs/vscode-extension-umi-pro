@@ -1,10 +1,7 @@
 import { Container } from 'typedi';
 import { ActionTypeDefinitionProvider } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import {
-  VscodeServiceToken,
-  loadVscodeService,
-} from '../../services/vscodeService';
+import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
 import { workspace, Position, Range } from 'vscode';
 import { deepEqual } from 'assert';
 
@@ -17,10 +14,7 @@ describe('test ActionTypeDefinitionProvider', async () => {
     const text = await workspace.openTextDocument(
       getAntdProFilePath('src/pages/Profile/AdvancedProfile.js')
     );
-    const definition = await provider.provideDefinition(
-      text,
-      new Position(195, 20)
-    );
+    const definition = await provider.provideDefinition(text, new Position(195, 20));
     deepEqual(definition!.length, 1);
     deepEqual(
       definition![0].targetUri.fsPath,

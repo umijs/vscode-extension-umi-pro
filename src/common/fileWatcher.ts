@@ -18,9 +18,7 @@ async function needExtension(projectPath: string) {
     return false;
   }
   try {
-    const packageJson = JSON.parse(
-      await fs.readFile(packageJsonPath, { encoding: 'utf-8' })
-    );
+    const packageJson = JSON.parse(await fs.readFile(packageJsonPath, { encoding: 'utf-8' }));
     const { dependencies = {} } = packageJson;
     return !!(dependencies.umi || dependencies.dva);
   } catch (error) {
@@ -29,9 +27,7 @@ async function needExtension(projectPath: string) {
   }
 }
 
-export async function getUmiFileWatcher(
-  workspaceFolders: vscode.WorkspaceFolder[] | undefined
-) {
+export async function getUmiFileWatcher(workspaceFolders: vscode.WorkspaceFolder[] | undefined) {
   if (!workspaceFolders || workspaceFolders.length === 0) {
     return null;
   }

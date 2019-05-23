@@ -27,8 +27,7 @@ describe('index.test.ts', () => {
         },
         reducers: {
           save: {
-            code:
-              'save(state, action) {\n  return { ...state,\n    list: action.payload\n  };\n}',
+            code: 'save(state, action) {\n  return { ...state,\n    list: action.payload\n  };\n}',
             loc: {
               start: { line: 23, column: 4 },
               end: { line: 28, column: 5 },

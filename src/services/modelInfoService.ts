@@ -50,9 +50,9 @@ export class ModelInfoService implements IModelInfoService {
       const pageModels = await getPageModels(filePath, projectPath);
       const modelFiles = globalModels.concat(pageModels);
       return lodash.flatten(
-        (await Promise.all(
-          modelFiles.map(file => this.fileToModels(file))
-        )).filter((o): o is IDvaModelWithFilePath[] => !!o)
+        (await Promise.all(modelFiles.map(file => this.fileToModels(file)))).filter(
+          (o): o is IDvaModelWithFilePath[] => !!o
+        )
       );
     } catch (error) {
       this.logger.info(error.message);

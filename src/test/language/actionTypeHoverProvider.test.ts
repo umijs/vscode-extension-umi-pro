@@ -1,10 +1,7 @@
 import { Container } from 'typedi';
 import { ActionTypeHoverProvider } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import {
-  VscodeServiceToken,
-  loadVscodeService,
-} from '../../services/vscodeService';
+import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
 import { workspace, Position, Range } from 'vscode';
 import { deepEqual } from 'assert';
 

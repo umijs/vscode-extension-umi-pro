@@ -45,9 +45,7 @@ export class DvaModelParser implements IDvaModelParser {
         modelObjects.push(model);
       }
     }
-    return modelObjects
-      .map(o => this.parseObjectExpression(o))
-      .filter(o => !!o) as IDvaModel[];
+    return modelObjects.map(o => this.parseObjectExpression(o)).filter(o => !!o) as IDvaModel[];
   }
 
   public async parseFile(path: string): Promise<IDvaModel[]> {
@@ -89,10 +87,7 @@ export class DvaModelParser implements IDvaModelParser {
     if (!result.namespace) {
       return null;
     }
-    if (
-      Object.keys(result.effects).length === 0 &&
-      Object.keys(result.reducers).length === 0
-    ) {
+    if (Object.keys(result.effects).length === 0 && Object.keys(result.reducers).length === 0) {
       return null;
     }
     return result;

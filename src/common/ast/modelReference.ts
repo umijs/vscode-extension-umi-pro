@@ -61,12 +61,7 @@ export class ModelReferenceParser implements IModelReferenceParser {
             return;
           }
           const { value, key } = property;
-          if (
-            !isIdentifier(key) ||
-            key.name !== 'type' ||
-            !isStringLiteral(value) ||
-            !value.loc
-          ) {
+          if (!isIdentifier(key) || key.name !== 'type' || !isStringLiteral(value) || !value.loc) {
             return;
           }
           result.push({

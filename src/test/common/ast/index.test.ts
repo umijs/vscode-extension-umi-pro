@@ -9,9 +9,7 @@ describe('test isPathInRouter', () => {
   const fixtures = getAbsPath(join(__dirname, './fixtures'));
 
   it('show word correct with js code', async () => {
-    const text = await vscode.workspace.openTextDocument(
-      join(fixtures, 'test.js')
-    );
+    const text = await vscode.workspace.openTextDocument(join(fixtures, 'test.js'));
 
     /**
      * { path: '/', component: './a' },

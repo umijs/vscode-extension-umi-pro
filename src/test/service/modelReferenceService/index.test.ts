@@ -1,8 +1,5 @@
 import { Range } from 'vscode';
-import {
-  VscodeServiceToken,
-  loadVscodeService,
-} from '../../../services/vscodeService';
+import { VscodeServiceToken, loadVscodeService } from '../../../services/vscodeService';
 import { join } from 'path';
 import { Container } from 'typedi';
 import * as assert from 'assert';
@@ -19,11 +16,7 @@ describe('test modelReferenceService', async () => {
   it('test getReference', async function() {
     this.timeout(10000);
     const LoginModel = join(antdPro, 'src/models/login.js');
-    const reference = await modelReferenceService.getReference(
-      LoginModel,
-      'login',
-      'getCaptcha'
-    );
+    const reference = await modelReferenceService.getReference(LoginModel, 'login', 'getCaptcha');
 
     const result = reference.map(({ uri: { fsPath }, range }) => ({
       path: fsPath,

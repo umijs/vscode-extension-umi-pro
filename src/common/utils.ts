@@ -14,9 +14,7 @@ export async function getModels(cwd: string): Promise<string[]> {
     cwd,
     deep: true,
   })).filter(p =>
-    ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(
-      ext => !p.endsWith(ext)
-    )
+    ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(ext => !p.endsWith(ext))
   );
   return modules.map(p => join(cwd, p));
 }
@@ -64,9 +62,7 @@ export async function getAllPages(cwd: string): Promise<string[]> {
       deep: true,
     }
   )).filter(p =>
-    ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(
-      ext => !p.endsWith(ext)
-    )
+    ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(ext => !p.endsWith(ext))
   );
 
   const pageSet = pages.reduce((set, page) => {

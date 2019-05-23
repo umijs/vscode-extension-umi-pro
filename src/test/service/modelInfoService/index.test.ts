@@ -1,8 +1,5 @@
 import { ModelInfoService } from '../../../services/modelInfoService';
-import {
-  VscodeServiceToken,
-  loadVscodeService,
-} from '../../../services/vscodeService';
+import { VscodeServiceToken, loadVscodeService } from '../../../services/vscodeService';
 import { join } from 'path';
 import { Container } from 'typedi';
 import assert = require('assert');
@@ -38,16 +35,7 @@ describe('test ModelInfoService', async () => {
     const modelNames = models.map(({ namespace }) => namespace);
     assert.deepEqual(
       modelNames.sort(),
-      [
-        'form',
-        'global',
-        'list',
-        'login',
-        'menu',
-        'project',
-        'setting',
-        'user',
-      ].sort()
+      ['form', 'global', 'list', 'login', 'menu', 'project', 'setting', 'user'].sort()
     );
   });
 });

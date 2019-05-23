@@ -79,9 +79,7 @@ class CoverageRunner {
     private endRunCallback: any
   ) {
     if (!options.relativeSourcePath) {
-      return endRunCallback(
-        'Error - relativeSourcePath must be defined for code coverage to work'
-      );
+      return endRunCallback('Error - relativeSourcePath must be defined for code coverage to work');
     }
   }
 
@@ -91,10 +89,7 @@ class CoverageRunner {
     self.instrumenter = new istanbul.Instrumenter({
       coverageVariable: self.coverageVar,
     });
-    let sourceRoot = paths.join(
-      self.testsRoot,
-      self.options.relativeSourcePath
-    );
+    let sourceRoot = paths.join(self.testsRoot, self.options.relativeSourcePath);
 
     // Glob source files
     let srcFiles = glob.sync('**/**.js', {
@@ -180,10 +175,7 @@ class CoverageRunner {
       }
     });
 
-    let reportingDir = paths.join(
-      self.testsRoot,
-      self.options.relativeCoverageDir
-    );
+    let reportingDir = paths.join(self.testsRoot, self.options.relativeCoverageDir);
     let includePid = self.options.includePid;
     let pidExt = includePid ? `-${process.pid}` : '';
     let coverageFile = paths.resolve(reportingDir, `coverage${pidExt}.json`);
@@ -201,8 +193,7 @@ class CoverageRunner {
     });
 
     let reporter = new istanbul.Reporter(undefined, reportingDir);
-    let reportTypes =
-      self.options.reports instanceof Array ? self.options.reports : ['lcov'];
+    let reportTypes = self.options.reports instanceof Array ? self.options.reports : ['lcov'];
     reporter.addAll(reportTypes);
     reporter.write(remappedCollector, true, () => {
       console.log(`reports written to ${reportingDir}`);

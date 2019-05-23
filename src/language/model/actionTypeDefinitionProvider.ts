@@ -1,12 +1,6 @@
 import { Inject, Service } from 'typedi';
-import {
-  IModelInfoService,
-  ModelInfoServiceToken,
-} from '../../services/modelInfoService';
-import {
-  IVscodeService,
-  VscodeServiceToken,
-} from '../../services/vscodeService';
+import { IModelInfoService, ModelInfoServiceToken } from '../../services/modelInfoService';
+import { IVscodeService, VscodeServiceToken } from '../../services/vscodeService';
 import * as vscode from 'vscode';
 import { TextDocumentUtils } from '../../common/document';
 
@@ -26,10 +20,7 @@ export class ActionTypeDefinitionProvider implements vscode.DefinitionProvider {
     this.modelInfoService = modelInfoService;
   }
 
-  async provideDefinition(
-    document: vscode.TextDocument,
-    position: vscode.Position
-  ) {
+  async provideDefinition(document: vscode.TextDocument, position: vscode.Position) {
     const filePath = document.uri.fsPath;
 
     const textDocumentUtils = new TextDocumentUtils(document);
@@ -54,18 +45,11 @@ export class ActionTypeDefinitionProvider implements vscode.DefinitionProvider {
     for (let model of models) {
       if (model.namespace === actionNameSpace) {
         let actionFunction =
-          model.effects[actionFunctionName] ||
-          model.reducers[actionFunctionName];
+          model.effects[actionFunctionName] || model.reducers[actionFunctionName];
         if (actionFunction) {
           const targetRange = new vscode.Range(
-            new vscode.Position(
-              actionFunction.loc.start.line - 1,
-              actionFunction.loc.start.column
-            ),
-            new vscode.Position(
-              actionFunction.loc.end.line - 1,
-              actionFunction.loc.end.column
-            )
+            new vscode.Position(actionFunction.loc.start.line - 1, actionFunction.loc.start.column),
+            new vscode.Position(actionFunction.loc.end.line - 1, actionFunction.loc.end.column)
           );
           return [
             {

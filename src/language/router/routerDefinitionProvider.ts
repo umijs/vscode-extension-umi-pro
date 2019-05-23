@@ -1,8 +1,5 @@
 import { Brackets } from './../../common/types';
-import {
-  IVscodeService,
-  VscodeServiceToken,
-} from '../../services/vscodeService';
+import { IVscodeService, VscodeServiceToken } from '../../services/vscodeService';
 import { Service, Inject } from 'typedi';
 import * as vscode from 'vscode';
 import { TextDocumentUtils } from '../../common/document';
@@ -22,10 +19,7 @@ export class UmiRouterDefinitionProvider implements vscode.DefinitionProvider {
     this.vscodeService = vscodeService;
   }
 
-  async provideDefinition(
-    document: vscode.TextDocument,
-    position: vscode.Position
-  ) {
+  async provideDefinition(document: vscode.TextDocument, position: vscode.Position) {
     const filePath = document.uri.fsPath;
     const textDocumentUtils = new TextDocumentUtils(document);
     const config = this.vscodeService.getConfig(filePath);
@@ -47,10 +41,7 @@ export class UmiRouterDefinitionProvider implements vscode.DefinitionProvider {
       return;
     }
     let routePath = document.getText(range).slice(1, -1);
-    const codeRange = textDocumentUtils.growBracketsRange(
-      range,
-      Brackets.CURLY
-    );
+    const codeRange = textDocumentUtils.growBracketsRange(range, Brackets.CURLY);
     if (!codeRange) {
       return;
     }
@@ -70,10 +61,7 @@ export class UmiRouterDefinitionProvider implements vscode.DefinitionProvider {
 
     for (const pagePath of possiblePagePath) {
       if (await fs.exists(pagePath)) {
-        return new vscode.Location(
-          vscode.Uri.file(pagePath),
-          new vscode.Position(0, 9)
-        );
+        return new vscode.Location(vscode.Uri.file(pagePath), new vscode.Position(0, 9));
       }
     }
   }

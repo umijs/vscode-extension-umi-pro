@@ -1,10 +1,5 @@
 import * as babelParser from '@babel/parser';
-import {
-  isStringLiteral,
-  isObjectExpression,
-  isObjectProperty,
-  isIdentifier,
-} from '@babel/types';
+import { isStringLiteral, isObjectExpression, isObjectProperty, isIdentifier } from '@babel/types';
 
 export { IModelReferenceParser, ModelReferenceParser } from './modelReference';
 

@@ -69,9 +69,7 @@ class CoverCardList extends PureComponent {
             >
               <Card.Meta
                 title={<a>{item.title}</a>}
-                description={
-                  <Ellipsis lines={2}>{item.subDescription}</Ellipsis>
-                }
+                description={<Ellipsis lines={2}>{item.subDescription}</Ellipsis>}
               />
               <div className={styles.cardItemContent}>
                 <span>{moment(item.updatedAt).fromNow()}</span>
@@ -101,32 +99,18 @@ class CoverCardList extends PureComponent {
     };
 
     const actionsTextMap = {
-      expandText: (
-        <FormattedMessage
-          id="component.tagSelect.expand"
-          defaultMessage="Expand"
-        />
-      ),
+      expandText: <FormattedMessage id="component.tagSelect.expand" defaultMessage="Expand" />,
       collapseText: (
-        <FormattedMessage
-          id="component.tagSelect.collapse"
-          defaultMessage="Collapse"
-        />
+        <FormattedMessage id="component.tagSelect.collapse" defaultMessage="Collapse" />
       ),
-      selectAllText: (
-        <FormattedMessage id="component.tagSelect.all" defaultMessage="All" />
-      ),
+      selectAllText: <FormattedMessage id="component.tagSelect.all" defaultMessage="All" />,
     };
 
     return (
       <div className={styles.coverCardList}>
         <Card bordered={false}>
           <Form layout="inline">
-            <StandardFormRow
-              title="所属类目"
-              block
-              style={{ paddingBottom: 11 }}
-            >
+            <StandardFormRow title="所属类目" block style={{ paddingBottom: 11 }}>
               <FormItem>
                 {getFieldDecorator('category')(
                   <TagSelect expandable actionsText={actionsTextMap}>
@@ -151,10 +135,7 @@ class CoverCardList extends PureComponent {
                 <Col lg={8} md={10} sm={10} xs={24}>
                   <FormItem {...formItemLayout} label="作者">
                     {getFieldDecorator('author', {})(
-                      <Select
-                        placeholder="不限"
-                        style={{ maxWidth: 200, width: '100%' }}
-                      >
+                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
                         <Option value="lisa">王昭君</Option>
                       </Select>
                     )}
@@ -163,10 +144,7 @@ class CoverCardList extends PureComponent {
                 <Col lg={8} md={10} sm={10} xs={24}>
                   <FormItem {...formItemLayout} label="好评度">
                     {getFieldDecorator('rate', {})(
-                      <Select
-                        placeholder="不限"
-                        style={{ maxWidth: 200, width: '100%' }}
-                      >
+                      <Select placeholder="不限" style={{ maxWidth: 200, width: '100%' }}>
                         <Option value="good">优秀</Option>
                         <Option value="normal">普通</Option>
                       </Select>

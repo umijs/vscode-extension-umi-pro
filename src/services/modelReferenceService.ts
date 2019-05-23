@@ -1,9 +1,6 @@
 import { JS_EXT_NAMES } from './../common/types';
 import { LoggerService, ILogger } from './../common/logger';
-import {
-  ModelReferenceParser,
-  IModelReferenceParser,
-} from './../common/ast/modelReference';
+import { ModelReferenceParser, IModelReferenceParser } from './../common/ast/modelReference';
 import { Location } from 'vscode';
 import globby from 'globby';
 import { flatten } from 'lodash';
@@ -14,11 +11,7 @@ import { join } from 'path';
 import { IModelInfoService, ModelInfoServiceToken } from './modelInfoService';
 
 export interface IModelReferenceService {
-  getReference(
-    filePath: string,
-    model: string,
-    action: string
-  ): Promise<Location[]>;
+  getReference(filePath: string, model: string, action: string): Promise<Location[]>;
 
   reloadFile(filePath: string): Promise<void>;
 }
@@ -74,9 +67,7 @@ export default class ModelReferenceService implements IModelReferenceService {
     if (!this.modelReferenceMap.has(projectPath)) {
       await this.loadProject(projectPath);
     }
-    return flatten<Location>(
-      Object.values(this.getActionReference(projectPath, model, action))
-    );
+    return flatten<Location>(Object.values(this.getActionReference(projectPath, model, action)));
   }
 
   async reloadFile(filePath: string) {
@@ -110,26 +101,18 @@ export default class ModelReferenceService implements IModelReferenceService {
         namespace,
         action,
       });
-      const reference =
-        this.getActionReference(projectPath, namespace, action)[filePath] || [];
+      const reference = this.getActionReference(projectPath, namespace, action)[filePath] || [];
       reference.push(new Location(uri, range));
-      this.getActionReference(projectPath, namespace, action)[
-        filePath
-      ] = reference;
+      this.getActionReference(projectPath, namespace, action)[filePath] = reference;
     });
     fileModels[filePath] = actions;
   }
   private async loadProject(cwd: string) {
-    const files = (await globby(
-      [`./src/**/*{${JS_EXT_NAMES.join(',')}}`, '!./node_modules/**'],
-      {
-        cwd,
-        deep: true,
-      }
-    )).filter(p =>
-      ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(
-        ext => !p.endsWith(ext)
-      )
+    const files = (await globby([`./src/**/*{${JS_EXT_NAMES.join(',')}}`, '!./node_modules/**'], {
+      cwd,
+      deep: true,
+    })).filter(p =>
+      ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(ext => !p.endsWith(ext))
     );
     this.logger.info(`load project ${cwd} find ${files.length} files`);
     await Promise.all(files.map(file => this.reloadFile(join(cwd, file))));

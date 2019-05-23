@@ -1,19 +1,12 @@
 import { Inject, Service } from 'typedi';
-import {
-  IModelInfoService,
-  ModelInfoServiceToken,
-} from './../../services/modelInfoService';
-import {
-  IVscodeService,
-  VscodeServiceToken,
-} from './../../services/vscodeService';
+import { IModelInfoService, ModelInfoServiceToken } from './../../services/modelInfoService';
+import { IVscodeService, VscodeServiceToken } from './../../services/vscodeService';
 import * as vscode from 'vscode';
 import { quoteString } from '../../common/utils';
 import logger from '../../common/logger';
 
 @Service()
-export class ActionTypeCompletionItemProvider
-  implements vscode.CompletionItemProvider {
+export class ActionTypeCompletionItemProvider implements vscode.CompletionItemProvider {
   private vscodeService: IVscodeService;
 
   private modelInfoService: IModelInfoService;
@@ -27,18 +20,13 @@ export class ActionTypeCompletionItemProvider
     this.vscodeService = vscodeService;
     this.modelInfoService = modelInfoService;
   }
-  async provideCompletionItems(
-    document: vscode.TextDocument,
-    position: vscode.Position
-  ) {
+  async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
     const filePath = document.uri.fsPath;
     const userConfig = this.vscodeService.getConfig(filePath);
     if (!userConfig) {
       return;
     }
-    const lineText = document.getText(
-      new vscode.Range(position.with(position.line, 0), position)
-    );
+    const lineText = document.getText(new vscode.Range(position.with(position.line, 0), position));
     logger.info(`current line ${lineText}`);
     //todo 更智能的判断
     if (!lineText.includes('type')) {

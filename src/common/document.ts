@@ -8,9 +8,7 @@ export class TextDocumentUtils {
 
   constructor(document: vscode.TextDocument) {
     this.document = document;
-    this.illegal = document.validatePosition(
-      new vscode.Position(Infinity, Infinity)
-    );
+    this.illegal = document.validatePosition(new vscode.Position(Infinity, Infinity));
   }
 
   public CharAt = (offset: number): string => {
@@ -18,10 +16,7 @@ export class TextDocumentUtils {
       throw new Error('illegal offset');
     }
     return this.document.getText(
-      new vscode.Range(
-        this.document.positionAt(offset),
-        this.document.positionAt(offset + 1)
-      )
+      new vscode.Range(this.document.positionAt(offset), this.document.positionAt(offset + 1))
     );
   };
 
@@ -48,9 +43,7 @@ export class TextDocumentUtils {
     if (startOfDocument === start) {
       return null;
     }
-    const endOfDocument = this.document.offsetAt(
-      new vscode.Position(Infinity, Infinity)
-    );
+    const endOfDocument = this.document.offsetAt(new vscode.Position(Infinity, Infinity));
     if (endOfDocument === end) {
       return null;
     }
@@ -99,12 +92,8 @@ export class TextDocumentUtils {
     if (this.outOfRange(offset)) {
       return null;
     }
-    const startOfLint = this.document.offsetAt(
-      new vscode.Position(position.line, 0)
-    );
-    const endOfLint = this.document.offsetAt(
-      new vscode.Position(position.line, Infinity)
-    );
+    const startOfLint = this.document.offsetAt(new vscode.Position(position.line, 0));
+    const endOfLint = this.document.offsetAt(new vscode.Position(position.line, Infinity));
     const quoteChar = QuoteCharMap[quoteType];
     let frontQuoteOffset;
     for (let i = offset - 1; i >= startOfLint; i--) {

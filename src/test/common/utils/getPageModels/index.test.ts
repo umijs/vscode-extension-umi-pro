@@ -16,11 +16,7 @@ describe('test getPageModels', () => {
     const models = await getPageModels(page, projectPath);
     assert.deepEqual(
       models.sort(),
-      getAbsModelsPaths([
-        'a/models/a.js',
-        'a/models/b.js',
-        'a/models/ss/s.js',
-      ]).sort()
+      getAbsModelsPaths(['a/models/a.js', 'a/models/b.js', 'a/models/ss/s.js']).sort()
     );
   });
 
@@ -33,9 +29,6 @@ describe('test getPageModels', () => {
   it('page d models should correct', async () => {
     const page = join(pagesPath, 'c', 'd', 'page.js');
     const models = await getPageModels(page, projectPath);
-    assert.deepEqual(
-      models.sort(),
-      getAbsModelsPaths(['c/model.js', 'c/d/models/d.js']).sort()
-    );
+    assert.deepEqual(models.sort(), getAbsModelsPaths(['c/model.js', 'c/d/models/d.js']).sort());
   });
 });

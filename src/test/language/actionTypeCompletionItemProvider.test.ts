@@ -1,10 +1,7 @@
 import { Container } from 'typedi';
 import { ActionTypeCompletionItemProvider } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import {
-  VscodeServiceToken,
-  loadVscodeService,
-} from '../../services/vscodeService';
+import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
 import { workspace, Position } from 'vscode';
 import { deepEqual } from 'assert';
 
@@ -17,10 +14,7 @@ describe('test ActionTypeCompletionItemProvider', async () => {
     const text = await workspace.openTextDocument(
       getAntdProFilePath('src/pages/List/Applications.js')
     );
-    const completionItems = await provider.provideCompletionItems(
-      text,
-      new Position(26, 11)
-    );
+    const completionItems = await provider.provideCompletionItems(text, new Position(26, 11));
     deepEqual(
       completionItems!.map(o => o.label).sort(),
       [

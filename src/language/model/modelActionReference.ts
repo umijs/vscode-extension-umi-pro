@@ -2,16 +2,10 @@ import {
   IModelReferenceService,
   ModelReferenceServiceToken,
 } from '../../services/modelReferenceService';
-import {
-  VscodeServiceToken,
-  IVscodeService,
-} from '../../services/vscodeService';
+import { VscodeServiceToken, IVscodeService } from '../../services/vscodeService';
 import { Service, Inject } from 'typedi';
 import { ReferenceProvider, TextDocument, Position } from 'vscode';
-import {
-  ModelInfoServiceToken,
-  IModelInfoService,
-} from '../../services/modelInfoService';
+import { ModelInfoServiceToken, IModelInfoService } from '../../services/modelInfoService';
 
 @Service()
 export class ModelActionReference implements ReferenceProvider {
@@ -39,9 +33,7 @@ export class ModelActionReference implements ReferenceProvider {
     if (!projectPath) {
       return;
     }
-    const currentNamespace = await this.modelInfoService.getNameSpace(
-      document.uri.fsPath
-    );
+    const currentNamespace = await this.modelInfoService.getNameSpace(document.uri.fsPath);
     if (!currentNamespace) {
       return;
     }
