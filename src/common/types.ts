@@ -56,3 +56,5 @@ export enum Brackets {
 }
 
 export const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
+
+export const SUPPORT_LANGUAGE = ['javascript', 'typescript', 'typescriptreact'];

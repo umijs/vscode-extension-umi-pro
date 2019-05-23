@@ -12,6 +12,7 @@ import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
 import { loadVscodeService, VscodeServiceToken } from './services/vscodeService';
 import { ModelInfoServiceToken } from './services/modelInfoService';
+import { SUPPORT_LANGUAGE } from './common/types';
 
 export async function activate(context) {
   logger.info('extension "umi-pro" is now active!');
@@ -30,45 +31,39 @@ export async function activate(context) {
   workspace.onDidChangeConfiguration(() => loadVscodeService(vscodeService));
   context.subscriptions.push(
     languages.registerCompletionItemProvider(
-      ['javascript', 'typescript'],
+      SUPPORT_LANGUAGE,
       Container.get(ActionTypeCompletionItemProvider),
       ':'
     )
   );
   context.subscriptions.push(
-    languages.registerHoverProvider(
-      ['javascript', 'typescript'],
-      Container.get(ActionTypeHoverProvider)
-    )
+    languages.registerHoverProvider(SUPPORT_LANGUAGE, Container.get(ActionTypeHoverProvider))
   );
 
   context.subscriptions.push(
     languages.registerDefinitionProvider(
-      ['javascript', 'typescript'],
+      SUPPORT_LANGUAGE,
       Container.get(ActionTypeDefinitionProvider)
     )
   );
 
   context.subscriptions.push(
     languages.registerDefinitionProvider(
-      ['javascript', 'typescript'],
+      SUPPORT_LANGUAGE,
       Container.get(UmiRouterDefinitionProvider)
     )
   );
 
   context.subscriptions.push(
     languages.registerCompletionItemProvider(
-      ['javascript', 'typescript'],
+      SUPPORT_LANGUAGE,
       Container.get(UmiRouterCompletionItemProvider),
       ...['/']
     )
   );
 
   context.subscriptions.push(
-    languages.registerReferenceProvider(
-      ['javascript', 'typescript'],
-      Container.get(ModelActionReference)
-    )
+    languages.registerReferenceProvider(SUPPORT_LANGUAGE, Container.get(ModelActionReference))
   );
 }
 
