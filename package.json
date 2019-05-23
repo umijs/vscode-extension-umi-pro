@@ -94,7 +94,7 @@
   "dependencies": {
     "@babel/generator": "^7.4.4",
     "@babel/parser": "^7.4.5",
-    "@babel/traverse": "^7.4.4",
+    "@babel/traverse": "^7.4.5",
     "@babel/types": "^7.4.4",
     "globby": "^9.2.0",
     "lodash": "^4.17.11",
