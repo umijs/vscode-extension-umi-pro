@@ -65,7 +65,7 @@
     "@types/babel-generator": "^6.25.3",
     "@types/babel-traverse": "^6.25.5",
     "@types/babel-types": "^7.0.7",
-    "@types/lodash": "^4.14.130",
+    "@types/lodash": "^4.14.132",
     "@types/mocha": "^5.2.6",
     "@types/mz": "^0.0.32",
     "@types/node": "^10.12.21",
