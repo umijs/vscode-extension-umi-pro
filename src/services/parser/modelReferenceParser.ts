@@ -9,6 +9,8 @@ import {
   isObjectProperty,
   isStringLiteral,
 } from '@babel/types';
+import { Service, Token, Inject } from 'typedi';
+import { IVscodeService, VscodeServiceToken } from './../vscodeService';
 
 interface ModelReference {
   type: string;
@@ -20,24 +22,27 @@ export interface IModelReferenceParser {
   parseFile(path: string): Promise<ModelReference[]>;
 }
 
-export class ModelReferenceParser implements IModelReferenceParser {
+export const ModelReferenceParserToken = new Token<IModelReferenceParser>();
+
+@Service(ModelReferenceParserToken)
+// eslint-disable-next-line @typescript-eslint/class-name-casing
+class _ModelReferenceParser implements IModelReferenceParser {
+  public readonly vscodeService: IVscodeService;
+
+  constructor(
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService
+  ) {
+    this.vscodeService = vscodeService;
+  }
+
   public async parseFile(filePath: string) {
     const code = await fs.readFile(filePath, 'utf-8');
-    const ast = babelParser.parse(code, {
-      sourceType: 'module',
-      plugins: [
-        'typescript',
-        'classProperties',
-        'dynamicImport',
-        'jsx',
-        [
-          'decorators',
-          {
-            decoratorsBeforeExport: true,
-          },
-        ],
-      ],
-    });
+    const config = this.vscodeService.getConfig(filePath);
+    if (!config) {
+      return [];
+    }
+    const ast = babelParser.parse(code, config.parserOptions);
     const result: ModelReference[] = [];
     traverse(ast, {
       enter(path) {

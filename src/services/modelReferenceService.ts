@@ -1,12 +1,12 @@
 import { JS_EXT_NAMES } from './../common/types';
 import { LoggerService, ILogger } from './../common/logger';
-import { ModelReferenceParser, IModelReferenceParser } from './../common/ast/modelReference';
 import { Location } from 'vscode';
 import globby from 'globby';
 import { flatten } from 'lodash';
 
 import { Service, Inject, Token } from 'typedi';
 import { IVscodeService, VscodeServiceToken } from './vscodeService';
+import { IModelReferenceParser, ModelReferenceParserToken } from './parser/modelReferenceParser';
 import { join } from 'path';
 import { IModelInfoService, ModelInfoServiceToken } from './modelInfoService';
 
@@ -49,14 +49,16 @@ export default class ModelReferenceService implements IModelReferenceService {
     @Inject(VscodeServiceToken)
     vscodeService: IVscodeService,
     @Inject(ModelInfoServiceToken)
-    modelInfoService: IModelInfoService
+    modelInfoService: IModelInfoService,
+    @Inject(ModelReferenceParserToken)
+    modelReferenceParser: IModelReferenceParser
   ) {
     this.vscodeService = vscodeService;
     this.logger = logger;
     this.modelReferenceMap = new Map<string, ReferenceCache>();
     this.projectFileModelsMap = new Map<string, FileInfoCache>();
     this.modelInfoService = modelInfoService;
-    this.modelReferenceParser = new ModelReferenceParser();
+    this.modelReferenceParser = modelReferenceParser;
   }
 
   async getReference(filePath: string, model: string, action: string) {
