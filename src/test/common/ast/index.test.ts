@@ -11,12 +11,14 @@ describe('test isPathInRouter', () => {
   it('show word correct with js code', async () => {
     const text = await vscode.workspace.openTextDocument(join(fixtures, 'test.js'));
 
+    const options = {};
+
     /**
      * { path: '/', component: './a' },
      */
     const code = text.getText(new vscode.Range(2, 4, 2, 35));
-    assert.equal(isPathInRouter(code, './a'), true);
-    assert.equal(isPathInRouter(code, '/'), false);
+    assert.equal(isPathInRouter(code, './a', options), true);
+    assert.equal(isPathInRouter(code, '/', options), false);
 
     /**
      * {
@@ -29,9 +31,9 @@ describe('test isPathInRouter', () => {
      * },
      */
     const code2 = text.getText(new vscode.Range(4, 4, 11, 5));
-    assert.equal(isPathInRouter(code2, './users/_layout'), true);
-    assert.equal(isPathInRouter(code2, '/'), false);
-    assert.equal(isPathInRouter(code2, './users/detail'), false);
-    assert.equal(isPathInRouter(code2, './users/id'), false);
+    assert.equal(isPathInRouter(code2, './users/_layout', options), true);
+    assert.equal(isPathInRouter(code2, '/', options), false);
+    assert.equal(isPathInRouter(code2, './users/detail', options), false);
+    assert.equal(isPathInRouter(code2, './users/id', options), false);
   });
 });

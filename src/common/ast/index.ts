@@ -1,6 +1,5 @@
-import * as babelParser from '@babel/parser';
+import { parseExpression, ParserOptions } from '@babel/parser';
 import { isStringLiteral, isObjectExpression, isObjectProperty, isIdentifier } from '@babel/types';
-
 export { IModelReferenceParser, ModelReferenceParser } from './modelReference';
 
 /**
@@ -10,21 +9,8 @@ export { IModelReferenceParser, ModelReferenceParser } from './modelReference';
  * @param code 路由配置的代码
  * @param path 在引号里的字符串
  */
-export function isPathInRouter(code: string, path: string) {
-  const ast = babelParser.parseExpression(code, {
-    sourceType: 'module',
-    plugins: [
-      'typescript',
-      'classProperties',
-      'jsx',
-      [
-        'decorators',
-        {
-          decoratorsBeforeExport: true,
-        },
-      ],
-    ],
-  });
+export function isPathInRouter(code: string, path: string, options: ParserOptions) {
+  const ast = parseExpression(code, options);
   if (!isObjectExpression(ast)) {
     return false;
   }

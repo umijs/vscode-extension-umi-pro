@@ -45,7 +45,7 @@ export class UmiRouterDefinitionProvider implements vscode.DefinitionProvider {
     if (!codeRange) {
       return;
     }
-    if (!isPathInRouter(document.getText(codeRange), routePath)) {
+    if (!isPathInRouter(document.getText(codeRange), routePath, config.parserOptions)) {
       return;
     }
     const possiblePagePath = [
