@@ -22,8 +22,6 @@
 
 ## 功能
 
-## Highlights
-
 <table>
 	<tr>
 		<th width="50%">
