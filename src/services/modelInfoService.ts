@@ -1,8 +1,7 @@
+import { DvaModelParserToken, IDvaModelParser } from './parser/dvaModelParser';
 import { IDvaModelWithFilePath, IDvaModel } from './../common/types';
-import { DvaModelParser } from './../common/parser/index';
 import { VscodeServiceToken, IVscodeService } from './vscodeService';
 import { LoggerService, ILogger } from './../common/logger';
-import { IDvaModelParser } from './../common/parser';
 import { join } from 'path';
 import * as lodash from 'lodash';
 import { Service, Inject, Token } from 'typedi';
@@ -31,13 +30,15 @@ export class ModelInfoService implements IModelInfoService {
     @Inject(LoggerService)
     logger: ILogger,
     @Inject(VscodeServiceToken)
-    vscodeService: IVscodeService
+    vscodeService: IVscodeService,
+    @Inject(DvaModelParserToken)
+    dvaModelParser: IDvaModelParser
   ) {
     this.logger = logger;
     this.logger.info('create ModelInfoService');
     this.vscodeService = vscodeService;
     this.data = {};
-    this.parser = new DvaModelParser();
+    this.parser = dvaModelParser;
   }
 
   public getModules = async (filePath: string) => {

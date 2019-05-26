@@ -1,3 +1,5 @@
+import { ParserOptions } from '@babel/parser';
+
 export enum QuoteType {
   double = 'double',
   single = 'single',
@@ -13,6 +15,7 @@ export const QuoteCharMap = {
 export interface IUmiProConfig {
   quotes: QuoteType;
   routerConfigPath?: string;
+  parserOptions: ParserOptions;
 }
 
 export const DEFAULT_ROUTER_CONFIG_PATH = [

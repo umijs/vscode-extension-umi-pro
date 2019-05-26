@@ -56,6 +56,11 @@
           "scope": "resource",
           "type": "string",
           "description": "path of router config"
+        },
+        "umi_pro.parser_options": {
+          "scope": "resource",
+          "type": "object",
+          "description": "babel parser options"
         }
       }
     }

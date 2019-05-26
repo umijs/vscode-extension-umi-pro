@@ -1,4 +1,18 @@
 // Place your settings in this file to overwrite default and user settings.
 {
-  "umi_pro.quotes": "single"
+  "umi_pro.quotes": "single",
+  "umi_pro.parser_options": {
+    "sourceType": "module",
+    "plugins": [
+      "classProperties",
+      "dynamicImport",
+      "jsx",
+      [
+        "decorators",
+        {
+          "decoratorsBeforeExport": true
+        }
+      ]
+    ]
+  }
 }

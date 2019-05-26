@@ -49,10 +49,39 @@ describe('test VscodeService', async () => {
       let result = vscodeService.getConfig(join(tsProject, './1.ts'));
       assert.notEqual(result, null);
       assert.equal(result!.quotes, QuoteType.double);
+      assert.deepEqual(result!.parserOptions, {
+        sourceType: 'module',
+        plugins: [
+          'typescript',
+          'classProperties',
+          'dynamicImport',
+          'jsx',
+          [
+            'decorators',
+            {
+              decoratorsBeforeExport: true,
+            },
+          ],
+        ],
+      });
 
       result = vscodeService.getConfig(join(jsProject, './1.js'));
       assert.notEqual(result, null);
       assert.equal(result!.quotes, QuoteType.single);
+      assert.deepEqual(result!.parserOptions, {
+        sourceType: 'module',
+        plugins: [
+          'classProperties',
+          'dynamicImport',
+          'jsx',
+          [
+            'decorators',
+            {
+              decoratorsBeforeExport: true,
+            },
+          ],
+        ],
+      });
     });
   });
 });

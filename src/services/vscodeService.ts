@@ -1,6 +1,7 @@
 import { IUmiProConfig, QuoteType } from './../common/types';
 import { Service, Token } from 'typedi';
 import * as vscode from 'vscode';
+import { isEqual } from 'lodash';
 
 export interface IVscodeService {
   getConfig(filePath: string): IUmiProConfig | null;
@@ -83,10 +84,29 @@ export class VscodeService implements IVscodeService {
     const config: IUmiProConfig = {
       quotes: QuoteType.single,
       routerConfigPath: userConfig.get<string>('router_config_path'),
+      parserOptions: {
+        sourceType: 'module',
+        plugins: [
+          'typescript',
+          'classProperties',
+          'dynamicImport',
+          'jsx',
+          [
+            'decorators',
+            {
+              decoratorsBeforeExport: true,
+            },
+          ],
+        ],
+      },
     };
     const userQuotesConfig = userConfig.get<QuoteType>('quotes');
     if (userQuotesConfig && Object.values(QuoteType).includes(userQuotesConfig)) {
       config.quotes = userQuotesConfig;
+    }
+    const parserOptions = userConfig.get<IUmiProConfig['parserOptions']>('parser_options');
+    if (parserOptions && !isEqual(parserOptions, {})) {
+      config.parserOptions = parserOptions;
     }
     return config;
   }

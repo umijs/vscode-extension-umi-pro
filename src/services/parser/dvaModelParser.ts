@@ -1,4 +1,5 @@
-import { IDvaModel } from './../types';
+import { VscodeServiceToken, IVscodeService } from './../vscodeService';
+import { IDvaModel } from '../../common/types';
 import * as fs from 'mz/fs';
 import * as babelParser from '@babel/parser';
 import {
@@ -11,30 +12,33 @@ import {
   isObjectMethod,
 } from '@babel/types';
 import generate from '@babel/generator';
+import { Service, Token, Inject } from 'typedi';
 
 export interface IDvaModelParser {
-  parse(code: string): Promise<IDvaModel[]>;
-
   parseFile(path: string): Promise<IDvaModel[]>;
 }
 
-export class DvaModelParser implements IDvaModelParser {
-  public async parse(code: string): Promise<IDvaModel[]> {
-    const ast = babelParser.parse(code, {
-      sourceType: 'module',
-      plugins: [
-        'typescript',
-        'classProperties',
-        'dynamicImport',
-        'jsx',
-        [
-          'decorators',
-          {
-            decoratorsBeforeExport: true,
-          },
-        ],
-      ],
-    });
+export const DvaModelParserToken = new Token<IDvaModelParser>();
+
+@Service(DvaModelParserToken)
+// eslint-disable-next-line @typescript-eslint/class-name-casing
+class _DvaModelParser implements IDvaModelParser {
+  public readonly vscodeService: IVscodeService;
+
+  constructor(
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService
+  ) {
+    this.vscodeService = vscodeService;
+  }
+
+  public async parseFile(path: string): Promise<IDvaModel[]> {
+    const code = await fs.readFile(path, 'utf-8');
+    const config = this.vscodeService.getConfig(path);
+    if (!config) {
+      return [];
+    }
+    const ast = babelParser.parse(code, config.parserOptions);
     let modelObjects: ObjectExpression[] = [];
     for (const node of ast.program.body) {
       let model: Node = node;
@@ -48,10 +52,6 @@ export class DvaModelParser implements IDvaModelParser {
     return modelObjects.map(o => this.parseObjectExpression(o)).filter(o => !!o) as IDvaModel[];
   }
 
-  public async parseFile(path: string): Promise<IDvaModel[]> {
-    const code = await fs.readFile(path, 'utf-8');
-    return this.parse(code);
-  }
   private parseObjectExpression(ast: ObjectExpression): IDvaModel | null {
     const result: IDvaModel = {
       namespace: '',
