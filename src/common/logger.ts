@@ -8,6 +8,7 @@ export interface ILogger {
 export const LoggerService = new Token<ILogger>();
 
 function createLogger() {
+  console.log('init logger');
   return new Logger(window.createOutputChannel('Umi Pro'));
 }
 

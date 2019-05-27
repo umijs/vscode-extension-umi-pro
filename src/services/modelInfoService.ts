@@ -18,7 +18,8 @@ export interface IModelInfoService {
 export const ModelInfoServiceToken = new Token<IModelInfoService>();
 
 @Service(ModelInfoServiceToken)
-export class ModelInfoService implements IModelInfoService {
+// eslint-disable-next-line @typescript-eslint/class-name-casing
+class _ModelInfoService implements IModelInfoService {
   public readonly vscodeService: IVscodeService;
   private logger: ILogger;
   private data: {
@@ -35,7 +36,7 @@ export class ModelInfoService implements IModelInfoService {
     dvaModelParser: IDvaModelParser
   ) {
     this.logger = logger;
-    this.logger.info('create ModelInfoService');
+    this.logger.info('init ModelInfoService');
     this.vscodeService = vscodeService;
     this.data = {};
     this.parser = dvaModelParser;

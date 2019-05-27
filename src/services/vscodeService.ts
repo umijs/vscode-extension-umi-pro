@@ -1,7 +1,9 @@
+import { ILogger } from './../common/logger';
 import { IUmiProConfig, QuoteType } from './../common/types';
-import { Service, Token } from 'typedi';
+import { Service, Token, Inject } from 'typedi';
 import * as vscode from 'vscode';
 import { isEqual } from 'lodash';
+import { LoggerService } from '../common/logger';
 
 export interface IVscodeService {
   getConfig(filePath: string): IUmiProConfig | null;
@@ -53,13 +55,20 @@ export async function loadVscodeService(service: IVscodeService) {
 export const VscodeServiceToken = new Token<IVscodeService>();
 
 @Service(VscodeServiceToken)
-export class VscodeService implements IVscodeService {
+// eslint-disable-next-line @typescript-eslint/class-name-casing
+class _VscodeService implements IVscodeService {
   private workspaceFolders: vscode.WorkspaceFolder[];
   private workspaceConfigurations: vscode.WorkspaceConfiguration[];
+  private logger: ILogger;
 
-  constructor() {
+  constructor(
+    @Inject(LoggerService)
+    logger: ILogger
+  ) {
     this.workspaceFolders = [];
     this.workspaceConfigurations = [];
+    this.logger = logger;
+    this.logger.info('init VscodeService');
   }
 
   load(

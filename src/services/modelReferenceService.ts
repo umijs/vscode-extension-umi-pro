@@ -35,7 +35,8 @@ interface ReferenceCache {
 export const ModelReferenceServiceToken = new Token<IModelReferenceService>();
 
 @Service(ModelReferenceServiceToken)
-export default class ModelReferenceService implements IModelReferenceService {
+// eslint-disable-next-line @typescript-eslint/class-name-casing
+class _ModelReferenceService implements IModelReferenceService {
   private modelReferenceParser: IModelReferenceParser;
   private modelReferenceMap: Map<string, ReferenceCache>;
   private projectFileModelsMap: Map<string, FileInfoCache>;
@@ -59,6 +60,7 @@ export default class ModelReferenceService implements IModelReferenceService {
     this.projectFileModelsMap = new Map<string, FileInfoCache>();
     this.modelInfoService = modelInfoService;
     this.modelReferenceParser = modelReferenceParser;
+    this.logger.info('init ModelReferenceService');
   }
 
   async getReference(filePath: string, model: string, action: string) {

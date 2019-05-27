@@ -1,5 +1,5 @@
-import { workspace, languages } from 'vscode';
 import 'reflect-metadata';
+import { workspace, languages } from 'vscode';
 import { Container } from 'typedi';
 import {
   ActionTypeDefinitionProvider,
