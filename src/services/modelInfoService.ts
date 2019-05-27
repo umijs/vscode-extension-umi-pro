@@ -70,7 +70,7 @@ export class ModelInfoService implements IModelInfoService {
   };
 
   public updateFile = async (filePath: string) => {
-    this.data[filePath] = [];
+    this.data[filePath] = null;
   };
 
   private fileToModels = async filePath => {

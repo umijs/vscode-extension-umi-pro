@@ -38,4 +38,10 @@ describe('test ModelInfoService', async () => {
       ['form', 'global', 'list', 'login', 'menu', 'project', 'setting', 'user'].sort()
     );
   });
+
+  it('should get correct namespace after file change', async () => {
+    const ListModel = join(antdPro, 'src/models/list.js');
+    await modelInfoService.updateFile(ListModel);
+    assert.equal(await modelInfoService.getNameSpace(ListModel), 'list');
+  });
 });
