@@ -1,20 +1,24 @@
+import { RouterInfoServiceToken, RouterInfoService } from './../../services/routerService';
 import { Inject, Service } from 'typedi';
 import { IVscodeService, VscodeServiceToken } from '../../services/vscodeService';
 import { TextDocumentUtils } from '../../common/document';
 import { join } from 'path';
 import * as vscode from 'vscode';
-import { getAllPages } from '../../common/utils';
 import { DEFAULT_ROUTER_CONFIG_PATH } from '../../common/types';
 
 @Service()
 export class UmiRouterCompletionItemProvider implements vscode.CompletionItemProvider {
   private vscodeService: IVscodeService;
+  private routerInfoService: RouterInfoService;
 
   constructor(
     @Inject(VscodeServiceToken)
-    vscodeService: IVscodeService
+    vscodeService: IVscodeService,
+    @Inject(RouterInfoServiceToken)
+    routerInfoService: RouterInfoService
   ) {
     this.vscodeService = vscodeService;
+    this.routerInfoService = routerInfoService;
   }
 
   async provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
@@ -36,7 +40,9 @@ export class UmiRouterCompletionItemProvider implements vscode.CompletionItemPro
       return;
     }
     let routePath = document.getText(range).slice(1, -1);
-    const pages = await getAllPages(join(projectPath, 'src/pages', routePath));
+    const pages = await this.routerInfoService.getAllPages(
+      join(projectPath, 'src/pages', routePath)
+    );
     return pages.map(o => new vscode.CompletionItem(o));
   }
 }

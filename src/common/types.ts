@@ -20,6 +20,7 @@ export interface IUmiProConfig {
 
 export const DEFAULT_ROUTER_CONFIG_PATH = [
   '.umirc.js',
+  '.umirc.ts',
   'config/config.js',
   'config/router.config.js',
 ];
@@ -59,5 +60,7 @@ export enum Brackets {
 }
 
 export const JS_EXT_NAMES = ['.js', '.jsx', '.ts', '.tsx'];
+
+export const EXCLUDE_EXT_NAMES = ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'];
 
 export const SUPPORT_LANGUAGE = ['javascript', 'typescript', 'typescriptreact'];

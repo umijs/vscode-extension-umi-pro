@@ -1,4 +1,4 @@
-import { join, resolve, dirname, extname, basename } from 'path';
+import { join, resolve, dirname } from 'path';
 import * as fs from 'mz/fs';
 import globby from 'globby';
 import { QuoteType, QuoteCharMap, JS_EXT_NAMES } from './types';
@@ -48,33 +48,4 @@ export function getAbsPath(input: string) {
 export function isUndefined<T>(data: T | undefined): data is T {
   // eslint-disable-next-line no-undefined
   return data === undefined;
-}
-
-export async function getAllPages(cwd: string): Promise<string[]> {
-  const pages = (await globby(
-    [
-      `./**/*{${JS_EXT_NAMES.join(',')}}`,
-      `!./**/models/**/*{${JS_EXT_NAMES.join(',')}}`,
-      '!**/model.js',
-    ],
-    {
-      cwd,
-      deep: true,
-    }
-  )).filter(p =>
-    ['.d.ts', '.test.js', '.test.jsx', '.test.ts', '.test.tsx'].every(ext => !p.endsWith(ext))
-  );
-
-  const pageSet = pages.reduce((set, page) => {
-    const ext = extname(page);
-
-    let pagePath = page.slice(0, -ext.length);
-    if (basename(pagePath) === 'index' && pagePath !== 'index') {
-      pagePath = dirname(pagePath);
-    }
-    set.add(pagePath);
-    return set;
-  }, new Set<string>());
-
-  return Array.from(pageSet);
 }
