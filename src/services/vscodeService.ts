@@ -84,6 +84,7 @@ export class VscodeService implements IVscodeService {
     const config: IUmiProConfig = {
       quotes: QuoteType.single,
       routerConfigPath: userConfig.get<string>('router_config_path'),
+      routerExcludePath: userConfig.get<string[]>('router_exclude_path') || [],
       parserOptions: {
         sourceType: 'module',
         plugins: [

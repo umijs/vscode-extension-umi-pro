@@ -16,6 +16,7 @@ export interface IUmiProConfig {
   quotes: QuoteType;
   routerConfigPath?: string;
   parserOptions: ParserOptions;
+  routerExcludePath: string[];
 }
 
 export const DEFAULT_ROUTER_CONFIG_PATH = [

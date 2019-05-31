@@ -57,6 +57,12 @@
           "type": "string",
           "description": "path of router config"
         },
+        "umi_pro.router_exclude_path": {
+          "scope": "resource",
+          "type": "array",
+          "default": [],
+          "description": "path exclude in router completion"
+        },
         "umi_pro.parser_options": {
           "scope": "resource",
           "type": "object",

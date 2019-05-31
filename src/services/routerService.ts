@@ -29,17 +29,22 @@ export class RouterInfoService implements IRouterInfoService {
   }
 
   getAllPages = async (cwd: string) => {
-    const pages = (await globby(
-      [
-        `./**/*{${JS_EXT_NAMES.join(',')}}`,
-        `!./**/models/**/*{${JS_EXT_NAMES.join(',')}}`,
-        '!**/model.js',
-      ],
-      {
-        cwd,
-        deep: true,
-      }
-    )).filter(p => EXCLUDE_EXT_NAMES.every(ext => !p.endsWith(ext)));
+    const config = this.vscodeService.getConfig(cwd);
+
+    let pagePattern = [
+      `./**/*{${JS_EXT_NAMES.join(',')}}`,
+      `!./**/models/**/*{${JS_EXT_NAMES.join(',')}}`,
+      '!**/model.js',
+    ];
+
+    if (config && Array.isArray(config.routerExcludePath)) {
+      pagePattern = pagePattern.concat(config.routerExcludePath.map(o => `!${o}`));
+    }
+
+    const pages = (await globby(pagePattern, {
+      cwd,
+      deep: true,
+    })).filter(p => EXCLUDE_EXT_NAMES.every(ext => !p.endsWith(ext)));
 
     const pageSet = pages.reduce((set, page) => {
       const ext = extname(page);
