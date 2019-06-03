@@ -1,14 +1,14 @@
 import { Container } from 'typedi';
 import { ActionTypeCompletionItemProvider } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
+import { VscodeServiceToken } from '../../services/vscodeService';
 import { workspace, Position } from 'vscode';
 import { deepEqual } from 'assert';
 
 describe('test ActionTypeCompletionItemProvider', async () => {
   const provider = Container.get(ActionTypeCompletionItemProvider);
   const vscodeService = Container.get(VscodeServiceToken);
-  await loadVscodeService(vscodeService);
+  await vscodeService.init();
 
   it('should get correct CompletionItems', async () => {
     const text = await workspace.openTextDocument(

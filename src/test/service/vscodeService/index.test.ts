@@ -1,5 +1,5 @@
 import { QuoteType } from './../../../common/types';
-import { VscodeServiceToken, loadVscodeService } from '../../../services/vscodeService';
+import { VscodeServiceToken } from '../../../services/vscodeService';
 import { join } from 'path';
 import { getAbsPath } from '../../../common/utils';
 import { workspace } from 'vscode';
@@ -18,7 +18,7 @@ describe('test VscodeService', async () => {
   });
 
   const vscodeService = Container.get(VscodeServiceToken);
-  await loadVscodeService(vscodeService);
+  await vscodeService.init();
 
   describe('test vscodeService.getWorkspace', () => {
     it('should get correct workspace', () => {

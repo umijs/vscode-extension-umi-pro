@@ -12,10 +12,7 @@ export interface IVscodeService {
 
   getProjectPath(filePath: string): string | null;
 
-  load(
-    workspaceFolders: vscode.WorkspaceFolder[] | null,
-    workspaceConfigurations: vscode.WorkspaceConfiguration[] | null
-  ): void;
+  init(props?: IVscodeServiceInitProps): Promise<void>;
 }
 
 const CONFIG_NAMESPACE = 'umi_pro';
@@ -33,26 +30,12 @@ export function eliminateSubWorkspaceFolder(
   return workspaceFolders;
 }
 
-export async function getVscodeServiceArgs() {
-  const workspaceFolders = eliminateSubWorkspaceFolder(vscode.workspace.workspaceFolders);
-  if (!workspaceFolders || workspaceFolders.length === 0) {
-    return {
-      workspaceFolders: null,
-      workspaceConfigurations: null,
-    };
-  }
-  const workspaceConfigurations = workspaceFolders.map(f =>
-    vscode.workspace.getConfiguration(CONFIG_NAMESPACE, f.uri)
-  );
-  return { workspaceFolders, workspaceConfigurations };
-}
-
-export async function loadVscodeService(service: IVscodeService) {
-  const { workspaceFolders, workspaceConfigurations } = await getVscodeServiceArgs();
-  service.load(workspaceFolders, workspaceConfigurations);
-}
-
 export const VscodeServiceToken = new Token<IVscodeService>();
+
+export interface IVscodeServiceInitProps {
+  workspaceFolders: vscode.WorkspaceFolder[];
+  workspaceConfigurations: vscode.WorkspaceConfiguration[];
+}
 
 @Service(VscodeServiceToken)
 // eslint-disable-next-line @typescript-eslint/class-name-casing
@@ -71,14 +54,16 @@ class _VscodeService implements IVscodeService {
     this.logger.info('init VscodeService');
   }
 
-  load(
-    workspaceFolders: vscode.WorkspaceFolder[] | null,
-    workspaceConfigurations: vscode.WorkspaceConfiguration[] | null
-  ) {
-    if (!workspaceConfigurations || !workspaceFolders) {
-      this.workspaceFolders = [];
-      this.workspaceConfigurations = [];
-      return;
+  async init(props?: IVscodeServiceInitProps) {
+    let workspaceFolders: vscode.WorkspaceFolder[];
+    let workspaceConfigurations: vscode.WorkspaceConfiguration[];
+    if (!props) {
+      workspaceFolders = eliminateSubWorkspaceFolder(vscode.workspace.workspaceFolders) || [];
+      workspaceConfigurations = workspaceFolders.map(f =>
+        vscode.workspace.getConfiguration(CONFIG_NAMESPACE, f.uri)
+      );
+    } else {
+      ({ workspaceFolders, workspaceConfigurations } = props);
     }
     this.workspaceFolders = workspaceFolders;
     this.workspaceConfigurations = workspaceConfigurations;

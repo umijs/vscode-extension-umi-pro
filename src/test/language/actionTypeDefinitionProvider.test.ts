@@ -1,14 +1,14 @@
 import { Container } from 'typedi';
 import { ActionTypeDefinitionProvider } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
+import { VscodeServiceToken } from '../../services/vscodeService';
 import { workspace, Position, Range } from 'vscode';
 import { deepEqual } from 'assert';
 
 describe('test ActionTypeDefinitionProvider', async () => {
   const provider = Container.get(ActionTypeDefinitionProvider);
   const vscodeService = Container.get(VscodeServiceToken);
-  await loadVscodeService(vscodeService);
+  await vscodeService.init();
 
   it('should get correct definition', async () => {
     const text = await workspace.openTextDocument(

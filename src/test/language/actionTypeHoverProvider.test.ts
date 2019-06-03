@@ -1,14 +1,14 @@
 import { Container } from 'typedi';
 import { ActionTypeHoverProvider } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
+import { VscodeServiceToken } from '../../services/vscodeService';
 import { workspace, Position, Range } from 'vscode';
 import { deepEqual } from 'assert';
 
 describe('test ActionTypeHoverProvider', async () => {
   const provider = Container.get(ActionTypeHoverProvider);
   const vscodeService = Container.get(VscodeServiceToken);
-  await loadVscodeService(vscodeService);
+  await vscodeService.init();
 
   it('should get correct hover', async () => {
     const text = await workspace.openTextDocument(

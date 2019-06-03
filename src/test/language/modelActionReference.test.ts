@@ -3,12 +3,12 @@ import { workspace, Position, Location } from 'vscode';
 import { deepEqual } from 'assert';
 import { ModelActionReference } from '../../language/model';
 import { getAntdProFilePath } from '../utils';
-import { VscodeServiceToken, loadVscodeService } from '../../services/vscodeService';
+import { VscodeServiceToken } from '../../services/vscodeService';
 
 describe('test ModelActionReference', async () => {
   const provider = Container.get(ModelActionReference);
   const vscodeService = Container.get(VscodeServiceToken);
-  await loadVscodeService(vscodeService);
+  await vscodeService.init();
 
   function flattenLocation({
     uri: { fsPath },

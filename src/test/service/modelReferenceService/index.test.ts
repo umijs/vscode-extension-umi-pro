@@ -1,5 +1,5 @@
 import { Range } from 'vscode';
-import { VscodeServiceToken, loadVscodeService } from '../../../services/vscodeService';
+import { VscodeServiceToken } from '../../../services/vscodeService';
 import { join } from 'path';
 import { Container } from 'typedi';
 import * as assert from 'assert';
@@ -9,7 +9,7 @@ import { ModelReferenceServiceToken } from '../../../services/modelReferenceServ
 describe('test modelReferenceService', async () => {
   const modelReferenceService = Container.get(ModelReferenceServiceToken);
   const vscodeService = Container.get(VscodeServiceToken);
-  await loadVscodeService(vscodeService);
+  await vscodeService.init();
   const workspaceFixtures = getAbsPath(join(__dirname, '../../fixtures'));
   const antdPro = join(workspaceFixtures, 'ant-design-pro-master');
 

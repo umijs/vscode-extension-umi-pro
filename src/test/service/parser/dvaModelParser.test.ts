@@ -1,5 +1,5 @@
 import { DvaModelParserToken } from './../../../services/parser/dvaModelParser';
-import { VscodeServiceToken, loadVscodeService } from '../../../services/vscodeService';
+import { VscodeServiceToken } from '../../../services/vscodeService';
 import assert = require('assert');
 import { join } from 'path';
 import { getAbsPath } from '../../../common/utils';
@@ -8,7 +8,7 @@ import { Container } from 'typedi';
 describe('dvaModelParser', async () => {
   const dvaModelParser = Container.get(DvaModelParserToken);
   const vscodeService = Container.get(VscodeServiceToken);
-  await loadVscodeService(vscodeService);
+  await vscodeService.init();
   const workspaceFixtures = getAbsPath(join(__dirname, '../../fixtures'));
   const antdPro = join(workspaceFixtures, 'ant-design-pro-master');
 
