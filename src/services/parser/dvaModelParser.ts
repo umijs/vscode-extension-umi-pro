@@ -10,6 +10,7 @@ import {
   isObjectProperty,
   isStringLiteral,
   isObjectMethod,
+  isCallExpression,
 } from '@babel/types';
 import generate from '@babel/generator';
 import { Service, Token, Inject } from 'typedi';
@@ -47,6 +48,10 @@ class _DvaModelParser implements IDvaModelParser {
       }
       if (isObjectExpression(model)) {
         modelObjects.push(model);
+      }
+      if (isCallExpression(model)) {
+        const args = model.arguments.filter(a => isObjectExpression(a)) as ObjectExpression[];
+        modelObjects.push(...args);
       }
     }
     return modelObjects.map(o => this.parseObjectExpression(o)).filter(o => !!o) as IDvaModel[];
