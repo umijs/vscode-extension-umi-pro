@@ -1,9 +1,0 @@
-{
-  "name": "use-umi",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "dependencies": {
-    "umi": "1.0.01"
-  }
-}

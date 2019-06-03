@@ -163,7 +163,6 @@ class _VscodeService implements IVscodeService {
     }
     const projectList = this.workspaceFolders.map(o => o.uri.fsPath);
     const pattern = `{${projectList.join(',')}}/**/*.{ts,tsx,js,jsx}`;
-    this.logger.info(`watch ${projectList.length} project`);
     this.fileSystemWatcher = vscode.workspace.createFileSystemWatcher(pattern, false, false, false);
     this.fileSystemWatcher.onDidChange(e => {
       this.listeners.forEach(l => l(e));
