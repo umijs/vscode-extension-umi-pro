@@ -25,7 +25,7 @@ describe('test ModelInfoService', async () => {
     const modelNames = models.map(({ namespace }) => namespace);
     assert.deepEqual(
       modelNames.sort(),
-      ['global', 'list', 'login', 'menu', 'project', 'setting', 'user'].sort()
+      ['global', 'list', 'login', 'menu', 'project', 'setting', 'user', 'withFunctionCall'].sort()
     );
   });
 
@@ -35,7 +35,17 @@ describe('test ModelInfoService', async () => {
     const modelNames = models.map(({ namespace }) => namespace);
     assert.deepEqual(
       modelNames.sort(),
-      ['form', 'global', 'list', 'login', 'menu', 'project', 'setting', 'user'].sort()
+      [
+        'form',
+        'global',
+        'list',
+        'login',
+        'menu',
+        'project',
+        'setting',
+        'user',
+        'withFunctionCall',
+      ].sort()
     );
   });
 

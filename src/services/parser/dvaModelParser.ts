@@ -50,7 +50,7 @@ class _DvaModelParser implements IDvaModelParser {
         modelObjects.push(model);
       }
       if (isCallExpression(model)) {
-        const args = model.arguments.filter(a => isObjectExpression(a)) as ObjectExpression[];
+        const args = model.arguments.filter((o): o is ObjectExpression => isObjectExpression(o));
         modelObjects.push(...args);
       }
     }

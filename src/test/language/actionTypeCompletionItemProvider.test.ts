@@ -49,6 +49,11 @@ describe('test ActionTypeCompletionItemProvider', async () => {
         "'rule/remove'",
         "'rule/update'",
         "'rule/save'",
+        "'withFunctionCall/fetch'",
+        "'withFunctionCall/fetchCurrent'",
+        "'withFunctionCall/save'",
+        "'withFunctionCall/saveCurrentUser'",
+        "'withFunctionCall/changeNotifyCount'",
       ].sort()
     );
   });
