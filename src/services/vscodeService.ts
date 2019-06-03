@@ -1,12 +1,12 @@
-import { ILogger } from './../common/logger';
+import { ILogger, LoggerService } from './../common/logger';
 import { IUmiProConfig, QuoteType } from './../common/types';
 import { Service, Token, Inject } from 'typedi';
 import * as vscode from 'vscode';
 import { isEqual } from 'lodash';
-import { LoggerService } from '../common/logger';
 import { join } from 'path';
 import { fs } from 'mz';
 
+type FileChangeListener = (e: vscode.Uri) => void;
 export interface IVscodeService {
   getConfig(filePath: string): IUmiProConfig | null;
 
@@ -15,6 +15,8 @@ export interface IVscodeService {
   getProjectPath(filePath: string): string | null;
 
   init(props?: IVscodeServiceInitProps): Promise<void>;
+
+  onFileChange(listener: FileChangeListener): void;
 }
 
 const CONFIG_NAMESPACE = 'umi_pro';
@@ -45,6 +47,8 @@ class _VscodeService implements IVscodeService {
   private workspaceFolders: vscode.WorkspaceFolder[];
   private workspaceConfigurations: vscode.WorkspaceConfiguration[];
   private logger: ILogger;
+  private listeners: FileChangeListener[];
+  private fileSystemWatcher?: vscode.FileSystemWatcher;
 
   constructor(
     @Inject(LoggerService)
@@ -54,6 +58,7 @@ class _VscodeService implements IVscodeService {
     this.workspaceConfigurations = [];
     this.logger = logger;
     this.logger.info('init VscodeService');
+    this.listeners = [];
   }
 
   async init(props?: IVscodeServiceInitProps) {
@@ -92,6 +97,7 @@ class _VscodeService implements IVscodeService {
 
     this.workspaceFolders = workspaceFolders;
     this.workspaceConfigurations = workspaceConfigurations;
+    this.initFileWatcher();
   }
 
   getConfig(filePath: string) {
@@ -146,4 +152,27 @@ class _VscodeService implements IVscodeService {
     }
     return workspaceFolder.uri.fsPath;
   }
+
+  onFileChange(listener: FileChangeListener) {
+    this.listeners.push(listener);
+  }
+
+  initFileWatcher = () => {
+    if (this.fileSystemWatcher) {
+      this.fileSystemWatcher.dispose();
+    }
+    const projectList = this.workspaceFolders.map(o => o.uri.fsPath);
+    const pattern = `{${projectList.join(',')}}/**/*.{ts,tsx,js,jsx}`;
+    this.logger.info(`watch ${projectList.length} project`);
+    this.fileSystemWatcher = vscode.workspace.createFileSystemWatcher(pattern, false, false, false);
+    this.fileSystemWatcher.onDidChange(e => {
+      this.listeners.forEach(l => l(e));
+    });
+    this.fileSystemWatcher.onDidDelete(e => {
+      this.listeners.forEach(l => l(e));
+    });
+    this.fileSystemWatcher.onDidCreate(e => {
+      this.listeners.forEach(l => l(e));
+    });
+  };
 }
