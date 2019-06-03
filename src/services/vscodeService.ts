@@ -4,6 +4,8 @@ import { Service, Token, Inject } from 'typedi';
 import * as vscode from 'vscode';
 import { isEqual } from 'lodash';
 import { LoggerService } from '../common/logger';
+import { join } from 'path';
+import { fs } from 'mz';
 
 export interface IVscodeService {
   getConfig(filePath: string): IUmiProConfig | null;
@@ -59,12 +61,35 @@ class _VscodeService implements IVscodeService {
     let workspaceConfigurations: vscode.WorkspaceConfiguration[];
     if (!props) {
       workspaceFolders = eliminateSubWorkspaceFolder(vscode.workspace.workspaceFolders) || [];
+      // exclude project don't need extension
+      const needExtensionPromise = workspaceFolders.map(async workspaceFolder => {
+        const projectPath = workspaceFolder.uri.path;
+        const packageJsonPath = join(projectPath, './package.json');
+        if (!(await fs.exists(packageJsonPath))) {
+          return null;
+        }
+        try {
+          const packageJson = JSON.parse(await fs.readFile(packageJsonPath, { encoding: 'utf-8' }));
+          const { dependencies = {} } = packageJson;
+          if (dependencies.umi || dependencies.dva || dependencies['dva-core']) {
+            return workspaceFolder;
+          }
+          return null;
+        } catch (error) {
+          this.logger.info(error);
+          return null;
+        }
+      });
+      workspaceFolders = (await Promise.all(needExtensionPromise)).filter(
+        (o): o is vscode.WorkspaceFolder => !!o
+      );
       workspaceConfigurations = workspaceFolders.map(f =>
         vscode.workspace.getConfiguration(CONFIG_NAMESPACE, f.uri)
       );
     } else {
       ({ workspaceFolders, workspaceConfigurations } = props);
     }
+
     this.workspaceFolders = workspaceFolders;
     this.workspaceConfigurations = workspaceConfigurations;
   }
