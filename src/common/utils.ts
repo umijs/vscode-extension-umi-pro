@@ -49,3 +49,12 @@ export function isUndefined<T>(data: T | undefined): data is T {
   // eslint-disable-next-line no-undefined
   return data === undefined;
 }
+
+export function isNotNull<T>(data: T | null): data is T {
+  // eslint-disable-next-line no-undefined
+  return data !== null;
+}
+
+export function duplicateUnicodeCharacter(str: string, num: number) {
+  return new Array(num).fill(str).join('');
+}

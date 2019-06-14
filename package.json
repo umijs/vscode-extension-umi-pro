@@ -37,6 +37,17 @@
     }
   },
   "contributes": {
+    "colors": [
+      {
+        "id": "umipro.annotationColor",
+        "description": "text color of line annotations",
+        "defaults": {
+          "dark": "#99999950",
+          "light": "#999999A6",
+          "highContrast": "#99999999"
+        }
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "Umi Pro configuration",

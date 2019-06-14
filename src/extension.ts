@@ -1,4 +1,4 @@
-import { workspace, languages } from 'vscode';
+import { workspace, languages, ExtensionContext } from 'vscode';
 import 'reflect-metadata';
 import { Container } from 'typedi';
 import {
@@ -7,6 +7,7 @@ import {
   ModelActionReference,
   ActionTypeCompletionItemProvider,
 } from './language/model';
+import { UmircDecoration } from './language/umircDecoration';
 import { UmiRouterCompletionItemProvider, UmiRouterDefinitionProvider } from './language/router';
 import logger from './common/logger';
 import { getUmiFileWatcher } from './common/fileWatcher';
@@ -14,7 +15,7 @@ import { loadVscodeService, VscodeServiceToken } from './services/vscodeService'
 import { ModelInfoServiceToken } from './services/modelInfoService';
 import { SUPPORT_LANGUAGE } from './common/types';
 
-export async function activate(context) {
+export async function activate(context: ExtensionContext) {
   logger.info('extension "umi-pro" is now active!');
   const umiFileWatcher = await getUmiFileWatcher(workspace.workspaceFolders);
   if (!umiFileWatcher) {
@@ -65,6 +66,8 @@ export async function activate(context) {
   context.subscriptions.push(
     languages.registerReferenceProvider(SUPPORT_LANGUAGE, Container.get(ModelActionReference))
   );
+
+  context.subscriptions.push(Container.get(UmircDecoration));
 }
 
 export function deactivate() {}

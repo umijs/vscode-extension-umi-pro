@@ -1,4 +1,5 @@
 import { ParserOptions } from '@babel/parser';
+import { SourceLocation } from '@babel/types';
 
 export enum QuoteType {
   double = 'double',
@@ -52,6 +53,13 @@ export interface IDvaModel {
 
 export interface IDvaModelWithFilePath extends IDvaModel {
   filePath: string;
+}
+
+export interface IUmirc {
+  key: string;
+  loc: SourceLocation;
+  start: number;
+  end: number;
 }
 
 export enum Brackets {
