@@ -11,11 +11,12 @@ import {
 import { basename } from 'path';
 import { isNotNull } from '../../common/utils';
 import { IUmircParser, UmircParserToken } from '../../services/parser/umircParser';
-import umircDef from './umircDef';
+import { getlang } from './umircDef';
 
 @Service()
 export class UmircDecoration implements Disposable {
   private umircParser: IUmircParser;
+  private lang: object = getlang();
 
   private annotationDecoration = window.createTextEditorDecorationType({});
 
@@ -48,7 +49,7 @@ export class UmircDecoration implements Disposable {
       const umiProperties = await this.umircParser.parseFile(document.fileName);
       const decorations: Array<DecorationOptions> = umiProperties
         .map(p => {
-          if (!umircDef[p.key]) {
+          if (!this.lang[p.key]) {
             return null;
           }
           const decoration: DecorationOptions = {
@@ -59,7 +60,7 @@ export class UmircDecoration implements Disposable {
                 fontStyle: 'normal',
                 textDecoration: 'none',
                 margin: '0',
-                contentText: ` \u22C5 ${umircDef[p.key]}`,
+                contentText: ` \u22C5 ${this.lang[p.key]}`,
               },
             },
             range: document.validateRange(

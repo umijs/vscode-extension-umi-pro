@@ -24,7 +24,7 @@ export default {
     'The configuration theme is actually equipped with the less variable. Support for both object and string types, the string needs to point to a file that returns the configuration',
   define:
     "Passed to the code via the webpack's DefinePlugin , the value is automatically handled by JSON.stringify",
-  externals: 'Configure the externals property of webpack. such as',
+  externals: 'Configure the externals property of webpack',
   alias: 'Configure the resolve.alias property of webpack',
   devServer: 'Configure the devServer property of webpack',
   devtool: 'Configure the devtool property of webpack',

@@ -1,0 +1,50 @@
+export default {
+  chainWebpack: '通过 webpack-chain 的 API 扩展或修改 webpack 配置',
+  context: '配置全局 context，会覆盖到每个 pages 里的 context',
+  disableRedirectHoist: '禁用 redirect 上提。默认 false',
+  exportStatic: '如果设为 true 或 Object，则导出全部路由为静态页面，否则默认只输出一个 index.html',
+  outputPath: '指定输出路径',
+  runtimePublicPath: '值为 true 时使用 HTML 里指定的 window.publicPath',
+  cssPublicPath: '为 CSS 指定额外的 publicPath',
+  minimizer: '指定代码压缩工具。UglifyJS 不支持 es6 语法，但 terser 支持',
+  hash: '是否开启 hash 文件后缀',
+  mock: '排除 mock 目录下不作 mock 处理的文件',
+
+  singular: '如果设为 true，启用单数模式的目录',
+  treeShaking: '配置是否开启 treeShaking，默认关闭',
+
+  base: '指定 react-router 的 base，部署到非根目录时需要配置',
+  history: '指定 history 类型，可选 browser、hash 和 memory',
+  mountElementId: '指定 react app 渲染到的 HTML 元素 id',
+  targets:
+    '配置浏览器最低版本，会自动引入 polyfill 和做语法转换，配置的 targets 会和合并到默认值，所以不需要重复配置',
+  theme:
+    '配置主题，实际上是配 less 变量。支持对象和字符串两种类型，字符串需要指向一个返回配置的文件',
+  define: '通过 webpack 的 DefinePlugin 传递给代码，值会自动做 JSON.stringify 处理',
+  externals: '配置 webpack 的 externals 属性',
+  alias: '配置 webpack 的 resolve.alias 属性',
+  devServer: '配置 webpack 的 devServer 属性',
+  devtool: '配置 webpack 的 devtool 属性',
+  disableCSSModules: '禁用 CSS Modules',
+  disableCSSSourceMap: '禁用 CSS 的 SourceMap 生成',
+  extraBabelPresets: '定义额外的 babel preset 列表，格式为数组',
+  extraBabelPlugins: '定义额外的 babel plugin 列表，格式为数组',
+  extraBabelIncludes:
+    '定义额外需要做 babel 转换的文件匹配列表，格式为数组，数组项是 webpack#Condition',
+  extraPostCSSPlugins: '定义额外的 PostCSS 插件，格式为数组',
+  cssModulesExcludes: '指定项目目录下的文件不走 css modules，格式为数组，项必须是 css 或 less 文件',
+  copy: '定义需要单纯做复制的文件列表，格式为数组，项的格式参考 copy-webpack-plugin 的配置',
+  proxy: '配置 webpack-dev-server 的 proxy 属性。 如果要代理请求到其他服务器',
+  sass: '配置 node-sass 的选项。注意：使用 sass 时需在项目目录安装 node-sass 和 sass-loader 依赖',
+  manifest:
+    '配置后会生成 asset-manifest.json，option 传给 https://www.npmjs.com/package/webpack-manifest-plugin',
+  ignoreMomentLocale: '忽略 moment 的 locale 文件，用于减少尺寸',
+  lessLoaderOptions: '给 less-loader 的额外配置项',
+  cssLoaderOptions: '给 css-loader 的额外配置项',
+  autoprefixer: '配置传给 autoprefixer 的配置项',
+  uglifyJSOptions: '配置传给 uglifyjs-webpack-plugin@1.x 的配置项',
+  browserslist: '配置 browserslist，同时作用域 babel-preset-env 和 autoprefixer',
+  plugins:
+    '配置插件列表。数组项为指向插件的路径，可以是 npm 依赖、相对路径或绝对路径。如果是相对路径，则会从项目根目录开始找',
+  routes: '配置路由。umi 的路由基于 react-router 实现，配置和 react-router@4 基本一致',
+};
