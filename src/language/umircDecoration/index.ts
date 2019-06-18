@@ -9,16 +9,13 @@ import {
   DecorationOptions,
 } from 'vscode';
 import { basename } from 'path';
-
 import { isNotNull } from '../../common/utils';
 import { IUmircParser, UmircParserToken } from '../../services/parser/umircParser';
-
 import umircDef from './umircDef';
 
 @Service()
 export class UmircDecoration implements Disposable {
   private umircParser: IUmircParser;
-  private activeEditor: TextEditor | undefined;
 
   private annotationDecoration = window.createTextEditorDecorationType({});
 
@@ -29,8 +26,11 @@ export class UmircDecoration implements Disposable {
     umircParser: IUmircParser
   ) {
     this.umircParser = umircParser;
-
-    this.init();
+    this.triggerUpdateDecorations();
+    this.disposables.push(
+      window.onDidChangeActiveTextEditor(this.triggerUpdateDecorations.bind(this))
+    );
+    this.disposables.push(workspace.onDidChangeTextDocument(() => this.triggerUpdateDecorations()));
   }
 
   dispose() {
@@ -38,16 +38,17 @@ export class UmircDecoration implements Disposable {
   }
 
   async triggerUpdateDecorations() {
-    if (!this.validUmirc(this.activeEditor)) {
+    let editor = window.activeTextEditor;
+    if (!this.validUmirc(editor)) {
       return;
     }
+    const { document } = editor;
 
     try {
-      const umiProperties = await this.umircParser.parseFile(this.activeEditor.document.fileName);
-
+      const umiProperties = await this.umircParser.parseFile(document.fileName);
       const decorations: Array<DecorationOptions> = umiProperties
         .map(p => {
-          if (!this.activeEditor || !umircDef[p.key]) {
+          if (!umircDef[p.key]) {
             return null;
           }
           const decoration: DecorationOptions = {
@@ -61,7 +62,7 @@ export class UmircDecoration implements Disposable {
                 contentText: ` \u22C5 ${umircDef[p.key]}`,
               },
             },
-            range: this.activeEditor.document.validateRange(
+            range: document.validateRange(
               new Range(
                 p.loc.start.line - 1,
                 Number.MAX_SAFE_INTEGER,
@@ -74,7 +75,7 @@ export class UmircDecoration implements Disposable {
         })
         .filter(isNotNull);
 
-      this.activeEditor.setDecorations(this.annotationDecoration, decorations);
+      editor.setDecorations(this.annotationDecoration, decorations);
     } catch (error) {
       console.warn('error', error);
     }
@@ -89,29 +90,5 @@ export class UmircDecoration implements Disposable {
       return true;
     }
     return fileName.endsWith('config/config.js') || fileName.endsWith('config/config.ts');
-  }
-
-  private init() {
-    this.activeEditor = window.activeTextEditor;
-    if (this.validUmirc(this.activeEditor)) {
-      this.triggerUpdateDecorations();
-    }
-
-    this.disposables.push(
-      window.onDidChangeActiveTextEditor(editor => {
-        this.activeEditor = editor;
-        if (this.validUmirc(this.activeEditor)) {
-          this.triggerUpdateDecorations();
-        }
-      })
-    );
-
-    this.disposables.push(
-      workspace.onDidChangeTextDocument(event => {
-        if (this.validUmirc(this.activeEditor) && event.document === this.activeEditor.document) {
-          this.triggerUpdateDecorations();
-        }
-      })
-    );
   }
 }
