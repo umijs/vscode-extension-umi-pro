@@ -20,7 +20,12 @@ async function needExtension(projectPath: string) {
   try {
     const packageJson = JSON.parse(await fs.readFile(packageJsonPath, { encoding: 'utf-8' }));
     const { dependencies = {} } = packageJson;
-    return !!(dependencies.umi || dependencies.dva || dependencies['dva-core'] || dependencies.alita);
+    return !!(
+      dependencies.umi ||
+      dependencies.dva ||
+      dependencies['dva-core'] ||
+      dependencies.alita
+    );
   } catch (error) {
     logger.info(error);
     return false;
