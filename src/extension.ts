@@ -6,6 +6,7 @@ import {
   ActionTypeHoverProvider,
   ModelActionReference,
   ActionTypeCompletionItemProvider,
+  ModelEffectsGenerator,
 } from './language/model';
 import { UmircDecoration } from './language/umircDecoration';
 import { UmiRouterCompletionItemProvider, UmiRouterDefinitionProvider } from './language/router';
@@ -68,6 +69,8 @@ export async function activate(context: ExtensionContext) {
   );
 
   context.subscriptions.push(Container.get(UmircDecoration));
+
+  context.subscriptions.push(Container.get(ModelEffectsGenerator));
 }
 
 export function deactivate() {}
