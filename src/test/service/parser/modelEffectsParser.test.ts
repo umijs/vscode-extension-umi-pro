@@ -19,22 +19,22 @@ describe('modelEffectsParser', async () => {
       {
         range: [{ line: 12, character: 4 }, { line: 18, character: 5 }],
         code:
-          "// eslint-disable-next-line @typescript-eslint/no-unused-vars\n*toManyEffects(payload, {\n  call,\n  put\n}) {\n  const response = yield call(queryUsers);\n  yield put({\n    type: 'save',\n    payload: response\n  });\n}",
+          "// eslint-disable-next-line @typescript-eslint/no-unused-vars\n*toManyEffects(payload, { call, put }) {\n  const response = yield call(queryUsers);\n  yield put({\n    type: 'save',\n    payload: response });\n\n}",
       },
       {
         range: [{ line: 19, character: 4 }, { line: 25, character: 5 }],
         code:
-          "*lackEffects(_, {\n  call,\n  put\n}) {\n  const response = yield call(queryUsers);\n  yield put({\n    type: 'save',\n    payload: response\n  });\n}",
+          "*lackEffects(_, { call, put }) {\n  const response = yield call(queryUsers);\n  yield put({\n    type: 'save',\n    payload: response });\n\n}",
       },
       {
         range: [{ line: 33, character: 4 }, { line: 41, character: 5 }],
         code:
-          "*noEffects(_, {\n  call,\n  put,\n  select\n}) {\n  const response = yield call(queryCurrent);\n  const res = yield select(data => data);\n  console.log(res);\n  yield put({\n    type: 'saveCurrentUser',\n    payload: response\n  });\n}",
+          "*noEffects(_, { call, put, select }) {\n  const response = yield call(queryCurrent);\n  const res = yield select(data => data);\n  console.log(res);\n  yield put({\n    type: 'saveCurrentUser',\n    payload: response });\n\n}",
       },
       {
         range: [{ line: 42, character: 4 }, { line: 48, character: 5 }],
         code:
-          "*noParams(_, {\n  call,\n  put\n}) {\n  const response = yield call(queryCurrent);\n  yield put({\n    type: 'saveCurrentUser',\n    payload: response\n  });\n}",
+          "*noParams(_, { call, put }) {\n  const response = yield call(queryCurrent);\n  yield put({\n    type: 'saveCurrentUser',\n    payload: response });\n\n}",
       },
     ]);
   });
@@ -46,21 +46,21 @@ describe('modelEffectsParser', async () => {
     deepEqual(JSON.parse(JSON.stringify(response)), [
       {
         range: [{ line: 11, character: 39 }, { line: 14, character: 3 }],
-        code: 'function* (_, {\n  call\n}) {\n  //@ts-ignore\n  yield call(console.log);\n}',
+        code: 'function* (_, { call }) {\n  //@ts-ignore\n  yield call(console.log);\n}',
       },
       {
         range: [{ line: 16, character: 45 }, { line: 19, character: 3 }],
-        code: 'function* (_, {\n  call\n}) {\n  //@ts-ignore\n  yield call(console.log);\n}',
+        code: 'function* (_, { call }) {\n  //@ts-ignore\n  yield call(console.log);\n}',
       },
       {
         range: [{ line: 20, character: 43 }, { line: 24, character: 3 }],
         code:
-          'function* (_, {\n  call,\n  put\n}) {\n  //@ts-ignore\n  yield call(console.log);\n  yield put({});\n}',
+          'function* (_, { call, put }) {\n  //@ts-ignore\n  yield call(console.log);\n  yield put({});\n}',
       },
       {
         range: [{ line: 25, character: 41 }, { line: 30, character: 3 }],
         code:
-          'function* (_, {\n  call,\n  put\n}) {\n  //@ts-ignore\n  yield call(console.log); //@ts-ignore\n\n  yield put({});\n}',
+          'function* (_, { call, put }) {\n  //@ts-ignore\n  yield call(console.log);\n  //@ts-ignore\n  yield put({});\n}',
       },
     ]);
   });

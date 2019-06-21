@@ -82,13 +82,18 @@ class _ModelEffectParser implements IModelEffectsParser {
                 return objectProperty(identifier(key), identifier(key), false, true);
               })
             );
-            const { code } = generate(node);
+            const { code } = generate(node, { retainLines: true });
+            const codeArray: string[] = code.split('\n');
+            let i = 0;
+            while (!codeArray[i]) {
+              i++;
+            }
             result.push({
               range: new Range(
                 new Position(node.loc.start.line - 1, node.loc.start.column),
                 new Position(node.loc.end.line - 1, node.loc.end.column)
               ),
-              code,
+              code: codeArray.slice(i).join('\n'),
             });
           }
         }
