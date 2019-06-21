@@ -1,0 +1,9 @@
+{
+  "name": "tsProject",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "dva-model-creator": "^0.1.4"
+  }
+}
