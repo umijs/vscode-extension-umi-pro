@@ -1,4 +1,4 @@
-import { Range, Uri, Position } from 'vscode';
+import { Range, Uri } from 'vscode';
 import * as fs from 'mz/fs';
 import * as babelParser from '@babel/parser';
 import traverse from '@babel/traverse';
@@ -11,6 +11,7 @@ import {
 } from '@babel/types';
 import { Service, Token, Inject } from 'typedi';
 import { IVscodeService, VscodeServiceToken } from './../vscodeService';
+import { sourceLocationToRange } from '../../common/utils';
 
 interface ModelReference {
   type: string;
@@ -72,10 +73,7 @@ class _ModelReferenceParser implements IModelReferenceParser {
           result.push({
             type: value.value,
             uri: Uri.file(filePath),
-            range: new Range(
-              new Position(value.loc.start.line - 1, value.loc.start.column),
-              new Position(value.loc.end.line - 1, value.loc.end.column)
-            ),
+            range: sourceLocationToRange(value.loc),
           });
         });
       },

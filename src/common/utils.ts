@@ -2,6 +2,8 @@ import { join, resolve, dirname } from 'path';
 import * as fs from 'mz/fs';
 import globby from 'globby';
 import { QuoteType, QuoteCharMap, JS_EXT_NAMES } from './types';
+import { Range, Position } from 'vscode';
+import { SourceLocation } from '@babel/types';
 
 export async function getModels(cwd: string): Promise<string[]> {
   for (const extName of JS_EXT_NAMES) {
@@ -57,4 +59,11 @@ export function isNotNull<T>(data: T | null): data is T {
 
 export function duplicateUnicodeCharacter(str: string, num: number) {
   return new Array(num).fill(str).join('');
+}
+
+export function sourceLocationToRange(loc: SourceLocation) {
+  return new Range(
+    new Position(loc.start.line - 1, loc.start.column),
+    new Position(loc.end.line - 1, loc.end.column)
+  );
 }
