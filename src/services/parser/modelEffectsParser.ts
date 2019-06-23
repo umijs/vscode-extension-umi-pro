@@ -1,4 +1,4 @@
-import { Range, Position } from 'vscode';
+import { Range } from 'vscode';
 import * as fs from 'mz/fs';
 import * as babelParser from '@babel/parser';
 import traverse from '@babel/traverse';
@@ -17,7 +17,7 @@ import {
 } from '@babel/types';
 import { Service, Token, Inject } from 'typedi';
 import { IVscodeService, VscodeServiceToken } from './../vscodeService';
-import { isNotNull } from '../../common/utils';
+import { isNotNull, sourceLocationToRange } from '../../common/utils';
 import generate from '@babel/generator';
 import { isEqual } from 'lodash';
 
@@ -89,10 +89,7 @@ class _ModelEffectParser implements IModelEffectsParser {
               i++;
             }
             result.push({
-              range: new Range(
-                new Position(node.loc.start.line - 1, node.loc.start.column),
-                new Position(node.loc.end.line - 1, node.loc.end.column)
-              ),
+              range: sourceLocationToRange(node.loc),
               code: codeArray.slice(i).join('\n'),
             });
           }

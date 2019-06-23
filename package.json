@@ -68,6 +68,16 @@
           "type": "string",
           "description": "path of router config"
         },
+        "umi_pro.autoGenerateSagaEffectsCommands": {
+          "scope": "resource",
+          "type": "boolean",
+          "description": "autoGenerateSagaEffectsCommands"
+        },
+        "umi_pro.saveOnGenerateEffectsCommandTimeout": {
+          "scope": "resource",
+          "type": "number",
+          "description": "saveOnGenerateEffectsCommandTimeout"
+        },
         "umi_pro.router_exclude_path": {
           "scope": "resource",
           "type": "array",

@@ -18,6 +18,8 @@ export interface IUmiProConfig {
   routerConfigPath?: string;
   parserOptions: ParserOptions;
   routerExcludePath: string[];
+  saveOnGenerateEffectsCommandTimeout: number;
+  autoGenerateSagaEffectsCommands: boolean;
 }
 
 export const DEFAULT_ROUTER_CONFIG_PATH = [

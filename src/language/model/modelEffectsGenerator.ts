@@ -4,17 +4,22 @@ import {
   IModelEffectsParser,
 } from './../../services/parser/modelEffectsParser';
 import { Disposable, workspace, TextDocument, window } from 'vscode';
+import { VscodeServiceToken, IVscodeService } from '../../services/vscodeService';
 
 @Service()
 export class ModelEffectsGenerator implements Disposable {
   private disposables: Array<Disposable> = [];
   private modelEffectsParser: IModelEffectsParser;
+  private vscodeService: IVscodeService;
 
   constructor(
     @Inject(ModelEffectsParserToken)
-    modelEffectsParser: IModelEffectsParser
+    modelEffectsParser: IModelEffectsParser,
+    @Inject(VscodeServiceToken)
+    vscodeService: IVscodeService
   ) {
     this.modelEffectsParser = modelEffectsParser;
+    this.vscodeService = vscodeService;
     this.disposables.push(workspace.onDidSaveTextDocument(this.handleDocumentSave));
   }
 
@@ -27,6 +32,10 @@ export class ModelEffectsGenerator implements Disposable {
     if (!activeTextEditor || activeTextEditor.document !== document) {
       return;
     }
+    const config = this.vscodeService.getConfig(document.uri.fsPath);
+    if (!config || !config.autoGenerateSagaEffectsCommands) {
+      return;
+    }
     try {
       const codeToChange = await this.modelEffectsParser.parseFile(document.uri.fsPath);
       if (codeToChange.length > 0) {
@@ -36,7 +45,7 @@ export class ModelEffectsGenerator implements Disposable {
           });
           setTimeout(() => {
             document.save();
-          }, 500);
+          }, config.saveOnGenerateEffectsCommandTimeout);
         });
       }
     } catch (error) {

@@ -85,6 +85,10 @@ export class VscodeService implements IVscodeService {
       quotes: QuoteType.single,
       routerConfigPath: userConfig.get<string>('router_config_path'),
       routerExcludePath: userConfig.get<string[]>('router_exclude_path') || [],
+      saveOnGenerateEffectsCommandTimeout:
+        userConfig.get<number>('saveOnGenerateEffectsCommandTimeout') || 500,
+      autoGenerateSagaEffectsCommands:
+        userConfig.get<boolean>('autoGenerateSagaEffectsCommands') || false,
       parserOptions: {
         sourceType: 'module',
         plugins: [
