@@ -82,6 +82,26 @@
 	</tr>
 </table>
 
+<table>
+	<tr>
+		<th width="50%">
+			Locale 点击跳转
+		</th>
+		<th width="50%">
+	    Locale 自动补全
+		</th>
+	</tr>
+	<tr><!-- Prevent zebra stripes --></tr>
+	<tr>
+		<td>docs/demo.gif
+			<img src="https://github.com/umijs/vscode-extension-umi-pro/raw/master/images/goto.gif" />
+		</td>
+		<td>
+			<img src="https://github.com/umijs/vscode-extension-umi-pro/raw/master/images/completion.gif" />
+		</td>
+	</tr>
+</table>
+
 ## 可配置项
 
 | 配置项 | 类型 | 作用 |
@@ -89,6 +109,7 @@
 | `umi_pro.quotes` | `single`,`double` ,`backtick` | 引号类型 |
 | `umi_pro.router_config_path` | string | 路由配置文件的路径 |
 | `umi_pro.autoGenerateSagaEffectsCommands` | boolean | 是否开启 saga effects 自动补全 |
+| `umi_pro.locale` | string | 多语言提示以哪个语言的内容为准，默认`zh-CN.js` |
 
 ## model 读取规则
 

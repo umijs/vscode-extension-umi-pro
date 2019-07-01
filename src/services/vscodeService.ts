@@ -104,6 +104,7 @@ export class VscodeService implements IVscodeService {
           ],
         ],
       },
+      locale: userConfig.get<string>('locale') || 'zh-CN',
     };
     const userQuotesConfig = userConfig.get<QuoteType>('quotes');
     if (userQuotesConfig && Object.values(QuoteType).includes(userQuotesConfig)) {

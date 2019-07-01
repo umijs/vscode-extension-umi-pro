@@ -88,6 +88,12 @@
           "scope": "resource",
           "type": "object",
           "description": "babel parser options"
+        },
+        "umi_pro.locale": {
+          "scope": "resource",
+          "type": "string",
+          "default": "zh-CN",
+          "description": "which language file to be watched for providing completion items and go-to definition"
         }
       }
     }

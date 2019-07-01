@@ -1,3 +1,4 @@
+import * as vscode from 'vscode';
 import { ParserOptions } from '@babel/parser';
 import { SourceLocation } from '@babel/types';
 
@@ -20,6 +21,7 @@ export interface IUmiProConfig {
   routerExcludePath: string[];
   saveOnGenerateEffectsCommandTimeout: number;
   autoGenerateSagaEffectsCommands: boolean;
+  locale: string;
 }
 
 export const DEFAULT_ROUTER_CONFIG_PATH = [
@@ -62,6 +64,12 @@ export interface IUmirc {
   loc: SourceLocation;
   start: number;
   end: number;
+}
+
+export interface ILocale {
+  key: string;
+  range: vscode.Range;
+  fileUri: vscode.Uri;
 }
 
 export enum Brackets {
