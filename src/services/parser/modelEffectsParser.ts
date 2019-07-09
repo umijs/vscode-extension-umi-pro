@@ -14,6 +14,8 @@ import {
   identifier,
   objectProperty,
   objectPattern,
+  Node,
+  isArrayExpression,
 } from '@babel/types';
 import { Service, Token, Inject } from 'typedi';
 import { IVscodeService, VscodeServiceToken } from './../vscodeService';
@@ -32,7 +34,7 @@ export interface IModelEffectsParser {
 
 export const ModelEffectsParserToken = new Token<IModelEffectsParser>();
 
-const reduxSagaEffectsCommands = ['put', 'call', 'select', 'cancel', 'take'];
+const reduxSagaEffectsCommands = ['put', 'call', 'select', 'cancel', 'take', 'all'];
 
 @Service(ModelEffectsParserToken)
 // eslint-disable-next-line @typescript-eslint/class-name-casing
@@ -113,30 +115,50 @@ class _ModelEffectParser implements IModelEffectsParser {
     return false;
   }
 
-  private getEffectsCommands(node: ObjectMethod | FunctionExpression): string[] {
+  private traverseCallExpression = (node: Node, effectsCommands: Set<string>) => {
+    if (!isCallExpression(node)) {
+      return;
+    }
+    const { callee } = node;
+    if (!isIdentifier(callee)) {
+      return;
+    }
+    if (reduxSagaEffectsCommands.some(o => o === callee.name)) {
+      effectsCommands.add(callee.name);
+    }
+    if (callee.name === 'all') {
+      const { arguments: nodeArguments } = node;
+      if (nodeArguments.length !== 1) {
+        return;
+      }
+      const firstArg = nodeArguments[0];
+      if (!isArrayExpression(firstArg)) {
+        return;
+      }
+      firstArg.elements.forEach(o => {
+        if (o) {
+          this.traverseCallExpression(o, effectsCommands);
+        }
+      });
+    }
+  };
+
+  private getEffectsCommands = (node: ObjectMethod | FunctionExpression): string[] => {
     const effectsCommands = new Set<string>();
+    const { traverseCallExpression } = this;
     traverse(
       node,
       {
         YieldExpression(path) {
           const { node } = path;
           const { argument } = node;
-          if (!isCallExpression(argument)) {
-            return;
-          }
-          const { callee } = argument;
-          if (!isIdentifier(callee)) {
-            return;
-          }
-          if (reduxSagaEffectsCommands.some(o => o === callee.name)) {
-            effectsCommands.add(callee.name);
-          }
+          traverseCallExpression(argument, effectsCommands);
         },
       },
       {}
     );
     return Array.from(effectsCommands);
-  }
+  };
 
   private getParamsEffectsCommands(node: ObjectMethod | FunctionExpression) {
     const effectsCommandsNode = node.params[1];

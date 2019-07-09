@@ -47,5 +47,14 @@ export default {
         payload: response,
       });
     },
+    *useAll() {
+      yield all([
+        call(queryCurrent),
+        put({
+          type: 'saveCurrentUser',
+          payload: response,
+        }),
+      ]);
+    },
   },
 };

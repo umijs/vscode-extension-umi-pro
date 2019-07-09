@@ -14,7 +14,7 @@ describe('modelEffectsParser', async () => {
     const response = await modelEffectsParser.parseFile(
       join(workspaceFixtures, 'jsProject/user.js')
     );
-    equal(response.length, 4);
+    equal(response.length, 5);
     deepEqual(JSON.parse(JSON.stringify(response)), [
       {
         range: [{ line: 12, character: 4 }, { line: 18, character: 5 }],
@@ -35,6 +35,11 @@ describe('modelEffectsParser', async () => {
         range: [{ line: 42, character: 4 }, { line: 48, character: 5 }],
         code:
           "*noParams(_, { call, put }) {\n  const response = yield call(queryCurrent);\n  yield put({\n    type: 'saveCurrentUser',\n    payload: response });\n\n}",
+      },
+      {
+        range: [{ line: 49, character: 4 }, { line: 57, character: 5 }],
+        code:
+          "*useAll(_, { all, call, put }) {\n  yield all([\n  call(queryCurrent),\n  put({\n    type: 'saveCurrentUser',\n    payload: response })]);\n\n\n}",
       },
     ]);
   });
