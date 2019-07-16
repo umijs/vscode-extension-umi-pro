@@ -68,10 +68,6 @@ export function sourceLocationToRange(loc: SourceLocation) {
   );
 }
 
-export function isArray(src: any) {
-  return Object.prototype.toString.call(src) === '[object Array]';
-}
-
 export function flatten(arr: Array<any>) {
-  return (arr || []).reduce((p, c) => p.concat(isArray(c) ? flatten(c) : c), []);
+  return (arr || []).reduce((p, c) => p.concat(Array.isArray(c) ? flatten(c) : c), []);
 }
