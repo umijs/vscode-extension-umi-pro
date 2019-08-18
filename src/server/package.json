@@ -1,0 +1,11 @@
+{
+  "name": "umi-pro-server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+    "vscode-languageserver": "^5.2.1"
+  }
+}

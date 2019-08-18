@@ -4385,6 +4385,40 @@ vsce@^1.66.0:
     yauzl "^2.3.1"
     yazl "^2.2.2"
 
+vscode-jsonrpc@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.npm.taobao.org/vscode-jsonrpc/download/vscode-jsonrpc-4.0.0.tgz#a7bf74ef3254d0a0c272fab15c82128e378b3be9"
+  integrity sha1-p7907zJU0KDCcvqxXIISjjeLO+k=
+
+vscode-languageclient@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.npm.taobao.org/vscode-languageclient/download/vscode-languageclient-5.2.1.tgz#7cfc83a294c409f58cfa2b910a8cfeaad0397193"
+  integrity sha1-fPyDopTECfWM+iuRCoz+qtA5cZM=
+  dependencies:
+    semver "^5.5.0"
+    vscode-languageserver-protocol "3.14.1"
+
+vscode-languageserver-protocol@3.14.1:
+  version "3.14.1"
+  resolved "https://registry.npm.taobao.org/vscode-languageserver-protocol/download/vscode-languageserver-protocol-3.14.1.tgz#b8aab6afae2849c84a8983d39a1cf742417afe2f"
+  integrity sha1-uKq2r64oSchKiYPTmhz3QkF6/i8=
+  dependencies:
+    vscode-jsonrpc "^4.0.0"
+    vscode-languageserver-types "3.14.0"
+
+vscode-languageserver-types@3.14.0:
+  version "3.14.0"
+  resolved "https://registry.npm.taobao.org/vscode-languageserver-types/download/vscode-languageserver-types-3.14.0.tgz#d3b5952246d30e5241592b6dde8280e03942e743"
+  integrity sha1-07WVIkbTDlJBWStt3oKA4DlC50M=
+
+vscode-languageserver@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.npm.taobao.org/vscode-languageserver/download/vscode-languageserver-5.2.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fvscode-languageserver%2Fdownload%2Fvscode-languageserver-5.2.1.tgz#0d2feddd33f92aadf5da32450df498d52f6f14eb"
+  integrity sha1-DS/t3TP5Kq312jJFDfSY1S9vFOs=
+  dependencies:
+    vscode-languageserver-protocol "3.14.1"
+    vscode-uri "^1.0.6"
+
 vscode-test@^0.4.1:
   version "0.4.3"
   resolved "https://registry.npmjs.org/vscode-test/-/vscode-test-0.4.3.tgz#461ebf25fc4bc93d77d982aed556658a2e2b90b8"
@@ -4392,6 +4426,11 @@ vscode-test@^0.4.1:
   dependencies:
     http-proxy-agent "^2.1.0"
     https-proxy-agent "^2.2.1"
+
+vscode-uri@^1.0.6:
+  version "1.0.8"
+  resolved "https://registry.npm.taobao.org/vscode-uri/download/vscode-uri-1.0.8.tgz#9769aaececae4026fb6e22359cb38946580ded59"
+  integrity sha1-l2mq7OyuQCb7biI1nLOJRlgN7Vk=
 
 vscode@^1.1.36:
   version "1.1.36"

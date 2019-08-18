@@ -138,6 +138,8 @@
     "lodash": "^4.17.11",
     "mz": "^2.7.0",
     "reflect-metadata": "^0.1.13",
-    "typedi": "^0.8.0"
+    "typedi": "^0.8.0",
+    "vscode-languageclient": "^5.2.1",
+    "vscode-languageserver": "^5.2.1"
   }
 }

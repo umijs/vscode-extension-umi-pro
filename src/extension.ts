@@ -17,9 +17,47 @@ import { loadVscodeService, VscodeServiceToken } from './services/vscodeService'
 import { ModelInfoServiceToken } from './services/modelInfoService';
 import { LocaleServiceToken } from './services/localeService';
 import { SUPPORT_LANGUAGE } from './common/types';
+import { join } from 'path';
+import {
+  ServerOptions,
+  TransportKind,
+  LanguageClientOptions,
+  LanguageClient,
+} from 'vscode-languageclient';
+
+let client: LanguageClient;
 
 export async function activate(context: ExtensionContext) {
+  let serverModule = context.asAbsolutePath(join('out', 'server', 'serverMain.js'));
+
+  logger.info('serverModule');
+  logger.info(serverModule);
+
+  let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
+  let serverOptions: ServerOptions = {
+    run: { module: serverModule, transport: TransportKind.ipc },
+    debug: {
+      module: serverModule,
+      transport: TransportKind.ipc,
+      options: debugOptions,
+    },
+  };
+
+  let clientOptions: LanguageClientOptions = {
+    // Register the server for plain text documents
+    documentSelector: [
+      { language: 'typescript', scheme: 'file' },
+      { language: 'javascript', scheme: 'file' },
+      { language: 'json', scheme: 'file' },
+    ],
+  };
+
+  client = new LanguageClient('Umi Pro', 'Umi Pro Server', serverOptions, clientOptions);
+
+  client.start();
+
   logger.info('extension "umi-pro" is now active!');
+
   const umiFileWatcher = await getUmiFileWatcher(workspace.workspaceFolders);
   if (!umiFileWatcher) {
     logger.info('no project use umi');
@@ -96,4 +134,6 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(Container.get(ModelEffectsGenerator));
 }
 
-export function deactivate() {}
+export function deactivate() {
+  client.stop();
+}
